@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# IDE / local tools
+.vscode/
+.idea/
+.claude/
+
+# Large datasets and generated artifacts
+HUST bearing dataset/
+processed/
+checkpoints/
+results/
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Logs and experiment outputs
+*.log
+wandb/
+runs/
+outputs/
+
+# OS files
+.DS_Store
+Thumbs.db

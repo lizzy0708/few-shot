@@ -35,10 +35,11 @@ class FeatureExtractor(nn.Module):
             backbone.layer1,
             backbone.layer2,
             backbone.layer3,
+            backbone.layer4,
         )
 
     def forward(self, x):
-        return self.encoder(x)  # [B, 1024, H, W]
+        return self.encoder(x)  # [B, 2048, H, W]
 
 
 # Class Classifier: normal / anomaly
@@ -52,7 +53,7 @@ class ClassClassifier(nn.Module):
         return self.fc(z_pool)
 
 
-# Domain Classifier: 400 / 500 / 600 / 700 / 800
+# Domain Classifier: 15-way fine-grained domain
 class DomainClassifier(nn.Module):
     def __init__(self, in_dim=1024, num_domains=5):
         super().__init__()
@@ -68,66 +69,52 @@ class MaskDecompositionModel(nn.Module):
         super().__init__()
 
         self.feature_extractor = FeatureExtractor()
-        self.classifier = ClassClassifier(in_dim=1024, num_classes=num_classes)
-        self.domain_classifier = DomainClassifier(in_dim=1024, num_domains=num_domains)
+        self.classifier = ClassClassifier(in_dim=2048, num_classes=num_classes)
+        self.domain_classifier = DomainClassifier(in_dim=2048, num_domains=num_domains)
 
-    def forward(self, x, alpha=1.0):
-        # 1. Feature extraction
-        z = self.feature_extractor(x)  # [B, C, H, W]
-        z.requires_grad_(True)
+    def forward(self, x, alpha=1.0, class_label=None):
+        with torch.enable_grad():
+            # 1. Feature extraction
+            z = self.feature_extractor(x)  # [B, C, H, W]
+            z.requires_grad_(True)
 
-        # 2. Class prediction
-        class_logits = self.classifier(z)
+            B = z.size(0)
 
-        # 3. Domain prediction with GRL
-        z_grl = grad_reverse(z, alpha)
-        domain_logits = self.domain_classifier(z_grl)
+            # 2. Class logits
+            class_logits = self.classifier(z)
 
-        # 4. Importance score 계산
-        # class/domain prediction에 크게 기여한 feature 위치를 gradient로 계산
-        class_score = class_logits.max(dim=1)[0].sum()
-        domain_score = domain_logits.max(dim=1)[0].sum()
+            # 3. class_score for mc: use GT label when available
+            if class_label is not None:
+                class_score = class_logits[torch.arange(B, device=z.device), class_label].sum()
+            else:
+                class_score = class_logits.max(dim=1)[0].sum()
 
-        grad_c = torch.autograd.grad(
-            class_score,
-            z,
-            create_graph=True,
-            retain_graph=True
-        )[0]
+            # 4. domain_score for md: GRL-path (adversarial domain classifier)
+            z_grl = grad_reverse(z, alpha)
+            domain_logits = self.domain_classifier(z_grl)
+            domain_score = domain_logits.max(dim=1)[0].sum()
 
-        grad_d = torch.autograd.grad(
-            domain_score,
-            z,
-            create_graph=True,
-            retain_graph=True
-        )[0]
+            grad_c = torch.autograd.grad(
+                class_score, z, create_graph=True, retain_graph=True
+            )[0]
 
-        # 5. Soft mask 생성
-        # mc: class-relevant mask
-        # md: domain-relevant mask
-        mc = torch.relu(grad_c)
-        md = torch.relu(grad_d)
+            grad_d = torch.autograd.grad(
+                domain_score, z, create_graph=True, retain_graph=True
+            )[0]
 
-        mc = mc / (mc.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
-        md = md / (md.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+            # 5. Soft masks
+            mc = torch.relu(grad_c)
+            md = torch.relu(grad_d)
 
-        # 6. Feature decomposition
-        # class + domain feature
-        z_cd = z * mc * md
+            mc = mc / (mc.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+            md = md / (md.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
 
-        # class-relevant & domain-invariant feature
-        # 논문에서 memory bank에 저장할 핵심 feature
-        z_c_notd = z * mc * (1 - md)
-
-        # domain-relevant feature
-        z_notc_d = z * (1 - mc) * md
-
-        # irrelevant feature
-        z_notc_notd = z * (1 - mc) * (1 - md)
-
-        # 7. Proposed feature
-        # 본 연구의 domain-invariant normal feature
-        z_inv = z_c_notd
+            # 6. Feature decomposition
+            z_cd        = z * mc * md
+            z_c_notd    = z * mc * (1 - md)   # class-relevant, domain-invariant
+            z_notc_d    = z * (1 - mc) * md   # domain-relevant
+            z_notc_notd = z * (1 - mc) * (1 - md)
+            z_inv       = z_c_notd
 
         return {
             "z": z,

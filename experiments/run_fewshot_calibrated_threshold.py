@@ -105,7 +105,7 @@ def mahalanobis_score(x, estimator):
     return torch.sum(projected * diff, dim=1)
 
 
-def build_multi_domain_dataset(domains, transform, seed):
+def build_multi_domain_dataset(root, domains, transform, seed):
     domain_list = domains.split(",")
     datasets = []
 
@@ -113,7 +113,7 @@ def build_multi_domain_dataset(domains, transform, seed):
         d = d.strip()
 
         dataset = HUSTDataset(
-            root="processed",
+            root=root,
             domain=d,
             only_normal=False,
             shot=None,
@@ -265,12 +265,14 @@ def print_score_statistics(scores, labels, title):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=str, default="processed")
     parser.add_argument("--support_domain", type=str, required=True)
     parser.add_argument("--calib_domain", type=str, required=True)
     parser.add_argument("--query_domain", type=str, required=True)
     parser.add_argument("--shot", type=int, default=4)
     parser.add_argument("--ckpt", type=str, required=True)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--num_domains", type=int, default=5)
 
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--select_metric", type=str, default="f1",
@@ -296,11 +298,13 @@ def main():
     print("FSAD + Calibrated Threshold")
     print("===================================")
     print("Device        :", device)
+    print("Root          :", args.root)
     print("Support domain:", args.support_domain)
     print("Calib domain  :", args.calib_domain)
     print("Query domain  :", args.query_domain)
     print("Shot          :", args.shot)
     print("Checkpoint    :", args.ckpt)
+    print("Num domains   :", args.num_domains)
     print("Select metric :", args.select_metric)
     print("Feature       :", args.feature)
     print("Score method  :", args.score_method)
@@ -314,13 +318,13 @@ def main():
         transforms.ToTensor(),
     ])
 
-    model = MaskDecompositionModel().to(device)
+    model = MaskDecompositionModel(num_domains=args.num_domains).to(device)
     model.load_state_dict(torch.load(args.ckpt, map_location=device))
     model.eval()
 
     # 1. Few-shot support normal feature 추출
     support_set = HUSTDataset(
-        root="processed",
+        root=args.root,
         domain=args.support_domain,
         only_normal=True,
         shot=args.shot,
@@ -347,6 +351,7 @@ def main():
 
     # 2. Calibration domain에서 score 계산
     calib_set = build_multi_domain_dataset(
+        root=args.root,
         domains=args.calib_domain,
         transform=transform,
         seed=args.seed,
@@ -421,7 +426,7 @@ def main():
 
     # 4. Query domain 평가
     query_set = HUSTDataset(
-        root="processed",
+        root=args.root,
         domain=args.query_domain,
         only_normal=False,
         shot=None,

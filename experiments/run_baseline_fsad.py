@@ -196,6 +196,7 @@ def main():
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--metric", type=str, default="euclidean", choices=["euclidean", "cosine"])
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--num_domains", type=int, default=5)
 
     args = parser.parse_args()
     set_seed(args.seed)
@@ -212,6 +213,7 @@ def main():
     print("Metric         :", args.metric)
     print("Shot/domain    :", args.shot)
     print("Checkpoint     :", args.ckpt)
+    print("Num domains    :", args.num_domains)
     print("===================================")
 
     transform = transforms.Compose([
@@ -219,7 +221,7 @@ def main():
         transforms.ToTensor(),
     ])
 
-    model = MaskDecompositionModel().to(device)
+    model = MaskDecompositionModel(num_domains=args.num_domains).to(device)
     model.load_state_dict(torch.load(args.ckpt, map_location=device))
     model.eval()
 

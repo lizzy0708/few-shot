@@ -62,7 +62,7 @@ def collect_features(args, device):
         num_workers=2,
     )
 
-    model = MaskDecompositionModel().to(device)
+    model = MaskDecompositionModel(num_classes=args.num_classes, num_domains=args.num_domains).to(device)
     model.load_state_dict(torch.load(args.ckpt, map_location=device))
     model.eval()
 
@@ -157,6 +157,8 @@ def main():
     )
 
     parser.add_argument("--save_prefix", type=str, default="results/tsne")
+    parser.add_argument("--num_classes", type=int, default=5)
+    parser.add_argument("--num_domains", type=int, default=15)
 
     args = parser.parse_args()
 

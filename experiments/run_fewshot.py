@@ -54,11 +54,13 @@ def diag_mahalanobis_score(x, estimator):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=str, default="processed")
     parser.add_argument("--support_domain", type=str, required=True)
     parser.add_argument("--query_domain", type=str, required=True)
     parser.add_argument("--shot", type=int, default=4)
     parser.add_argument("--ckpt", type=str, default="mask_decomposition.pth")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--num_domains", type=int, default=5)
     parser.add_argument("--score_method", type=str, default="mahalanobis",
                         choices=["mahalanobis", "cosine"])
     parser.add_argument("--cov_reg", type=float, default=1e-3)
@@ -72,11 +74,13 @@ def main():
     print("Decomposition only FSAD")
     print("===================================")
     print("Device        :", device)
+    print("Root          :", args.root)
     print("Support domain:", args.support_domain)
     print("Query domain  :", args.query_domain)
     print("Shot          :", args.shot)
     print("Seed          :", args.seed)
     print("Checkpoint    :", args.ckpt)
+    print("Num domains   :", args.num_domains)
     print("Score method  :", args.score_method)
     print("Cov reg       :", args.cov_reg)
 
@@ -85,12 +89,12 @@ def main():
         transforms.ToTensor(),
     ])
 
-    model = MaskDecompositionModel().to(device)
+    model = MaskDecompositionModel(num_domains=args.num_domains).to(device)
     model.load_state_dict(torch.load(args.ckpt, map_location=device))
     model.eval()
 
     support_set = HUSTDataset(
-        root="processed",
+        root=args.root,
         domain=args.support_domain,
         only_normal=True,
         shot=args.shot,
@@ -123,7 +127,7 @@ def main():
     estimator = build_diag_mahalanobis(support_features, args.cov_reg)
 
     query_set = HUSTDataset(
-        root="processed",
+        root=args.root,
         domain=args.query_domain,
         only_normal=False,
         shot=None,

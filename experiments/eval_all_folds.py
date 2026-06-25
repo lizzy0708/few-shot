@@ -90,7 +90,7 @@ def normal_threshold(scores: np.ndarray, n_sigma: float = 2.0) -> float:
     return scores.mean() + n_sigma * scores.std()
 
 
-def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False):
+def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, use_l2=False, n_sigma=2.0, use_classifier=False):
     all_base, all_zinv = [], []
     all_base_acc, all_base_f1, all_cacc, all_cf1 = [], [], [], []
 
@@ -179,14 +179,43 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False):
                 support_feats, _ = get_features(model, support_loader)
                 prototype_np = support_feats.cpu().numpy().mean(axis=0)
 
-                # z_inv: Mahalanobis score
+                # z_inv scoring
                 query_np = query_feats.cpu().numpy()
-                zinv_scores = mahalanobis_score(query_np, prototype_np, prec_np)
-                zinv_aurocs.append(roc_auc_score(query_labels, zinv_scores))
+                support_np = support_feats.cpu().numpy()
 
-                # Support 기반 threshold: mean + 2*std (4-shot)
-                support_zinv_scores = mahalanobis_score(support_feats.cpu().numpy(), prototype_np, prec_np)
-                threshold = support_zinv_scores.mean() + 2.0 * support_zinv_scores.std()
+                # L2-normalize features before scoring (scale-invariant, matches episodic training)
+                def l2norm(x):
+                    n = np.linalg.norm(x, axis=1, keepdims=True)
+                    return x / (n + 1e-8)
+
+                query_np_n   = l2norm(query_np)
+                support_np_n = l2norm(support_np)
+                calib_np_n   = l2norm(calib_normal_np)
+                prototype_np_n = l2norm(support_np_n.mean(axis=0, keepdims=True))[0]
+
+                if use_l2:
+                    # L2 on normalized sphere
+                    zinv_scores = np.sqrt(((query_np_n - prototype_np_n) ** 2).sum(axis=1))
+                    support_zinv_scores = np.sqrt(((support_np_n - prototype_np_n) ** 2).sum(axis=1))
+                    threshold = support_zinv_scores.mean()
+                elif use_classifier:
+                    # Threshold-free: use trained classifier + support-based bias correction
+                    fc_w = model.classifier.fc.weight.detach().cpu().numpy()  # [2, 2048]
+                    fc_b = model.classifier.fc.bias.detach().cpu().numpy()    # [2]
+                    query_logits = query_np @ fc_w.T + fc_b    # [N, 2]
+                    support_logits = support_np @ fc_w.T + fc_b  # [4, 2]
+                    zinv_scores = query_logits[:, 1] - query_logits[:, 0]
+                    support_anom_scores = support_logits[:, 1] - support_logits[:, 0]
+                    threshold = support_anom_scores.mean()
+                else:
+                    # Mahalanobis on normalized features + support mean threshold
+                    _, prec_np_n = fit_normal_distribution(calib_np_n)
+                    zinv_scores = mahalanobis_score(query_np_n, prototype_np_n, prec_np_n)
+                    support_zinv_scores = mahalanobis_score(support_np_n, prototype_np_n, prec_np_n)
+                    calib_zinv_scores = mahalanobis_score(calib_np_n, prototype_np_n, prec_np_n)
+                    threshold = support_zinv_scores.mean() + n_sigma * calib_zinv_scores.std()
+
+                zinv_aurocs.append(roc_auc_score(query_labels, zinv_scores))
                 preds = (zinv_scores > threshold).astype(int)
                 accs.append(accuracy_score(query_labels, preds))
                 f1s.append(f1_score(query_labels, preds, zero_division=0))
@@ -249,6 +278,12 @@ def main():
                         help="Calibration normal score percentile for threshold (default 95)")
     parser.add_argument("--vit", action="store_true",
                         help="Use ViTMaskDecompositionModel instead of ResNet-based model")
+    parser.add_argument("--use_l2", action="store_true",
+                        help="Use L2 distance + support mean threshold (matches episodic training)")
+    parser.add_argument("--n_sigma", type=float, default=0.0,
+                        help="Threshold = support_mean + n_sigma * calib_std (default 0.0)")
+    parser.add_argument("--use_classifier", action="store_true",
+                        help="Threshold-free: use trained classifier with support bias correction")
     args = parser.parse_args()
 
     print(f"Device   : {device}")
@@ -278,7 +313,7 @@ def main():
             print(f"No fold found for test_fold={args.test_fold}")
             return
 
-    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.vit)
+    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.vit, args.use_l2, args.n_sigma, args.use_classifier)
 
 
 if __name__ == "__main__":

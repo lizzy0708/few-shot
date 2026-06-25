@@ -1,189 +1,65 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with code in this repository.
-
 ## Goal
 
-**도메인 불변성을 고려한 정상 특징 메모리 기반 퓨샷 이상탐지 (Few-shot Anomaly Detection)**
+**도메인 불변성 기반 정상 특징 메모리 퓨샷 이상탐지 (Few-shot Anomaly Detection)**
 
-미학습 RPM 도메인(예: 800/802/804)에서도 정상 샘플 몇 개만으로 이상 탐지가 가능하도록 학습.
+미학습 RPM 도메인(예: 700/702/704)에서 정상 샘플 4개만으로 이상 탐지.
 
-- 원래 논문: AUROC + cosine similarity + 5개 coarse domain (400/500/600/700/800)
-- 저널 확장: **15개 fine-grained domain + Acc/F1 (현장 적용)** + z_inv 도메인 불변성 강화
+- 원 논문: AUROC + cosine similarity + 5개 coarse domain
+- 저널 확장: **15개 fine-grained domain + Acc/F1** + z_inv 도메인 불변성 강화
+
+---
 
 ## Setup
 
 ```bash
+conda activate torch
 pip install -r requirements.txt
-pip install PyWavelets  # CWT 전처리용
 ```
 
-Python 환경: `/home/smai9/anaconda3/envs/torch/bin/python`
-
-Large artifacts (`.pth`, `processed/`, `processed_cwt/`, `processed_fine/`, `HUST bearing dataset/`, `results/`)는 git-ignored.
+Python: `/home/smai9/anaconda3/envs/torch/bin/python`  
+Data root: `processed_gadf_fine_4096/` (GADF 변환 이미지, 224×224)
 
 ---
 
 ## Architecture
 
-### 데이터 표현
-
-**CWT + RPM 정규화** (`processed/make_cwt.py`) ← **현재 권장**
-- frequency axis를 shaft frequency로 정규화 → order domain 변환
-- 같은 결함 유형이 RPM에 관계없이 동일 position에 나타남 (BPFI → row 28)
-- 출력: `processed_cwt/{domain}/{normal,anomaly}/{stem}_{start}.png`
-
-### 도메인 구분
-
-| 모드 | 도메인 수 | 디렉토리 |
-|------|----------|---------|
-| coarse | 5 (400/500/600/700/800) | `processed/` |
-| **fine** (권장) | **15** (400/402/404/.../804) | `processed_cwt/` |
-
-LOO 전략: speed group 단위 hold-out (예: 800+802+804 전체를 test)
-
-### 클래스 레이블
-
-```
-fault_type: N=0, I=1(inner race), O=2(outer race), B=3(ball), IB/IO/OB=4(compound)
-label:      0=normal, 1=anomaly  ← 평가 시 binary
-```
-- 학습: `binary_label = (fault_type > 0)` 으로 ClassClassifier 훈련
-  - 이유: 5-class mc는 N/I/O/B/compound를 구분하는 gradient를 선택 → z_inv에 anomaly 정보 소실
-  - binary mc는 "정상 vs 이상" gradient를 선택 → z_inv에 anomaly 정보 보존
-
 ### MaskDecompositionModel (`models/mask_decomposition_model.py`)
-
-XdomainMix (Liu et al., 2024)의 feature decomposition 아이디어를 few-shot anomaly detection에 맞게 수정한 구조.
 
 ```
 입력 x [B,3,224,224]
-  → FeatureExtractor(ResNet50 up to layer3) → z [B,1024,14,14]
-  → ClassClassifier(GAP → Linear) → class_logits [B,2]   (binary: normal/anomaly)
-  → DomainClassifier(GAP → Linear) → domain_logits [B,15] (via GRL)
+  → ResNet50 (layer1~layer4) → z [B, 2048, 7, 7]
+  → ClassClassifier(GAP→Linear) → class_logits [B,2]   (binary: normal/anomaly)
+  → DomainClassifier(GAP→Linear) → domain_logits [B,15] (via GRL on z)
 
-Gradient-based masks (XdomainMix 방식에서 soft mask로 수정):
-  mc = ReLU(∂binary_anomaly_logit/∂z) / max  ← class-relevant (anomaly 정보 보존)
-  md = ReLU(∂domain_score/∂z) / max          ← domain-relevant (GRL 없이 계산)
+Gradient masks:
+  mc = ReLU(∂class_score/∂z) / max     ← class-relevant
+  md = ReLU(∂domain_score/∂z) / max    ← domain-relevant
 
 Feature decomposition:
-  z_inv    = z ⊙ mc ⊙ (1-md)  ← class-relevant, domain-invariant
-  z_notc_d = z ⊙ (1-mc) ⊙ md  ← domain-relevant
-
-Adversarial: GRL(z) → domain_logits (domain loss용)
+  z_inv = z_c_notd = z ⊙ mc ⊙ (1 - md)  ← class-relevant, domain-invariant
 ```
 
-**현재 한계 및 개선 방향:**
-- 현재 GRL이 `z` 전체에만 작용 → `z_inv`에 domain 정보가 잔존
-- 개선: `z_inv`에 직접 GRL + domain adversarial loss 추가 필요
-  ```
-  GRL(z_inv) → domain classifier → domain loss  (z_inv가 domain 예측 불가하도록 직접 강제)
-  ```
+### Inference (Few-shot, 4-shot)
+
+1. support 4개 정상 샘플 → z_inv 추출 → prototype (mean)
+2. LedoitWolf shrinkage로 calib domain normal 공분산 추정
+3. Mahalanobis distance → threshold = support_mean + 2σ
+4. query domain Acc/F1/AUROC 평가
 
 ### Training Loss
 
 ```
-L = CE(classifier(z_inv), binary_label)
-  + λ_d · CE(domain_cls(GRL(z)), domain)
-  + λ_m_eff · mean(mc ⊙ md)
+L = CE(classifier(z_inv), binary_label)        ← class loss
+  + λ_d  · CE(domain_cls(GRL(z)), domain)       ← domain adversarial (z 전체)
+  + λ_m  · mean(mc ⊙ md)                        ← mask orthogonality
+  + λ_sc · SupCon(z_inv, binary_label)          ← normal 클러스터링
+  + λ_pa · ProtoAlign(z_inv, binary_label, domain) ← 도메인간 prototype 정렬
+  + λ_ep · EpisodicProto(z_inv, binary_label)   ← 4-shot 테스트 시나리오 시뮬레이션
 ```
 
-### Inference (Few-shot)
-
-1. support 정상 샘플 → z_inv 추출 → prototype (mean)
-2. LedoitWolf shrinkage 공분산으로 Mahalanobis distance 계산
-3. calib domain 정상 샘플 score 분포 (mean + 2σ)로 threshold 결정
-4. query domain에서 Acc, F1 평가 (AUROC도 함께 보고)
-
----
-
-## Commands
-
-### 1. 전처리
-
-```bash
-python processed/make_cwt.py \
-  --data_dir "HUST bearing dataset" \
-  --save_dir processed_cwt \
-  --domain_mode fine \
-  --num_workers 8
-```
-
-### 2. 학습 (fine-grained, binary label)
-
-```bash
-# 800 RPM group hold-out
-python experiments/train_mask_decomposition.py \
-  --root processed_cwt \
-  --train_domains 400 402 404 500 502 504 600 602 604 700 702 704 \
-  --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \
-  --epochs 20 --num_classes 2 --warmup_epochs 3 \
-  --mask_weight 0.1 --domain_weight 1.0 \
-  --save_path mask_decomposition.pth
-```
-
-### 3. 분해 품질 진단
-
-```bash
-python experiments/check_disentangle.py \
-  --ckpt mask_decomposition.pth \
-  --root processed_cwt \
-  --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804
-
-# 기대값:
-#   z_inv domain acc    < 0.07  (chance = 1/15)
-#   z_notc_d domain acc > 0.70
-#   z_inv anomaly acc   > 0.80
-```
-
-### 4. t-SNE 시각화
-
-```bash
-python experiments/visualize_tsne_decomposition.py \
-  --root processed_cwt \
-  --domains 400 600 700 800 802 804 \
-  --feature zinv \
-  --ckpt mask_decomposition.pth \
-  --num_classes 2 --num_domains 15 \
-  --save_prefix results/tsne_binary
-```
-
-### 5. 전체 LOO 평가
-
-```bash
-python experiments/eval_all_folds.py \
-  --root processed_cwt \
-  --mode fine \
-  --num_classes 2
-```
-
----
-
-## Checkpoints (현재)
-
-| 파일 | Fold | num_classes | 날짜 |
-|------|------|------------|------|
-| `mask_decomposition.pth` | 800 hold-out | 2 (binary) | 2026-06-22 |
-| `mask_decomposition_fold_700.pth` | 700 hold-out | 2 (binary) | 2026-06-22 |
-| `mask_decomposition_fold_600.pth` | 600 hold-out | 2 (binary) | 2026-06-22 |
-| `mask_decomposition_fold_500.pth` | 500 hold-out | 2 (binary) | 2026-06-22 |
-
----
-
-## HUST 데이터셋 구조 (중요)
-
-파일명의 숫자가 실제 RPM이 아님:
-
-| 파일 그룹 | fs (sampling freq) | 의미 |
-|----------|-------------------|------|
-| N400, N500, ..., N800 | 24.93 kHz | 측정 배치 1 |
-| N402, N502, ..., N802 | 24.22 kHz | 측정 배치 2 |
-| N404, N504, ..., N804 | ~23.0 kHz | 측정 배치 3 |
-
-→ **실제 구조**: 5개 RPM 조건 × 3회 반복 측정 = 15개 파일 그룹
-→ N402는 "402 RPM"이 아니라 "400 RPM 조건의 두 번째 측정 배치"
-→ **15개 도메인 처리 유지**: 배치 간 fs가 달라 실질적 분포 차이 존재
-→ B400.mat, IB400.mat 없음 (ball/compound fault는 400 RPM 조건 미수집)
+EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습-추론 정렬)
 
 ---
 
@@ -191,11 +67,97 @@ python experiments/eval_all_folds.py \
 
 | 결정 | 이유 |
 |------|------|
-| CWT + RPM 정규화 | 결함 주파수는 RPM에 비례 → order domain 변환으로 class-domain 분리 가능 |
-| Fine-grained 15 domains | 배치별 fs 차이 = 실질적 분포 차이 → 더 세밀한 domain invariance 강제 |
-| Binary class label | 5-class mc는 anomaly 정보를 보존 못 함 → binary로 "정상 vs 이상" gradient 직접 선택 |
-| Soft mask (XdomainMix 수정) | XdomainMix의 threshold binary mask 대신 soft mask → 연속적 분리로 안정적 학습 |
-| GT label로 mc 계산 | max logit 사용 시 오분류 샘플에서 mc gradient 불안정 → GT logit 사용으로 안정화 |
-| md 계산 시 GRL 제거 | GRL 통과 z는 adversarial-confused 상태 → GRL 없이 실제 domain 정보 반영 |
-| Mask weight warm-up | 초기 mc/md 미정제 상태에서 z_inv ≈ 0 → CE 발산 방지 |
-| Mahalanobis + LedoitWolf | 고차원 feature 공분산 추정 → cosine보다 분포 기반 거리로 정확도 향상 |
+| GADF 224×224 | 시간-주파수 2D 표현으로 ResNet 활용 |
+| ResNet50 layer4 (2048-dim) | layer3보다 AUROC/Acc 일관 향상 |
+| Binary class label | 5-class mc는 anomaly 정보를 보존 못 함 |
+| Soft mask (XdomainMix 수정) | binary mask 대신 soft → 안정적 학습 |
+| GT label로 mc 계산 | max logit 사용 시 오분류 샘플 불안정 |
+| Mahalanobis + LedoitWolf | 고차원에서 cosine보다 분포 기반 거리로 정확도 향상 |
+| EpisodicProto loss | 학습-추론 disconnect 해소 (L2 threshold 시뮬레이션) |
+
+---
+
+## Current Results (layer4 v3, 20 epochs, n_sigma=0.0)
+
+| Fold | Base AUROC | Base Acc | Base F1 | z_inv AUROC | z_inv Acc | z_inv F1 |
+|------|-----------|---------|--------|------------|----------|---------|
+| 500  | 0.8848 | 0.8357 | 0.8987 | **0.9507** | **0.8847** | **0.9357** |
+| 600  | 0.9013 | 0.8497 | 0.9092 | 0.9260 | 0.8666 | 0.9252 |
+| 700  | 0.8918 | 0.8338 | 0.8998 | 0.9086 | **0.8607** | **0.9197** |
+| 800  | 0.9050 | 0.8645 | 0.9216 | 0.9104 | 0.8611 | 0.9192 |
+| **Avg** | **0.8957** | **0.8459** | **0.9073** | **0.9239** | **0.8683** | **0.9250** |
+
+---
+
+## Checkpoints (현재 best)
+
+| 파일 | Fold | 버전 | 비고 |
+|------|------|------|------|
+| `resnet50_l4_v3_fold_500.pth` | 500 hold-out | v3 layer4 | best |
+| `resnet50_l4_v3_fold_600.pth` | 600 hold-out | v3 layer4 | best |
+| `resnet50_l4_v3_fold_700.pth` | 700 hold-out | v3 layer4 | best |
+| `resnet50_l4_v3_fold_800.pth` | 800 hold-out | v3 layer4 | best |
+
+---
+
+## Commands
+
+### 학습 (fold_500, layer4, v3 설정)
+
+```bash
+conda run -n torch python experiments/train_mask_decomposition.py \
+  --root processed_gadf_fine_4096 \
+  --train_domains 400 402 404 600 602 604 700 702 704 800 802 804 \
+  --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \
+  --epochs 20 --num_classes 2 --warmup_epochs 3 \
+  --mask_weight 0.1 --domain_weight 1.0 \
+  --supcon_weight 0.5 --proto_weight 0.1 --episodic_weight 1.0 \
+  --seed 42 --save_path resnet50_l4_v3_fold_500.pth
+```
+
+### 평가 (전체 4 fold)
+
+```bash
+conda run -n torch python experiments/eval_all_folds.py \
+  --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
+  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth \
+  --ckpt_fold_600 resnet50_l4_v3_fold_600.pth \
+  --ckpt_fold_700 resnet50_l4_v3_fold_700.pth \
+  --ckpt_fold_800 resnet50_l4_v3_fold_800.pth
+```
+
+### 평가 (단일 fold)
+
+```bash
+conda run -n torch python experiments/eval_all_folds.py \
+  --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
+  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth --test_fold 500
+```
+
+---
+
+## HUST 데이터셋 구조
+
+| 파일 그룹 | 의미 |
+|----------|------|
+| N400/500/.../800 | 측정 배치 1 (fs=24.93 kHz) |
+| N402/502/.../802 | 측정 배치 2 (fs=24.22 kHz) |
+| N404/504/.../804 | 측정 배치 3 (fs≈23.0 kHz) |
+
+5개 RPM 조건 × 3회 반복 = 15개 도메인. B400, IB400 없음 (400 RPM ball/compound 미수집).
+
+---
+
+## 시도했으나 효과 없었던 것들
+
+| 방법 | 결과 |
+|------|------|
+| 40 epoch + cosine LR (v4) | fold_500 Acc 0.8786 < v3 0.8968 (과적합) |
+| L2 inference (use_l2) | AUROC 0.8993 vs 0.9239 (Mahalanobis가 우월) |
+| 95th percentile threshold | Acc/F1 하락 |
+| cross-val std threshold (calib_std) | n_sigma 증가할수록 Acc 하락 |
+| Mahalanobis episodic training | 60~80분/fold (학습 불가) |
+| ViT backbone | 도메인 loss 폭발 (21.7), OOM |
+| episodic_weight 튜닝 (0.5, 2.0) | 유의미한 차이 없음 |
+| z_inv 직접 GRL (v5, domain_inv_weight=0.5) | fold_500 AUROC 0.85, Acc 0.77 (심각한 하락) |
+| **n_sigma=0.0 (support_mean만 사용)** | **Avg Acc 0.8683, F1 0.9250 → 현재 best** |

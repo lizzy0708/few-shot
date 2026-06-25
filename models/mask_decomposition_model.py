@@ -71,6 +71,8 @@ class MaskDecompositionModel(nn.Module):
         self.feature_extractor = FeatureExtractor()
         self.classifier = ClassClassifier(in_dim=2048, num_classes=num_classes)
         self.domain_classifier = DomainClassifier(in_dim=2048, num_domains=num_domains)
+        # domain adversarial directly on z_inv (forces z_inv itself to be domain-blind)
+        self.domain_classifier_inv = DomainClassifier(in_dim=2048, num_domains=num_domains)
 
     def forward(self, x, alpha=1.0, class_label=None):
         with torch.enable_grad():
@@ -116,6 +118,10 @@ class MaskDecompositionModel(nn.Module):
             z_notc_notd = z * (1 - mc) * (1 - md)
             z_inv       = z_c_notd
 
+            # direct domain adversarial on z_inv: GRL(z_inv) → domain_classifier_inv
+            z_inv_grl = grad_reverse(z_c_notd, alpha)
+            domain_logits_inv = self.domain_classifier_inv(z_inv_grl)
+
         return {
             "z": z,
             "class_logits": class_logits,
@@ -127,4 +133,5 @@ class MaskDecompositionModel(nn.Module):
             "z_notc_d": z_notc_d,
             "z_notc_notd": z_notc_notd,
             "z_inv": z_inv,
+            "domain_logits_inv": domain_logits_inv,
         }

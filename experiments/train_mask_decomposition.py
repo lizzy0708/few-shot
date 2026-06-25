@@ -47,27 +47,25 @@ def normal_contrastive_loss(z_pool, labels, temperature=0.07):
 
 
 def episodic_proto_loss(z_pool, labels, n_support=4, n_episodes=4):
-    """학습 중에 4-shot 테스트 시나리오를 직접 시뮬레이션.
-    매 episode: 4개 normal support → prototype → 거리 → BCE 분류 학습.
-    """
+    """학습 중에 4-shot 테스트 시나리오를 직접 시뮬레이션 (normalized feature space)."""
     device = z_pool.device
     normal_idx = (labels == 0).nonzero(as_tuple=True)[0]
 
     if len(normal_idx) < n_support + 1 or not (labels == 1).any():
         return torch.tensor(0.0, device=device)
 
+    # normalize to unit sphere (consistent with SupCon and ProtoAlign losses)
+    z_norm = F.normalize(z_pool, dim=1)
+
     losses = []
     for _ in range(n_episodes):
         perm = torch.randperm(len(normal_idx), device=device)[:n_support]
         support_idx = normal_idx[perm]
-        prototype = z_pool[support_idx].mean(dim=0).detach()
+        prototype = F.normalize(z_norm[support_idx].mean(dim=0).detach(), dim=0)
 
-        dists = ((z_pool - prototype) ** 2).sum(dim=1).sqrt()
-
-        # threshold: support 거리 평균 (detach — collapse 방지)
+        dists = ((z_norm - prototype) ** 2).sum(dim=1).sqrt()
         thresh = dists[support_idx].detach().mean()
-
-        logits = dists - thresh  # 양수 → anomaly, 음수 → normal
+        logits = dists - thresh
         loss = F.binary_cross_entropy_with_logits(logits, labels.float())
         losses.append(loss)
 
@@ -139,10 +137,13 @@ def train(args):
     ).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=args.epochs, eta_min=args.lr * 0.01
+    )
     ce = nn.CrossEntropyLoss()
 
     print("===================================")
-    print("Train Mask Decomposition Model (v2)")
+    print("Train Mask Decomposition Model (v5 - z_inv GRL)")
     print("===================================")
     print("Device       :", device)
     print("Train domains:", args.train_domains)
@@ -153,6 +154,7 @@ def train(args):
     print("LR           :", args.lr)
     print("Mask weight  :", args.mask_weight)
     print("Domain weight:", args.domain_weight)
+    print("DomInv weight:", args.domain_inv_weight)
     print("SupCon weight:", args.supcon_weight)
     print("Proto weight :", args.proto_weight)
     print("Temperature  :", args.temperature)
@@ -176,6 +178,7 @@ def train(args):
         total_loss = 0.0
         total_class_loss = 0.0
         total_domain_loss = 0.0
+        total_domain_inv_loss = 0.0
         total_mask_loss = 0.0
         total_supcon_loss = 0.0
         total_proto_loss = 0.0
@@ -207,6 +210,7 @@ def train(args):
             class_logits  = model.classifier(z_c_notd)
             class_loss    = ce(class_logits, binary_label)
             domain_loss   = ce(out["domain_logits"], domain)
+            domain_inv_loss = ce(out["domain_logits_inv"], domain)
             mask_loss     = torch.mean(mc * md)
 
             z_inv_pool = F.adaptive_avg_pool2d(z_c_notd, 1).flatten(1)
@@ -221,6 +225,7 @@ def train(args):
 
             loss = (class_loss
                     + args.domain_weight * domain_loss
+                    + args.domain_inv_weight * domain_inv_loss
                     + effective_mask_weight * mask_loss
                     + args.supcon_weight * supcon_loss
                     + args.proto_weight * proto_loss
@@ -230,10 +235,11 @@ def train(args):
             loss.backward()
             optimizer.step()
 
-            total_loss       += loss.item()
-            total_class_loss += class_loss.item()
-            total_domain_loss += domain_loss.item()
-            total_mask_loss  += mask_loss.item()
+            total_loss          += loss.item()
+            total_class_loss    += class_loss.item()
+            total_domain_loss   += domain_loss.item()
+            total_domain_inv_loss += domain_inv_loss.item()
+            total_mask_loss     += mask_loss.item()
             total_supcon_loss   += supcon_loss.item()
             total_proto_loss    += proto_loss.item()
             total_episodic_loss += episodic_loss.item()
@@ -245,23 +251,28 @@ def train(args):
             correct_dom += (pred_dom == domain).sum().item()
             total += fault_type.size(0)
 
-        avg_loss        = total_loss / len(loader)
-        avg_class_loss  = total_class_loss / len(loader)
-        avg_domain_loss = total_domain_loss / len(loader)
-        avg_mask_loss   = total_mask_loss / len(loader)
-        avg_supcon_loss   = total_supcon_loss / len(loader)
-        avg_proto_loss    = total_proto_loss / len(loader)
-        avg_episodic_loss = total_episodic_loss / len(loader)
+        avg_loss           = total_loss / len(loader)
+        avg_class_loss     = total_class_loss / len(loader)
+        avg_domain_loss    = total_domain_loss / len(loader)
+        avg_domain_inv_loss = total_domain_inv_loss / len(loader)
+        avg_mask_loss      = total_mask_loss / len(loader)
+        avg_supcon_loss    = total_supcon_loss / len(loader)
+        avg_proto_loss     = total_proto_loss / len(loader)
+        avg_episodic_loss  = total_episodic_loss / len(loader)
 
         cls_acc = correct_cls / total
         dom_acc = correct_dom / total
 
+        scheduler.step()
+
         print(
             f"Epoch [{epoch + 1}/{args.epochs}] "
             f"alpha={alpha:.3f} | mask_w={effective_mask_weight:.4f} | "
+            f"lr={scheduler.get_last_lr()[0]:.2e} | "
             f"Loss: {avg_loss:.4f} | "
             f"Class: {avg_class_loss:.4f} | "
             f"Dom: {avg_domain_loss:.4f} | "
+            f"DomInv: {avg_domain_inv_loss:.4f} | "
             f"Mask: {avg_mask_loss:.4f} | "
             f"SupCon: {avg_supcon_loss:.4f} | "
             f"Proto: {avg_proto_loss:.4f} | "
@@ -300,6 +311,7 @@ def main():
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--warmup_epochs", type=int, default=3)
     parser.add_argument("--episodic_weight", type=float, default=1.0)
+    parser.add_argument("--domain_inv_weight", type=float, default=0.5)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--save_path", type=str, default="mask_decomposition.pth")
 

@@ -90,6 +90,64 @@ def episodic_proto_loss(z_pool, labels, domains=None, n_support=4, n_episodes=4)
     return torch.stack(losses).mean() if losses else torch.tensor(0.0, device=device)
 
 
+def episodic_patch_loss(z_spatial, labels, domains=None, n_support=4,
+                        n_episodes=4, topk=5, scale=10.0):
+    """patch memory 4-shot 추론 시나리오 시뮬레이션 (eval_patch_folds.py와 정렬).
+
+    z_spatial: [B, C, H, W] — GAP 없이 공간 구조 유지.
+    support 4장 → patch memory, 각 샘플은 patch별 최근접 cosine 거리의
+    top-k 평균이 score. threshold는 support LOO score 평균 (detach).
+    cosine 거리 스케일이 작아(0~0.3) BCE logits에 scale 곱함.
+    """
+    device = z_spatial.device
+    if not (labels == 1).any():
+        return torch.tensor(0.0, device=device)
+
+    B, C, H, W = z_spatial.shape
+    P = H * W
+    patches = F.normalize(z_spatial.view(B, C, P).permute(0, 2, 1), dim=-1)  # [B,P,C]
+    k = min(topk, P)
+    losses = []
+
+    for _ in range(n_episodes):
+        if domains is not None:
+            unique_doms = domains.unique()
+            valid_doms = [d for d in unique_doms
+                          if ((domains == d) & (labels == 0)).sum() >= n_support]
+            if not valid_doms:
+                continue
+            dom = valid_doms[torch.randint(len(valid_doms), (1,)).item()]
+            dom_normal_idx = ((domains == dom) & (labels == 0)).nonzero(as_tuple=True)[0]
+            perm = torch.randperm(len(dom_normal_idx), device=device)[:n_support]
+            support_idx = dom_normal_idx[perm]
+        else:
+            normal_idx = (labels == 0).nonzero(as_tuple=True)[0]
+            if len(normal_idx) < n_support + 1:
+                continue
+            perm = torch.randperm(len(normal_idx), device=device)[:n_support]
+            support_idx = normal_idx[perm]
+
+        memory = patches[support_idx].reshape(-1, C).detach()      # [n_support*P, C]
+        sim = torch.einsum("bpc,mc->bpm", patches, memory)
+        patch_d = 1.0 - sim.max(dim=-1).values                     # [B, P]
+        scores = patch_d.topk(k, dim=-1).values.mean(dim=-1)       # [B]
+
+        # threshold: support LOO (자기 patch 제외 memory로 스코어)
+        loo = []
+        for i in range(n_support):
+            keep = torch.arange(n_support, device=device) != i
+            mem_i = patches[support_idx[keep]].reshape(-1, C).detach()
+            sim_i = patches[support_idx[i]] @ mem_i.T              # [P, M']
+            d_i = 1.0 - sim_i.max(dim=-1).values
+            loo.append(d_i.topk(k).values.mean())
+        thresh = torch.stack(loo).mean().detach()
+
+        logits = (scores - thresh) * scale
+        losses.append(F.binary_cross_entropy_with_logits(logits, labels.float()))
+
+    return torch.stack(losses).mean() if losses else torch.tensor(0.0, device=device)
+
+
 def prototype_alignment_loss(z_pool, labels, domains):
     """정상 샘플의 domain별 prototype이 z_inv 공간에서 가까워야 함."""
     z = F.normalize(z_pool, dim=1)
@@ -263,6 +321,7 @@ def train(args):
                 supcon_loss      = torch.tensor(0.0, device=device)
                 proto_loss       = torch.tensor(0.0, device=device)
                 episodic_loss    = torch.tensor(0.0, device=device)
+                patch_episodic   = torch.tensor(0.0, device=device)
             else:
                 z_c_notd = out["z_c_notd"]
                 class_logits    = model.classifier(z_c_notd)
@@ -283,6 +342,14 @@ def train(args):
                     domains=domain if args.domain_episodes else None,
                     n_support=4, n_episodes=4
                 )
+                if args.patch_episodic_weight > 0:
+                    patch_episodic = episodic_patch_loss(
+                        z_c_notd, binary_label,
+                        domains=domain if args.domain_episodes else None,
+                        n_support=4, n_episodes=4, topk=args.patch_topk,
+                    )
+                else:
+                    patch_episodic = torch.tensor(0.0, device=device)
 
                 loss = (class_loss
                         + args.domain_weight * domain_loss
@@ -291,7 +358,8 @@ def train(args):
                         + effective_mask_weight * mask_loss
                         + args.supcon_weight * supcon_loss
                         + args.proto_weight * proto_loss
-                        + args.episodic_weight * episodic_loss)
+                        + args.episodic_weight * episodic_loss
+                        + args.patch_episodic_weight * patch_episodic)
 
             optimizer.zero_grad()
             loss.backward()
@@ -376,6 +444,10 @@ def main():
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--warmup_epochs", type=int, default=3)
     parser.add_argument("--episodic_weight", type=float, default=1.0)
+    parser.add_argument("--patch_episodic_weight", type=float, default=0.0,
+                        help="patch memory episodic loss 가중치 (0=기존 동작)")
+    parser.add_argument("--patch_topk", type=int, default=5,
+                        help="patch score 집계 top-k")
     parser.add_argument("--domain_disc_weight", type=float, default=1.0)
     parser.add_argument("--domain_inv_weight", type=float, default=0.0)
     parser.add_argument("--domain_episodes", action="store_true",

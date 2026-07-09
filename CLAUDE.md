@@ -77,7 +77,7 @@ EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습
 
 ---
 
-## Current Results (layer4 v3, 20 epochs, n_sigma=0.0)
+## Current Results (layer4 v3, 20 epochs, n_sigma=0.0, pca_dim=128)
 
 | Fold | Base AUROC | Base Acc | Base F1 | z_inv AUROC | z_inv Acc | z_inv F1 |
 |------|-----------|---------|--------|------------|----------|---------|

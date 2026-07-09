@@ -22,24 +22,22 @@ def grad_reverse(x, alpha=1.0):
 
 # Encoder: feature z 생성
 class FeatureExtractor(nn.Module):
-    def __init__(self):
+    def __init__(self, encoder_layer='layer4'):
         super().__init__()
-
         backbone = resnet50(pretrained=True)
-
-        self.encoder = nn.Sequential(
-            backbone.conv1,
-            backbone.bn1,
-            backbone.relu,
-            backbone.maxpool,
-            backbone.layer1,
-            backbone.layer2,
-            backbone.layer3,
-            backbone.layer4,
-        )
+        layers = [
+            backbone.conv1, backbone.bn1, backbone.relu, backbone.maxpool,
+            backbone.layer1, backbone.layer2, backbone.layer3,
+        ]
+        if encoder_layer == 'layer4':
+            layers.append(backbone.layer4)
+            self.out_dim = 2048
+        else:
+            self.out_dim = 1024
+        self.encoder = nn.Sequential(*layers)
 
     def forward(self, x):
-        return self.encoder(x)  # [B, 2048, H, W]
+        return self.encoder(x)  # [B, C, H, W]
 
 
 # Class Classifier: normal / anomaly
@@ -65,73 +63,80 @@ class DomainClassifier(nn.Module):
 
 
 class MaskDecompositionModel(nn.Module):
-    def __init__(self, num_classes=2, num_domains=5):
+    def __init__(self, num_classes=2, num_domains=5, encoder_layer='layer4'):
         super().__init__()
 
-        self.feature_extractor = FeatureExtractor()
-        self.classifier = ClassClassifier(in_dim=2048, num_classes=num_classes)
-        self.domain_classifier = DomainClassifier(in_dim=2048, num_domains=num_domains)
-        # domain adversarial directly on z_inv (forces z_inv itself to be domain-blind)
-        self.domain_classifier_inv = DomainClassifier(in_dim=2048, num_domains=num_domains)
+        self.feature_extractor = FeatureExtractor(encoder_layer=encoder_layer)
+        in_dim = self.feature_extractor.out_dim
+        self.classifier = ClassClassifier(in_dim=in_dim, num_classes=num_classes)
+        self.domain_classifier = DomainClassifier(in_dim=in_dim, num_domains=num_domains)
+        self.domain_classifier_inv = DomainClassifier(in_dim=in_dim, num_domains=num_domains)
+        # Discriminative domain classifier: trained to identify domains (no GRL).
+        # Used solely for computing md — gradient w.r.t. z gives true domain-relevant regions.
+        # Updated only via domain_logits_disc (z.detach()) in training, so encoder is unaffected.
+        self.domain_classifier_disc = DomainClassifier(in_dim=in_dim, num_domains=num_domains)
 
     def forward(self, x, alpha=1.0, class_label=None):
         with torch.enable_grad():
-            # 1. Feature extraction
             z = self.feature_extractor(x)  # [B, C, H, W]
             z.requires_grad_(True)
-
             B = z.size(0)
 
-            # 2. Class logits
+            # --- mc: class gradient mask ---
             class_logits = self.classifier(z)
-
-            # 3. class_score for mc: use GT label when available
             if class_label is not None:
                 class_score = class_logits[torch.arange(B, device=z.device), class_label].sum()
             else:
                 class_score = class_logits.max(dim=1)[0].sum()
 
-            # 4. domain_score for md: GRL-path (adversarial domain classifier)
-            z_grl = grad_reverse(z, alpha)
-            domain_logits = self.domain_classifier(z_grl)
-            domain_score = domain_logits.max(dim=1)[0].sum()
-
             grad_c = torch.autograd.grad(
                 class_score, z, create_graph=True, retain_graph=True
             )[0]
-
-            grad_d = torch.autograd.grad(
-                domain_score, z, create_graph=True, retain_graph=True
-            )[0]
-
-            # 5. Soft masks
             mc = torch.relu(grad_c)
-            md = torch.relu(grad_d)
-
             mc = mc / (mc.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+
+            # --- md: domain gradient mask from discriminative classifier ---
+            # z_for_md is detached so this gradient does not affect the encoder;
+            # grad_d is also detached so md is a fixed mask during the main backward pass.
+            z_for_md = z.detach().requires_grad_(True)
+            domain_score_disc = self.domain_classifier_disc(z_for_md).max(dim=1)[0].sum()
+            grad_d = torch.autograd.grad(domain_score_disc, z_for_md)[0].detach()
+            md = torch.relu(grad_d)
             md = md / (md.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
 
-            # 6. Feature decomposition
-            z_cd        = z * mc * md
-            z_c_notd    = z * mc * (1 - md)   # class-relevant, domain-invariant
-            z_notc_d    = z * (1 - mc) * md   # domain-relevant
-            z_notc_notd = z * (1 - mc) * (1 - md)
-            z_inv       = z_c_notd
+            # --- GRL adversarial path (forces encoder to be domain-blind) ---
+            z_grl = grad_reverse(z, alpha)
+            domain_logits = self.domain_classifier(z_grl)
 
-            # direct domain adversarial on z_inv: GRL(z_inv) → domain_classifier_inv
-            z_inv_grl = grad_reverse(z_c_notd, alpha)
+            # --- Gradient orthogonalization: remove domain direction from mc ---
+            # Gram-Schmidt: mc_orth = mc - proj(mc onto md)
+            mc_flat = mc.view(B, -1)
+            md_flat = md.view(B, -1)
+            md_unit = F.normalize(md_flat, dim=1, eps=1e-6)
+            mc_orth_flat = mc_flat - (mc_flat * md_unit).sum(dim=1, keepdim=True) * md_unit
+            mc_orth = mc_orth_flat.view_as(mc).relu()
+            mc_orth = mc_orth / (mc_orth.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+
+            z_inv = z * mc_orth  # class-relevant, domain-orthogonal
+
+            # --- optional: GRL on z_inv ---
+            z_inv_grl = grad_reverse(z_inv, alpha)
             domain_logits_inv = self.domain_classifier_inv(z_inv_grl)
+
+            # --- disc classifier training signal (z.detach() → only disc weights update) ---
+            domain_logits_disc = self.domain_classifier_disc(z.detach())
 
         return {
             "z": z,
             "class_logits": class_logits,
             "domain_logits": domain_logits,
+            "domain_logits_disc": domain_logits_disc,
             "mc": mc,
             "md": md,
-            "z_cd": z_cd,
-            "z_c_notd": z_c_notd,
-            "z_notc_d": z_notc_d,
-            "z_notc_notd": z_notc_notd,
+            "mc_orth": mc_orth,
+            "z_mc": z * mc,           # class-relevant only (no domain removal)
+            "z_mc_nomd": z * mc * (1 - md),  # Notion 6/15 원본: z * mc * (1-md)
+            "z_c_notd": z_inv,   # backward compat with eval script
             "z_inv": z_inv,
             "domain_logits_inv": domain_logits_inv,
         }

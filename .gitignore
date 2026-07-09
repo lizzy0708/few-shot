@@ -37,3 +37,6 @@ outputs/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Generated coarse dataset (reproducible via experiments/make_coarse_dataset.py)
+processed_gadf_coarse_4096/

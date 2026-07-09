@@ -12,6 +12,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 
 from datasets.hust_image import HUSTDataset
 from models.mask_decomposition_model import MaskDecompositionModel
+from models.original_mask_model import OriginalMaskModel
 
 
 def normal_contrastive_loss(z_pool, labels, temperature=0.07):
@@ -46,30 +47,47 @@ def normal_contrastive_loss(z_pool, labels, temperature=0.07):
     return loss[valid].mean() if valid.any() else torch.tensor(0.0, device=z.device)
 
 
-def episodic_proto_loss(z_pool, labels, n_support=4, n_episodes=4):
-    """학습 중에 4-shot 테스트 시나리오를 직접 시뮬레이션 (normalized feature space)."""
+def episodic_proto_loss(z_pool, labels, domains=None, n_support=4, n_episodes=4):
+    """4-shot 테스트 시나리오 시뮬레이션.
+    domains 제공 시: 단일 도메인에서 support 선택 (test-time과 동일).
+    domains=None 시: 기존 방식 (배치에서 랜덤 선택).
+    """
     device = z_pool.device
-    normal_idx = (labels == 0).nonzero(as_tuple=True)[0]
 
-    if len(normal_idx) < n_support + 1 or not (labels == 1).any():
+    if not (labels == 1).any():
         return torch.tensor(0.0, device=device)
 
-    # normalize to unit sphere (consistent with SupCon and ProtoAlign losses)
     z_norm = F.normalize(z_pool, dim=1)
-
     losses = []
-    for _ in range(n_episodes):
-        perm = torch.randperm(len(normal_idx), device=device)[:n_support]
-        support_idx = normal_idx[perm]
-        prototype = F.normalize(z_norm[support_idx].mean(dim=0).detach(), dim=0)
 
+    for _ in range(n_episodes):
+        if domains is not None:
+            # test-time 시뮬레이션: 단일 도메인에서 support 4개 선택
+            unique_doms = domains.unique()
+            # 정상 샘플이 충분한 도메인만 후보
+            valid_doms = [d for d in unique_doms
+                          if ((domains == d) & (labels == 0)).sum() >= n_support]
+            if not valid_doms:
+                continue
+            dom = valid_doms[torch.randint(len(valid_doms), (1,)).item()]
+            dom_normal_idx = ((domains == dom) & (labels == 0)).nonzero(as_tuple=True)[0]
+            perm = torch.randperm(len(dom_normal_idx), device=device)[:n_support]
+            support_idx = dom_normal_idx[perm]
+        else:
+            normal_idx = (labels == 0).nonzero(as_tuple=True)[0]
+            if len(normal_idx) < n_support + 1:
+                continue
+            perm = torch.randperm(len(normal_idx), device=device)[:n_support]
+            support_idx = normal_idx[perm]
+
+        prototype = F.normalize(z_norm[support_idx].mean(dim=0).detach(), dim=0)
         dists = ((z_norm - prototype) ** 2).sum(dim=1).sqrt()
         thresh = dists[support_idx].detach().mean()
         logits = dists - thresh
         loss = F.binary_cross_entropy_with_logits(logits, labels.float())
         losses.append(loss)
 
-    return torch.stack(losses).mean()
+    return torch.stack(losses).mean() if losses else torch.tensor(0.0, device=device)
 
 
 def prototype_alignment_loss(z_pool, labels, domains):
@@ -105,10 +123,24 @@ def set_seed(seed):
     torch.backends.cudnn.benchmark = False
 
 
+def make_coarse_domain_map(all_domains):
+    """500/502/504 → 같은 index (RPM 그룹 기준)."""
+    rpm_groups = sorted(set(int(d) // 100 * 100 for d in all_domains))
+    rpm_to_idx = {rpm: idx for idx, rpm in enumerate(rpm_groups)}
+    return {str(d): rpm_to_idx[int(d) // 100 * 100] for d in all_domains}
+
+
 def train(args):
     set_seed(args.seed)
-    datasets = []
 
+    if args.coarse:
+        domain_map  = make_coarse_domain_map(args.all_domains)
+        num_domains = len(set(domain_map.values()))
+    else:
+        domain_map  = None
+        num_domains = len(args.all_domains)
+
+    datasets = []
     for domain in args.train_domains:
         ds = HUSTDataset(
             root=args.root,
@@ -116,6 +148,7 @@ def train(args):
             only_normal=False,
             shot=None,
             all_domains=args.all_domains,
+            domain_map=domain_map,
         )
         datasets.append(ds)
 
@@ -129,12 +162,17 @@ def train(args):
         drop_last=False,
     )
 
-    num_domains = len(args.all_domains)
-
-    model = MaskDecompositionModel(
-        num_classes=args.num_classes,
-        num_domains=num_domains
-    ).to(device)
+    if args.original:
+        model = OriginalMaskModel(
+            num_classes=args.num_classes,
+            num_domains=num_domains,
+            encoder_layer='layer3',
+        ).to(device)
+    else:
+        model = MaskDecompositionModel(
+            num_classes=args.num_classes,
+            num_domains=num_domains
+        ).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
@@ -143,24 +181,28 @@ def train(args):
     ce = nn.CrossEntropyLoss()
 
     print("===================================")
-    print("Train Mask Decomposition Model (v5 - z_inv GRL)")
+    print("Train Mask Decomposition Model (v3)")
     print("===================================")
-    print("Device       :", device)
-    print("Train domains:", args.train_domains)
-    print("All domains  :", args.all_domains)
-    print("Num domains  :", num_domains)
-    print("Epochs       :", args.epochs)
-    print("Batch size   :", args.batch_size)
-    print("LR           :", args.lr)
-    print("Mask weight  :", args.mask_weight)
-    print("Domain weight:", args.domain_weight)
-    print("DomInv weight:", args.domain_inv_weight)
-    print("SupCon weight:", args.supcon_weight)
-    print("Proto weight :", args.proto_weight)
-    print("Temperature  :", args.temperature)
-    print("Seed         :", args.seed)
-    print("Save path    :", args.save_path)
-    print("Total samples:", len(dataset))
+    print("Device        :", device)
+    print("Train domains :", args.train_domains)
+    print("All domains   :", args.all_domains)
+    print("Domain mode   :", f"coarse ({num_domains} groups)" if args.coarse else f"fine ({num_domains} domains)")
+    if args.coarse:
+        print("Domain map    :", domain_map)
+    print("Num domains   :", num_domains)
+    print("Epochs        :", args.epochs)
+    print("Batch size    :", args.batch_size)
+    print("LR            :", args.lr)
+    print("Mask weight   :", args.mask_weight)
+    print("Domain weight :", args.domain_weight)
+    print("DomDisc weight:", args.domain_disc_weight)
+    print("DomInv weight :", args.domain_inv_weight)
+    print("SupCon weight :", args.supcon_weight)
+    print("Proto weight  :", args.proto_weight)
+    print("Temperature   :", args.temperature)
+    print("Seed          :", args.seed)
+    print("Save path     :", args.save_path)
+    print("Total samples :", len(dataset))
     print("===================================")
 
     for epoch in range(args.epochs):
@@ -178,6 +220,7 @@ def train(args):
         total_loss = 0.0
         total_class_loss = 0.0
         total_domain_loss = 0.0
+        total_domain_disc_loss = 0.0
         total_domain_inv_loss = 0.0
         total_mask_loss = 0.0
         total_supcon_loss = 0.0
@@ -203,46 +246,66 @@ def train(args):
 
             out = model(img, alpha=alpha, class_label=binary_label)
 
-            z_c_notd = out["z_c_notd"]
-            mc       = out["mc"]
-            md       = out["md"]
+            mc = out["mc"]
+            md = out["md"]
 
-            class_logits  = model.classifier(z_c_notd)
-            class_loss    = ce(class_logits, binary_label)
-            domain_loss   = ce(out["domain_logits"], domain)
-            domain_inv_loss = ce(out["domain_logits_inv"], domain)
-            mask_loss     = torch.mean(mc * md)
+            if args.original:
+                # Notion 6/15 원본: class + domain(GRL) + mask_orth 만 사용
+                class_logits = out["class_logits"]
+                class_loss   = ce(class_logits, binary_label)
+                domain_loss  = ce(out["domain_logits"], domain)
+                mask_loss    = torch.mean(mc * md)
+                loss = (class_loss
+                        + args.domain_weight * domain_loss
+                        + effective_mask_weight * mask_loss)
+                domain_disc_loss = torch.tensor(0.0, device=device)
+                domain_inv_loss  = torch.tensor(0.0, device=device)
+                supcon_loss      = torch.tensor(0.0, device=device)
+                proto_loss       = torch.tensor(0.0, device=device)
+                episodic_loss    = torch.tensor(0.0, device=device)
+            else:
+                z_c_notd = out["z_c_notd"]
+                class_logits    = model.classifier(z_c_notd)
+                class_loss      = ce(class_logits, binary_label)
+                domain_loss     = ce(out["domain_logits"], domain)
+                domain_disc_loss = ce(out["domain_logits_disc"], domain)
+                domain_inv_loss = ce(out["domain_logits_inv"], domain)
+                mask_loss       = torch.mean(mc * md)
 
-            z_inv_pool = F.adaptive_avg_pool2d(z_c_notd, 1).flatten(1)
+                z_inv_pool = F.adaptive_avg_pool2d(z_c_notd, 1).flatten(1)
 
-            supcon_loss = normal_contrastive_loss(
-                z_inv_pool, binary_label, temperature=args.temperature
-            )
-            proto_loss = prototype_alignment_loss(z_inv_pool, binary_label, domain)
-            episodic_loss = episodic_proto_loss(
-                z_inv_pool, binary_label, n_support=4, n_episodes=4
-            )
+                supcon_loss = normal_contrastive_loss(
+                    z_inv_pool, binary_label, temperature=args.temperature
+                )
+                proto_loss = prototype_alignment_loss(z_inv_pool, binary_label, domain)
+                episodic_loss = episodic_proto_loss(
+                    z_inv_pool, binary_label,
+                    domains=domain if args.domain_episodes else None,
+                    n_support=4, n_episodes=4
+                )
 
-            loss = (class_loss
-                    + args.domain_weight * domain_loss
-                    + args.domain_inv_weight * domain_inv_loss
-                    + effective_mask_weight * mask_loss
-                    + args.supcon_weight * supcon_loss
-                    + args.proto_weight * proto_loss
-                    + args.episodic_weight * episodic_loss)
+                loss = (class_loss
+                        + args.domain_weight * domain_loss
+                        + args.domain_disc_weight * domain_disc_loss
+                        + args.domain_inv_weight * domain_inv_loss
+                        + effective_mask_weight * mask_loss
+                        + args.supcon_weight * supcon_loss
+                        + args.proto_weight * proto_loss
+                        + args.episodic_weight * episodic_loss)
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            total_loss          += loss.item()
-            total_class_loss    += class_loss.item()
-            total_domain_loss   += domain_loss.item()
+            total_loss            += loss.item()
+            total_class_loss      += class_loss.item()
+            total_domain_loss     += domain_loss.item()
+            total_domain_disc_loss += domain_disc_loss.item()
             total_domain_inv_loss += domain_inv_loss.item()
-            total_mask_loss     += mask_loss.item()
-            total_supcon_loss   += supcon_loss.item()
-            total_proto_loss    += proto_loss.item()
-            total_episodic_loss += episodic_loss.item()
+            total_mask_loss       += mask_loss.item()
+            total_supcon_loss     += supcon_loss.item()
+            total_proto_loss      += proto_loss.item()
+            total_episodic_loss   += episodic_loss.item()
 
             pred_cls = class_logits.argmax(dim=1)
             pred_dom = out["domain_logits"].argmax(dim=1)
@@ -251,14 +314,15 @@ def train(args):
             correct_dom += (pred_dom == domain).sum().item()
             total += fault_type.size(0)
 
-        avg_loss           = total_loss / len(loader)
-        avg_class_loss     = total_class_loss / len(loader)
-        avg_domain_loss    = total_domain_loss / len(loader)
-        avg_domain_inv_loss = total_domain_inv_loss / len(loader)
-        avg_mask_loss      = total_mask_loss / len(loader)
-        avg_supcon_loss    = total_supcon_loss / len(loader)
-        avg_proto_loss     = total_proto_loss / len(loader)
-        avg_episodic_loss  = total_episodic_loss / len(loader)
+        avg_loss             = total_loss / len(loader)
+        avg_class_loss       = total_class_loss / len(loader)
+        avg_domain_loss      = total_domain_loss / len(loader)
+        avg_domain_disc_loss = total_domain_disc_loss / len(loader)
+        avg_domain_inv_loss  = total_domain_inv_loss / len(loader)
+        avg_mask_loss        = total_mask_loss / len(loader)
+        avg_supcon_loss      = total_supcon_loss / len(loader)
+        avg_proto_loss       = total_proto_loss / len(loader)
+        avg_episodic_loss    = total_episodic_loss / len(loader)
 
         cls_acc = correct_cls / total
         dom_acc = correct_dom / total
@@ -272,8 +336,9 @@ def train(args):
             f"Loss: {avg_loss:.4f} | "
             f"Class: {avg_class_loss:.4f} | "
             f"Dom: {avg_domain_loss:.4f} | "
+            f"DomDisc: {avg_domain_disc_loss:.4f} | "
             f"DomInv: {avg_domain_inv_loss:.4f} | "
-            f"Mask: {avg_mask_loss:.4f} | "
+            f"Mask(mc*md): {avg_mask_loss:.4f} | "
             f"SupCon: {avg_supcon_loss:.4f} | "
             f"Proto: {avg_proto_loss:.4f} | "
             f"Episodic: {avg_episodic_loss:.4f} | "
@@ -311,9 +376,16 @@ def main():
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--warmup_epochs", type=int, default=3)
     parser.add_argument("--episodic_weight", type=float, default=1.0)
-    parser.add_argument("--domain_inv_weight", type=float, default=0.5)
+    parser.add_argument("--domain_disc_weight", type=float, default=1.0)
+    parser.add_argument("--domain_inv_weight", type=float, default=0.0)
+    parser.add_argument("--domain_episodes", action="store_true",
+                        help="Use domain-specific support in episodic loss (matches test-time)")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--save_path", type=str, default="mask_decomposition.pth")
+    parser.add_argument("--coarse", action="store_true",
+                        help="500/502/504 → 같은 도메인 index (RPM 그룹 기준)")
+    parser.add_argument("--original", action="store_true",
+                        help="Notion 6/15 원본: OriginalMaskModel (layer3, z*mc*(1-md), 3-loss만 사용)")
 
     args = parser.parse_args()
     train(args)

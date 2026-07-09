@@ -8,13 +8,20 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, ConcatDataset
 from torchvision import transforms
-from sklearn.metrics import roc_auc_score, accuracy_score, f1_score
+from sklearn.metrics import roc_auc_score, accuracy_score, f1_score, confusion_matrix
 from sklearn.covariance import LedoitWolf
+from sklearn.decomposition import PCA
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 from torchvision.models import resnet50
 from datasets.hust_image import HUSTDataset
 from models.mask_decomposition_model import MaskDecompositionModel
-from models.vit_mask_decomposition_model import ViTMaskDecompositionModel
+from models.inv_encoder_model import InvEncoderModel
+from models.mc_model import MCModel
+from models.channel_mask_model import ChannelMaskModel
+from models.original_mask_model import OriginalMaskModel
 
 
 class PretrainedExtractor(torch.nn.Module):
@@ -61,16 +68,73 @@ transform = transforms.Compose([
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-def get_features(model, loader, feature_key="z_c_notd"):
+def get_features(model, loader, feature_key="z_c_notd", md=None):
     feats, labels = [], []
     for batch in loader:
         img = batch["image"].to(device)
-        out = model(img)
+        out = model(img) if md is None else model(img, md=md)
         z = out[feature_key]
         z = F.adaptive_avg_pool2d(z, 1).view(z.size(0), -1)
         feats.append(z.detach())
         labels.extend(batch["label"].numpy().tolist())
     return torch.cat(feats, dim=0), np.array(labels)
+
+
+def compute_md_from_calib(model, calib_normal_loader):
+    """calib 도메인 정상 샘플로 md_calib 계산 (ChannelMaskModel 전용)."""
+    zp_list, dom_list = [], []
+    with torch.no_grad():
+        for batch in calib_normal_loader:
+            img = batch["image"].to(device)
+            z = model.feature_extractor(img)
+            zp = F.adaptive_avg_pool2d(z, 1).flatten(1)
+            zp_list.append(zp)
+            dom_list.append(batch["domain"].long().to(device))
+    zp_all = torch.cat(zp_list)
+    dom_all = torch.cat(dom_list)
+    labels_all = torch.zeros(len(zp_all), dtype=torch.long, device=device)
+    return ChannelMaskModel.compute_md(zp_all, labels_all, dom_all)
+
+
+def plot_confusion_matrix(cm: np.ndarray, title: str, save_path: str,
+                          auroc: float = None, acc: float = None,
+                          f1: float = None, prec: float = None, rec: float = None):
+    """혼동행렬을 heatmap 이미지로 저장."""
+    os.makedirs(os.path.dirname(save_path) if os.path.dirname(save_path) else ".", exist_ok=True)
+    tn, fp, fn, tp = cm.ravel()
+    total = tn + fp + fn + tp
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
+    plt.colorbar(im, ax=ax)
+
+    classes = ['Normal', 'Anomaly']
+    ax.set_xticks([0, 1]); ax.set_xticklabels(classes, fontsize=12)
+    ax.set_yticks([0, 1]); ax.set_yticklabels(classes, fontsize=12)
+    ax.set_xlabel('Predicted Label', fontsize=12)
+    ax.set_ylabel('True Label', fontsize=12)
+
+    for i in range(2):
+        for j in range(2):
+            val = cm[i, j]
+            pct = val / total * 100
+            color = 'white' if cm[i, j] > cm.max() / 2 else 'black'
+            ax.text(j, i, f'{val:,}\n({pct:.1f}%)', ha='center', va='center',
+                    fontsize=11, color=color, fontweight='bold')
+
+    metrics_lines = []
+    if auroc is not None: metrics_lines.append(f'AUROC={auroc:.4f}')
+    if acc   is not None: metrics_lines.append(f'Acc={acc:.4f}')
+    if f1    is not None: metrics_lines.append(f'F1={f1:.4f}')
+    if prec  is not None: metrics_lines.append(f'Prec={prec:.4f}')
+    if rec   is not None: metrics_lines.append(f'Rec={rec:.4f}')
+    subtitle = '  |  '.join(metrics_lines)
+
+    ax.set_title(f'{title}\n{subtitle}', fontsize=11, pad=10)
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"  [CM 이미지 저장] {save_path}")
 
 
 def mahalanobis_score(x: np.ndarray, mean: np.ndarray, prec: np.ndarray) -> np.ndarray:
@@ -85,38 +149,121 @@ def fit_normal_distribution(normal_feats: np.ndarray):
     return lw.location_, lw.precision_
 
 
+def fit_diag_distribution(normal_feats: np.ndarray, reg: float = 1e-3) -> np.ndarray:
+    """Diagonal covariance: precision = diag(1 / (var + reg))."""
+    var = normal_feats.var(axis=0) + reg
+    return np.diag(1.0 / var)
+
+
 def normal_threshold(scores: np.ndarray, n_sigma: float = 2.0) -> float:
     """Threshold = mean + n_sigma * std of normal-sample scores (no label leakage)."""
     return scores.mean() + n_sigma * scores.std()
 
 
-def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, use_l2=False, n_sigma=2.0, use_classifier=False):
+def youden_threshold(scores: np.ndarray, labels: np.ndarray) -> float:
+    """Threshold at maximum Youden's J = TPR - FPR (from calib normal+anomaly)."""
+    from sklearn.metrics import roc_curve
+    fpr, tpr, thresholds = roc_curve(labels, scores)
+    return float(thresholds[np.argmax(tpr - fpr)])
+
+
+def f1_threshold(scores: np.ndarray, labels: np.ndarray) -> float:
+    """Threshold at maximum F1 score (from calib normal+anomaly)."""
+    from sklearn.metrics import precision_recall_curve
+    precision, recall, thresholds = precision_recall_curve(labels, scores)
+    f1s = 2 * precision * recall / (precision + recall + 1e-9)
+    return float(thresholds[np.argmax(f1s[:-1])])
+
+
+def acc_threshold(scores: np.ndarray, labels: np.ndarray) -> float:
+    """Threshold at maximum Accuracy (from calib normal+anomaly)."""
+    thresholds = np.unique(scores)
+    best_acc, best_th = 0.0, thresholds[0]
+    for th in thresholds:
+        preds = (scores >= th).astype(int)
+        acc = (preds == labels).mean()
+        if acc > best_acc:
+            best_acc, best_th = acc, th
+    return float(best_th)
+
+
+def make_coarse_domain_map(all_domains):
+    """500/502/504 → 같은 index (RPM 그룹 기준)."""
+    rpm_groups = sorted(set(int(d) // 100 * 100 for d in all_domains))
+    rpm_to_idx = {rpm: idx for idx, rpm in enumerate(rpm_groups)}
+    return {str(d): rpm_to_idx[int(d) // 100 * 100] for d in all_domains}
+
+
+def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=False, n_sigma=2.0, use_classifier=False, proto_beta=1.0, model_type="mask", pca_dim=0, coarse=False, use_youden=False, use_cosine=False, use_f1_thresh=False, use_acc_thresh=False, use_zmc=False, use_nomd=False):
     all_base, all_zinv = [], []
     all_base_acc, all_base_f1, all_cacc, all_cf1 = [], [], [], []
+    all_prec, all_rec = [], []
+    global_preds, global_labels = [], []
 
     header = (f"{'Test':>12} | {'Base AUROC':>10} | {'Base Acc':>8} | {'Base F1':>7} |"
-              f" {'z_inv AUROC':>11} | {'z_inv Acc':>9} | {'z_inv F1':>8}")
+              f" {'z_inv AUROC':>11} | {'z_inv Acc':>9} | {'z_inv F1':>8} | {'Prec':>6} | {'Rec':>6}")
     print(header)
     print("-" * len(header))
+
+    if use_nomd:
+        feature_key = "z_mc_nomd"
+    elif use_zmc:
+        feature_key = "z_mc"
+    else:
+        feature_key = "z_c_notd"
 
     for ckpt, test_domains, calib_domains, all_domains in folds:
         if not os.path.exists(ckpt):
             print(f"  Checkpoint not found: {ckpt} — skipping fold")
             continue
 
-        num_domains = len(all_domains)
+        # coarse 모드: 500/502/504 → 같은 도메인 index
+        if coarse:
+            domain_map  = make_coarse_domain_map(all_domains)
+            num_domains = len(set(domain_map.values()))
+        else:
+            domain_map  = None
+            num_domains = len(all_domains)
 
-        if vit:
-            model = ViTMaskDecompositionModel(
+        # 체크포인트에서 실제 num_domains 및 encoder_layer 감지
+        _sd = torch.load(ckpt, map_location=device)
+        for key in ("domain_classifier.weight", "domain_classifier_inv.fc.weight"):
+            if key in _sd:
+                num_domains = _sd[key].shape[0]
+                break
+        # classifier 가중치 열 수로 encoder_layer 감지 (fc wrapper 유무 모두 처리)
+        ckpt_encoder_layer = 'layer4'
+        for cls_key in ("classifier.fc.weight", "classifier.weight"):
+            if cls_key in _sd:
+                if _sd[cls_key].shape[1] == 1024:
+                    ckpt_encoder_layer = 'layer3'
+                break
+
+        if model_type == "inv":
+            model = InvEncoderModel(
                 num_classes=num_classes,
                 num_domains=num_domains,
+            ).to(device)
+        elif model_type == "mc":
+            model = MCModel(
+                num_classes=num_classes,
+                num_domains=num_domains,
+            ).to(device)
+        elif model_type == "channel":
+            model = ChannelMaskModel(num_classes=num_classes, num_domains=num_domains).to(device)
+        elif model_type == "original":
+            model = OriginalMaskModel(
+                num_classes=num_classes,
+                num_domains=num_domains,
+                encoder_layer=ckpt_encoder_layer,
             ).to(device)
         else:
             model = MaskDecompositionModel(
                 num_classes=num_classes,
                 num_domains=num_domains,
+                encoder_layer=ckpt_encoder_layer,
             ).to(device)
-        model.load_state_dict(torch.load(ckpt, map_location=device), strict=False)
+        model.load_state_dict(_sd, strict=False)
         model.eval()
 
         # Baseline용 pretrained extractor (학습 안 함)
@@ -124,21 +271,59 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
         baseline_extractor.eval()
 
         base_aurocs, zinv_aurocs = [], []
-        base_accs, base_f1s, accs, f1s = [], [], [], []
+        base_accs, base_f1s, accs, f1s, precs, recs = [], [], [], [], [], []
+        fold_all_preds, fold_all_labels = [], []
+        fold_base_preds, fold_base_labels = [], []
 
-        # 학습 도메인 정상 샘플로 정상 분포 추정 (공분산)
-        calib_normal_sets = []
+        # Calib 로딩: youden/cosine 모드는 정상+이상 모두, 아니면 정상만
+        calib_sets = []
         for d in calib_domains:
             try:
-                calib_normal_sets.append(HUSTDataset(
-                    root=root, domain=d, only_normal=True,
+                calib_sets.append(HUSTDataset(
+                    root=root, domain=d, only_normal=(not use_youden and not use_cosine),
                     transform=transform, all_domains=all_domains,
+                    domain_map=domain_map,
                 ))
             except RuntimeError:
                 pass
-        calib_normal_loader = DataLoader(ConcatDataset(calib_normal_sets), batch_size=32, shuffle=False)
-        calib_normal_feats, _ = get_features(model, calib_normal_loader)
-        calib_normal_np = calib_normal_feats.cpu().numpy()
+        calib_loader = DataLoader(ConcatDataset(calib_sets), batch_size=32, shuffle=False)
+
+        md_calib = None
+        if model_type == "channel":
+            # ChannelMaskModel은 정상 loader로 md 계산 (youden여부 무관)
+            if use_youden:
+                calib_norm_sets = []
+                for d in calib_domains:
+                    try:
+                        calib_norm_sets.append(HUSTDataset(
+                            root=root, domain=d, only_normal=True,
+                            transform=transform, all_domains=all_domains,
+                            domain_map=domain_map,
+                        ))
+                    except RuntimeError:
+                        pass
+                md_calib = compute_md_from_calib(
+                    model, DataLoader(ConcatDataset(calib_norm_sets), batch_size=32, shuffle=False)
+                )
+            else:
+                md_calib = compute_md_from_calib(model, calib_loader)
+
+        calib_feats, calib_labels_all = get_features(model, calib_loader, feature_key=feature_key, md=md_calib)
+        calib_np_all = calib_feats.cpu().numpy()
+
+        # 정상 샘플만 분리 (covariance fitting용)
+        if use_youden:
+            calib_normal_np = calib_np_all[calib_labels_all == 0]
+        else:
+            calib_normal_np = calib_np_all
+
+        # PCA dimensionality reduction (fit on calib normals)
+        pca_model = None
+        if pca_dim > 0 and pca_dim < calib_normal_np.shape[1]:
+            pca_model = PCA(n_components=pca_dim, random_state=42)
+            calib_normal_np = pca_model.fit_transform(calib_normal_np)
+            if use_youden:
+                calib_np_all = pca_model.transform(calib_np_all)
 
         def extract_pretrained(loader):
             feats, lbls = [], []
@@ -149,7 +334,10 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
                     lbls.extend(batch["label"].numpy().tolist())
             return torch.cat(feats, dim=0), np.array(lbls)
 
-        _, prec_np = fit_normal_distribution(calib_normal_np)
+        if use_youden:
+            prec_np = fit_diag_distribution(calib_normal_np)
+        else:
+            _, prec_np = fit_normal_distribution(calib_normal_np)
 
         for seed in seeds:
             torch.manual_seed(seed)
@@ -161,10 +349,12 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
                         root=root, domain=d, only_normal=True,
                         shot=shot, transform=transform,
                         seed=seed, all_domains=all_domains,
+                        domain_map=domain_map,
                     )
                     query_ds = HUSTDataset(
                         root=root, domain=d, only_normal=False,
                         transform=transform, all_domains=all_domains,
+                        domain_map=domain_map,
                     )
                 except RuntimeError:
                     continue
@@ -172,53 +362,72 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
                 support_loader = DataLoader(support_ds, batch_size=shot, shuffle=False)
                 query_loader   = DataLoader(query_ds,   batch_size=32,   shuffle=False)
 
-                query_feats, query_labels = get_features(model, query_loader)
+                query_feats, query_labels = get_features(model, query_loader, feature_key=feature_key, md=md_calib)
                 if len(np.unique(query_labels)) < 2:
                     continue
 
-                support_feats, _ = get_features(model, support_loader)
+                support_feats, _ = get_features(model, support_loader, feature_key=feature_key, md=md_calib)
                 prototype_np = support_feats.cpu().numpy().mean(axis=0)
 
                 # z_inv scoring
                 query_np = query_feats.cpu().numpy()
                 support_np = support_feats.cpu().numpy()
 
-                # L2-normalize features before scoring (scale-invariant, matches episodic training)
-                def l2norm(x):
-                    n = np.linalg.norm(x, axis=1, keepdims=True)
-                    return x / (n + 1e-8)
+                # apply PCA if fitted
+                if pca_model is not None:
+                    query_np   = pca_model.transform(query_np)
+                    support_np = pca_model.transform(support_np)
 
-                query_np_n   = l2norm(query_np)
-                support_np_n = l2norm(support_np)
-                calib_np_n   = l2norm(calib_normal_np)
-                prototype_np_n = l2norm(support_np_n.mean(axis=0, keepdims=True))[0]
+                prototype_np = support_np.mean(axis=0)
 
-                if use_l2:
-                    # L2 on normalized sphere
-                    zinv_scores = np.sqrt(((query_np_n - prototype_np_n) ** 2).sum(axis=1))
-                    support_zinv_scores = np.sqrt(((support_np_n - prototype_np_n) ** 2).sum(axis=1))
+                if use_cosine:
+                    def cosine_dist(x, proto):
+                        x_n = x / (np.linalg.norm(x, axis=1, keepdims=True) + 1e-8)
+                        p_n = proto / (np.linalg.norm(proto) + 1e-8)
+                        return 1.0 - (x_n @ p_n)
+                    zinv_scores = cosine_dist(query_np, prototype_np)
+                    calib_scores_thresh = cosine_dist(calib_np_all, prototype_np)
+                    threshold = youden_threshold(calib_scores_thresh, calib_labels_all)
+                elif use_l2:
+                    zinv_scores = np.sqrt(((query_np - prototype_np) ** 2).sum(axis=1))
+                    support_zinv_scores = np.sqrt(((support_np - prototype_np) ** 2).sum(axis=1))
                     threshold = support_zinv_scores.mean()
                 elif use_classifier:
-                    # Threshold-free: use trained classifier + support-based bias correction
-                    fc_w = model.classifier.fc.weight.detach().cpu().numpy()  # [2, 2048]
-                    fc_b = model.classifier.fc.bias.detach().cpu().numpy()    # [2]
-                    query_logits = query_np @ fc_w.T + fc_b    # [N, 2]
-                    support_logits = support_np @ fc_w.T + fc_b  # [4, 2]
+                    fc_w = model.classifier.fc.weight.detach().cpu().numpy()
+                    fc_b = model.classifier.fc.bias.detach().cpu().numpy()
+                    query_logits = query_np @ fc_w.T + fc_b
+                    support_logits = support_np @ fc_w.T + fc_b
                     zinv_scores = query_logits[:, 1] - query_logits[:, 0]
                     support_anom_scores = support_logits[:, 1] - support_logits[:, 0]
                     threshold = support_anom_scores.mean()
+                elif use_f1_thresh:
+                    zinv_scores = mahalanobis_score(query_np, prototype_np, prec_np)
+                    calib_scores_thresh = mahalanobis_score(calib_np_all, prototype_np, prec_np)
+                    threshold = f1_threshold(calib_scores_thresh, calib_labels_all)
+                elif use_acc_thresh:
+                    zinv_scores = mahalanobis_score(query_np, prototype_np, prec_np)
+                    calib_scores_thresh = mahalanobis_score(calib_np_all, prototype_np, prec_np)
+                    threshold = acc_threshold(calib_scores_thresh, calib_labels_all)
+                elif use_youden:
+                    zinv_scores = mahalanobis_score(query_np, prototype_np, prec_np)
+                    calib_scores_thresh = mahalanobis_score(calib_np_all, prototype_np, prec_np)
+                    threshold = youden_threshold(calib_scores_thresh, calib_labels_all)
                 else:
-                    # Mahalanobis on normalized features + support mean threshold
-                    _, prec_np_n = fit_normal_distribution(calib_np_n)
-                    zinv_scores = mahalanobis_score(query_np_n, prototype_np_n, prec_np_n)
-                    support_zinv_scores = mahalanobis_score(support_np_n, prototype_np_n, prec_np_n)
-                    calib_zinv_scores = mahalanobis_score(calib_np_n, prototype_np_n, prec_np_n)
+                    # Mahalanobis + support mean + n_sigma*calib_std
+                    zinv_scores = mahalanobis_score(query_np, prototype_np, prec_np)
+                    support_zinv_scores = mahalanobis_score(support_np, prototype_np, prec_np)
+                    calib_zinv_scores = mahalanobis_score(calib_normal_np, prototype_np, prec_np)
                     threshold = support_zinv_scores.mean() + n_sigma * calib_zinv_scores.std()
 
+                from sklearn.metrics import precision_score, recall_score
                 zinv_aurocs.append(roc_auc_score(query_labels, zinv_scores))
                 preds = (zinv_scores > threshold).astype(int)
                 accs.append(accuracy_score(query_labels, preds))
                 f1s.append(f1_score(query_labels, preds, zero_division=0))
+                precs.append(precision_score(query_labels, preds, zero_division=0))
+                recs.append(recall_score(query_labels, preds, zero_division=0))
+                fold_all_preds.extend(preds.tolist())
+                fold_all_labels.extend(query_labels.tolist())
 
                 # Baseline: pretrained ResNet50 + cosine
                 query_base, _ = extract_pretrained(query_loader)
@@ -232,6 +441,8 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
                 base_preds = (base_scores > base_threshold).astype(int)
                 base_accs.append(accuracy_score(query_labels, base_preds))
                 base_f1s.append(f1_score(query_labels, base_preds, zero_division=0))
+                fold_base_preds.extend(base_preds.tolist())
+                fold_base_labels.extend(query_labels.tolist())
 
         bm = np.mean(base_aurocs)
         bam = np.mean(base_accs)
@@ -247,13 +458,63 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, vit=False, 
         all_cacc.append(am)
         all_cf1.append(fm)
 
+        pm = np.mean(precs) if precs else 0.0
+        rm = np.mean(recs)  if recs  else 0.0
+        all_prec.append(pm)
+        all_rec.append(rm)
+
         test_label = "+".join(test_domains)
         print(f"{test_label:>12} | {bm:>10.4f} | {bam:>8.4f} | {bfm:>7.4f} |"
-              f" {zm:>11.4f} | {am:>9.4f} | {fm:>8.4f}")
+              f" {zm:>11.4f} | {am:>9.4f} | {fm:>8.4f} | {pm:>6.4f} | {rm:>6.4f}")
+
+        # Confusion matrix for this fold
+        if fold_all_labels:
+            cm = confusion_matrix(fold_all_labels, fold_all_preds, labels=[0, 1])
+            tn, fp, fn, tp = cm.ravel()
+            print(f"  [z_inv CM] TN={tn:5d} FP={fp:5d} FN={fn:5d} TP={tp:5d}"
+                  f"  | Sens={tp/(tp+fn+1e-9):.4f} Spec={tn/(tn+fp+1e-9):.4f}")
+            fold_acc  = (tn+tp)/(tn+fp+fn+tp)
+            fold_prec = tp/(tp+fp+1e-9)
+            fold_rec  = tp/(tp+fn+1e-9)
+            fold_f1   = 2*tp/(2*tp+fp+fn+1e-9)
+            plot_confusion_matrix(
+                cm, title=f"Fold {test_label} Confusion Matrix",
+                save_path=f"results/cm_fold_{test_label}.png",
+                auroc=zm, acc=fold_acc, f1=fold_f1, prec=fold_prec, rec=fold_rec,
+            )
+            global_preds.extend(fold_all_preds)
+            global_labels.extend(fold_all_labels)
 
     print("-" * len(header))
+    avg_prec = np.mean(all_prec) if all_prec else 0.0
+    avg_rec  = np.mean(all_rec)  if all_rec  else 0.0
     print(f"{'Avg':>12} | {np.mean(all_base):>10.4f} | {np.mean(all_base_acc):>8.4f} | {np.mean(all_base_f1):>7.4f} |"
-          f" {np.mean(all_zinv):>11.4f} | {np.mean(all_cacc):>9.4f} | {np.mean(all_cf1):>8.4f}")
+          f" {np.mean(all_zinv):>11.4f} | {np.mean(all_cacc):>9.4f} | {np.mean(all_cf1):>8.4f} | {avg_prec:>6.4f} | {avg_rec:>6.4f}")
+
+    if global_labels:
+        gcm = confusion_matrix(global_labels, global_preds, labels=[0, 1])
+        gtn, gfp, gfn, gtp = gcm.ravel()
+        print()
+        gtotal = gtn + gfp + gfn + gtp
+        print("=== 전체 혼동행렬 (z_inv, 모든 fold 합산) ===")
+        print(f"              Pred Normal  Pred Anomaly")
+        print(f"  True Normal    {gtn:7d}     {gfp:7d}")
+        print(f"  True Anomaly   {gfn:7d}     {gtp:7d}")
+        gacc  = (gtn+gtp)/gtotal
+        grec  = gtp/(gtp+gfn+1e-9)
+        gspec = gtn/(gtn+gfp+1e-9)
+        gprec = gtp/(gtp+gfp+1e-9)
+        gf1   = 2*gtp/(2*gtp+gfp+gfn+1e-9)
+        print(f"  Accuracy      = {gacc:.4f}")
+        print(f"  Recall(Sens)  = {grec:.4f}")
+        print(f"  Specificity   = {gspec:.4f}")
+        print(f"  Precision     = {gprec:.4f}")
+        print(f"  F1            = {gf1:.4f}")
+        plot_confusion_matrix(
+            gcm, title="Overall Confusion Matrix (All Folds)",
+            save_path="results/cm_overall.png",
+            acc=gacc, f1=gf1, prec=gprec, rec=grec,
+        )
 
 
 def main():
@@ -284,6 +545,27 @@ def main():
                         help="Threshold = support_mean + n_sigma * calib_std (default 0.0)")
     parser.add_argument("--use_classifier", action="store_true",
                         help="Threshold-free: use trained classifier with support bias correction")
+    parser.add_argument("--proto_beta", type=float, default=1.0,
+                        help="Prototype blend: β*test_proto + (1-β)*calib_centroid (default 1.0 = test only)")
+    parser.add_argument("--model_type", type=str, default="mask",
+                        choices=["mask", "inv", "mc", "vit", "channel", "original"],
+                        help="Model type: mask=MaskDecompositionModel, inv=InvEncoderModel, mc=MCModel, channel=ChannelMaskModel, original=OriginalMaskModel")
+    parser.add_argument("--pca_dim", type=int, default=0,
+                        help="PCA dim before Mahalanobis (0=no PCA, e.g. 64, 128, 256)")
+    parser.add_argument("--coarse", action="store_true",
+                        help="500/502/504를 같은 domain index로 묶어서 평가")
+    parser.add_argument("--youden", action="store_true",
+                        help="Youden's J threshold + diag covariance (6/15 방식)")
+    parser.add_argument("--cosine", action="store_true",
+                        help="코사인 유사도 기반 scoring + Youden threshold (원본 방식)")
+    parser.add_argument("--f1_thresh", action="store_true",
+                        help="Calib F1 최대화 threshold")
+    parser.add_argument("--acc_thresh", action="store_true",
+                        help="Calib Accuracy 최대화 threshold (정확도 우선)")
+    parser.add_argument("--zmc", action="store_true",
+                        help="z*mc feature 사용 (Gram-Schmidt 없이, 5/1 체크포인트 방식)")
+    parser.add_argument("--nomd", action="store_true",
+                        help="z*mc*(1-md) feature 사용 (Notion 6/15 원본 공식)")
     args = parser.parse_args()
 
     print(f"Device   : {device}")
@@ -313,7 +595,7 @@ def main():
             print(f"No fold found for test_fold={args.test_fold}")
             return
 
-    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.vit, args.use_l2, args.n_sigma, args.use_classifier)
+    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.use_l2, args.n_sigma, args.use_classifier, args.proto_beta, args.model_type, args.pca_dim, coarse=args.coarse, use_youden=args.youden, use_cosine=args.cosine, use_f1_thresh=args.f1_thresh, use_acc_thresh=args.acc_thresh, use_zmc=args.zmc, use_nomd=args.nomd)
 
 
 if __name__ == "__main__":

@@ -146,30 +146,42 @@ conda run -n torch python experiments/eval_all_folds.py \
 
 ---
 
-## 6. Notion 6/15 결과 vs 현재
+## 6. 공식 기록 (coarse5 성능)
 
-| Fold | Notion 6/15 AUROC | 현재 (5/1 ckpt, 5-seed) | 차이 |
-|------|------------------|----------------------|------|
-| 500  | 0.9948 | 0.9898 | -0.005 ✅ |
-| 600  | 0.9923 | 0.8923 | -0.100 ❌ |
-| 700  | 1.0000 | 0.9992 | -0.001 ✅ |
-| 800  | 0.9779 | 0.8071 | -0.171 ❌ |
-| **Avg** | **0.9913** | **0.9221** | **-0.069** |
+### 6.1 역대 최고 — 재현 불가 (기록용)
 
-### 원인
-- fold_500, fold_700: 5/1 체크포인트가 살아있어서 근접 재현 가능
-- fold_600, fold_800: 6/15에 사용했던 체크포인트 삭제됨 → 재학습 필요
-- 6/15 체크포인트는 seed 고정 없이 학습 → 우연히 좋은 초기화로 높은 성능
-- git 히스토리 없음 (첫 커밋: 6/17, 6/15 이후)
+> **AUROC 0.9913 / Acc 0.9484 / F1 0.9683 (2026-06-15 Notion 기록)**
+> 당시 fold_600/800 체크포인트가 삭제되어 **재현 불가**. seed 미고정 학습이라
+> 재학습으로도 동일 수치 보장 안 됨 (멀티시드 재학습 시도로도 미달 → 후보 전량 폐기).
+> 논문에는 재현 가능한 6.2 수치를 사용할 것.
 
-### 현재 보유 체크포인트
+| Fold | 6/15 AUROC (재현 불가) |
+|------|------------------|
+| 500  | 0.9948 |
+| 600  | 0.9923 |
+| 700  | 1.0000 |
+| 800  | 0.9779 |
+| **Avg** | **0.9913** |
+
+### 6.2 현재 best — 재현 가능 (공식 수치, Notion 6/29 확정)
+
+fold 500/700은 5/1 학습분, fold 600/800은 멀티시드 재학습 중 best seed.
+
+| Fold | 체크포인트 | AUROC | Acc | F1 |
+|------|-----------|-------|-----|-----|
+| 500  | `coarse5_fold500_best.pth` (구 decomposition_400_600_700_800, 5/1) | 0.9898 | 0.9452 | 0.9672 |
+| 600  | `coarse5_fold600_best.pth` (구 decomp_fold_600_s3, best seed) | 0.9321 | 0.8247 | 0.8862 |
+| 700  | `coarse5_fold700_best.pth` (구 decomposition_400_500_600_800, 5/1) | 0.9992 | 0.9013 | 0.9389 |
+| 800  | `coarse5_fold800_best.pth` (구 decomp_fold_800_s2, best seed) | 0.8588 | 0.6620 | 0.7502 |
+| **Avg** | | **0.9450** | **0.8333** | **0.8856** |
+
+- fold_800이 병목 (base AUROC 0.8349 — 도메인 자체가 어려움)
+- fine15와 직접 비교 주의: threshold 프로토콜이 다름
+  (coarse5 = Youden, calib 이상 라벨 사용 / fine15 = support mean, 정상 4개만)
+
+### 현재 보유 체크포인트 (2026-07-09 정리: fold별 best만 보관, 탈락 후보 55개 삭제)
 
 | 파일 | 용도 |
 |------|------|
-| `checkpoints/decomposition_400_600_700_800.pth` | fold_500 (5/1, 성능 양호) |
-| `checkpoints/decomposition_400_500_700_800.pth` | fold_600 (5/1, 성능 부족) |
-| `checkpoints/decomposition_400_500_600_800.pth` | fold_700 (5/1, 성능 양호) |
-| `checkpoints/decomposition_400_500_600_700.pth` | fold_800 (5/1, 성능 부족) |
-| `checkpoints/coarse5_retrain_fold600_s{0-3}.pth` | fold_600 재학습 시도 (20ep, mw=0.0) |
-| `checkpoints/coarse5_retrain_fold800_s{0-3}.pth` | fold_800 재학습 시도 (20ep, mw=0.0) |
+| `checkpoints/coarse5_fold{500,600,700,800}_best.pth` | coarse5 fold별 best (6.2 표) |
 | `checkpoints/fine15_fold{500-800}.pth` | **fine15 최종 체크포인트 (수정 금지)** |

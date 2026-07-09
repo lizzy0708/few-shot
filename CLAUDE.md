@@ -89,14 +89,15 @@ EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습
 
 ---
 
-## Checkpoints (현재 best)
+## Checkpoints (현재 best — fold별 best만 보관, 2026-07-09 정리)
 
-| 파일 | Fold | 버전 | 비고 |
+| 파일 | Fold | 설정 | 비고 |
 |------|------|------|------|
-| `checkpoints/fine15_fold500.pth` | 500 hold-out |  fine15 (layer4) | best |
-| `checkpoints/fine15_fold600.pth` | 600 hold-out |  fine15 (layer4) | best |
-| `checkpoints/fine15_fold700.pth` | 700 hold-out |  fine15 (layer4) | best |
-| `checkpoints/fine15_fold800.pth` | 800 hold-out |  fine15 (layer4) | best |
+| `checkpoints/fine15_fold{500,600,700,800}.pth` | 각 fold hold-out | fine15 (layer4) | 메인 결과 (위 표), 수정 금지 |
+| `checkpoints/coarse5_fold{500,600,700,800}_best.pth` | 각 fold hold-out | coarse5 (layer3) | avg AUROC 0.9450 / Acc 0.8333 / F1 0.8856 (METHOD_615.md §6.2) |
+
+- coarse5 역대 최고(AUROC 0.9913, 6/15)는 체크포인트 소실로 **재현 불가** — 논문 인용 금지, 기록은 METHOD_615.md §6.1
+- 두 설정은 threshold 프로토콜이 달라 직접 비교 주의 (coarse5=Youden/이상 라벨 사용, fine15=support mean/정상만)
 
 ---
 

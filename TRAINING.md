@@ -85,7 +85,7 @@ epoch < 3:  mask_weight_eff = 0
 epoch >= 3: mask_weight_eff = mask_weight × min(1.0, linear_ramp)
 ```
 
-## 현재 하이퍼파라미터 (v3, best)
+## 현재 하이퍼파라미터 (fine15, best)
 ```bash
 --root processed_gadf_fine_4096
 --epochs 20
@@ -110,13 +110,13 @@ conda run -n torch python experiments/train_mask_decomposition.py \
   --epochs 20 --num_classes 2 --warmup_epochs 3 \
   --mask_weight 0.1 --domain_weight 1.0 \
   --supcon_weight 0.5 --proto_weight 0.1 --episodic_weight 1.0 \
-  --seed 42 --save_path resnet50_l4_v3_fold_500.pth
+  --seed 42 --save_path checkpoints/fine15_fold500.pth
 ```
 
 ## 체크포인트 (현재 best)
 | 파일 | Fold |
 |------|------|
-| `resnet50_l4_v3_fold_500.pth` | 500 hold-out |
-| `resnet50_l4_v3_fold_600.pth` | 600 hold-out |
-| `resnet50_l4_v3_fold_700.pth` | 700 hold-out |
-| `resnet50_l4_v3_fold_800.pth` | 800 hold-out |
+| `checkpoints/fine15_fold500.pth` | 500 hold-out |
+| `checkpoints/fine15_fold600.pth` | 600 hold-out |
+| `checkpoints/fine15_fold700.pth` | 700 hold-out |
+| `checkpoints/fine15_fold800.pth` | 800 hold-out |

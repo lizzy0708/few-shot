@@ -66,7 +66,7 @@ seeds [0, 1, 2, 3, 4] × 3개 test 도메인 = 15회 평균
 ```bash
 conda run -n torch python experiments/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
-  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth \
+  --ckpt_fold_500 checkpoints/fine15_fold500.pth \
   --test_fold 500
 ```
 
@@ -74,10 +74,10 @@ conda run -n torch python experiments/eval_all_folds.py \
 ```bash
 conda run -n torch python experiments/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
-  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth \
-  --ckpt_fold_600 resnet50_l4_v3_fold_600.pth \
-  --ckpt_fold_700 resnet50_l4_v3_fold_700.pth \
-  --ckpt_fold_800 resnet50_l4_v3_fold_800.pth
+  --ckpt_fold_500 checkpoints/fine15_fold500.pth \
+  --ckpt_fold_600 checkpoints/fine15_fold600.pth \
+  --ckpt_fold_700 checkpoints/fine15_fold700.pth \
+  --ckpt_fold_800 checkpoints/fine15_fold800.pth
 ```
 
 ## 현재 최종 결과 (n_sigma=0.0)

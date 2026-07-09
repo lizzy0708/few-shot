@@ -181,7 +181,7 @@ def train(args):
     ce = nn.CrossEntropyLoss()
 
     print("===================================")
-    print("Train Mask Decomposition Model (v3)")
+    print("Train Mask Decomposition Model (fine15)")
     print("===================================")
     print("Device        :", device)
     print("Train domains :", args.train_domains)

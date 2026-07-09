@@ -77,7 +77,7 @@ EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습
 
 ---
 
-## Current Results (layer4 v3, 20 epochs, n_sigma=0.0, pca_dim=128)
+## Current Results (fine15 최종 설정: layer4, 20 epochs, n_sigma=0.0, pca_dim=128)
 
 | Fold | Base AUROC | Base Acc | Base F1 | z_inv AUROC | z_inv Acc | z_inv F1 |
 |------|-----------|---------|--------|------------|----------|---------|
@@ -93,16 +93,16 @@ EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습
 
 | 파일 | Fold | 버전 | 비고 |
 |------|------|------|------|
-| `resnet50_l4_v3_fold_500.pth` | 500 hold-out | v3 layer4 | best |
-| `resnet50_l4_v3_fold_600.pth` | 600 hold-out | v3 layer4 | best |
-| `resnet50_l4_v3_fold_700.pth` | 700 hold-out | v3 layer4 | best |
-| `resnet50_l4_v3_fold_800.pth` | 800 hold-out | v3 layer4 | best |
+| `checkpoints/fine15_fold500.pth` | 500 hold-out |  fine15 (layer4) | best |
+| `checkpoints/fine15_fold600.pth` | 600 hold-out |  fine15 (layer4) | best |
+| `checkpoints/fine15_fold700.pth` | 700 hold-out |  fine15 (layer4) | best |
+| `checkpoints/fine15_fold800.pth` | 800 hold-out |  fine15 (layer4) | best |
 
 ---
 
 ## Commands
 
-### 학습 (fold_500, layer4, v3 설정)
+### 학습 (fold_500, fine15 설정)
 
 ```bash
 conda run -n torch python experiments/train_mask_decomposition.py \
@@ -112,7 +112,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
   --epochs 20 --num_classes 2 --warmup_epochs 3 \
   --mask_weight 0.1 --domain_weight 1.0 \
   --supcon_weight 0.5 --proto_weight 0.1 --episodic_weight 1.0 \
-  --seed 42 --save_path resnet50_l4_v3_fold_500.pth
+  --seed 42 --save_path checkpoints/fine15_fold500.pth
 ```
 
 ### 평가 (전체 4 fold)
@@ -120,10 +120,10 @@ conda run -n torch python experiments/train_mask_decomposition.py \
 ```bash
 conda run -n torch python experiments/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
-  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth \
-  --ckpt_fold_600 resnet50_l4_v3_fold_600.pth \
-  --ckpt_fold_700 resnet50_l4_v3_fold_700.pth \
-  --ckpt_fold_800 resnet50_l4_v3_fold_800.pth
+  --ckpt_fold_500 checkpoints/fine15_fold500.pth \
+  --ckpt_fold_600 checkpoints/fine15_fold600.pth \
+  --ckpt_fold_700 checkpoints/fine15_fold700.pth \
+  --ckpt_fold_800 checkpoints/fine15_fold800.pth
 ```
 
 ### 평가 (단일 fold)
@@ -131,7 +131,7 @@ conda run -n torch python experiments/eval_all_folds.py \
 ```bash
 conda run -n torch python experiments/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
-  --ckpt_fold_500 resnet50_l4_v3_fold_500.pth --test_fold 500
+  --ckpt_fold_500 checkpoints/fine15_fold500.pth --test_fold 500
 ```
 
 ---
@@ -152,7 +152,7 @@ conda run -n torch python experiments/eval_all_folds.py \
 
 | 방법 | 결과 |
 |------|------|
-| 40 epoch + cosine LR (v4) | fold_500 Acc 0.8786 < v3 0.8968 (과적합) |
+| 40 epoch + cosine LR (v4) | fold_500 Acc 0.8786 < fine15 0.8968 (과적합) |
 | L2 inference (use_l2) | AUROC 0.8993 vs 0.9239 (Mahalanobis가 우월) |
 | 95th percentile threshold | Acc/F1 하락 |
 | cross-val std threshold (calib_std) | n_sigma 증가할수록 Acc 하락 |

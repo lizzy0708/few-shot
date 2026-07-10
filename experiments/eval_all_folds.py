@@ -258,10 +258,16 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 encoder_layer=ckpt_encoder_layer,
             ).to(device)
         else:
+            # 계층적 md 체크포인트 감지 (disc_rpm 헤드 존재 여부)
+            hier_md = "domain_classifier_disc_rpm.fc.weight" in _sd
+            hier_rpm_groups = (_sd["domain_classifier_disc_rpm.fc.weight"].shape[0]
+                               if hier_md else None)
             model = MaskDecompositionModel(
                 num_classes=num_classes,
                 num_domains=num_domains,
                 encoder_layer=ckpt_encoder_layer,
+                num_rpm_groups=hier_rpm_groups,
+                hierarchical_md=hier_md,
             ).to(device)
         model.load_state_dict(_sd, strict=False)
         model.eval()

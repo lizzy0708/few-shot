@@ -144,8 +144,19 @@ def main():
     lw = LedoitWolf().fit(pca.transform(calib_flat[idx]))
     prec = lw.precision_
 
+    # ---- GAP 경로 준비 (hybrid용): 기존 프로토콜과 동일 (PCA 128 + LedoitWolf) ----
+    calib_gap_np = calib_gap.numpy()
+    gap_pca = PCA(n_components=args.pca_dim, random_state=42).fit(calib_gap_np)
+    gap_lw = LedoitWolf().fit(gap_pca.transform(calib_gap_np))
+    gap_prec = gap_lw.precision_
+
+    def gap_scores(feats_np, proto_np):
+        d = gap_pca.transform(feats_np) - gap_pca.transform(proto_np[None])[0]
+        return np.sqrt(np.clip((d @ gap_prec * d).sum(1), 0, None))
+
     # ---- 결과 집계 ----
-    conds = [("mahal", args.topk), ("mahal", 1), ("cosine", args.topk), ("cosine", 1)]
+    conds = [("mahal", args.topk), ("mahal", 1), ("cosine", args.topk), ("cosine", 1),
+             ("hybrid", args.topk)]
     agg = {c: {"auroc": [], "acc": [], "f1": []} for c in conds}
 
     for d in test_domains:
@@ -165,11 +176,30 @@ def main():
             sup_p = z.view(z.size(0), z.size(1), -1).permute(0, 2, 1).detach().cpu()  # [4,49,C]
 
             # query에서 support 중복 제거 불필요 (query는 정상+이상 전체, 관례 유지)
+            sup_gap = z.mean(dim=(2, 3)).detach().cpu().numpy()
+            proto_gap = sup_gap.mean(axis=0)
+
             for mode, topk in conds:
                 mem = sup_p.reshape(-1, sup_p.shape[-1])
-                kw = dict(pca=pca, prec=prec) if mode == "mahal" else dict()
-                scores = score_patches(query_p, mem, mode, topk=topk, **kw)
-                thr = support_loo_threshold(sup_p, mode, topk=topk, **kw)
+                if mode == "hybrid":
+                    # 성분 1: GAP Mahalanobis (기존 프로토콜)
+                    q_gap = gap_scores(query_gap.numpy(), proto_gap)
+                    c_gap = gap_scores(calib_gap_np, proto_gap)
+                    s_gap = gap_scores(sup_gap, proto_gap)
+                    # 성분 2: patch cosine-top5
+                    q_pat = score_patches(query_p, mem, "cosine", topk=topk)
+                    c_pat = score_patches(calib_p, mem, "cosine", topk=topk)
+                    s_pat_thr = support_loo_threshold(sup_p, "cosine", topk=topk)
+                    # calib 정상 분포로 z-정규화 후 평균
+                    zq = ((q_gap - c_gap.mean()) / (c_gap.std() + 1e-8)
+                          + (q_pat - c_pat.mean()) / (c_pat.std() + 1e-8)) / 2
+                    thr = ((s_gap.mean() - c_gap.mean()) / (c_gap.std() + 1e-8)
+                           + (s_pat_thr - c_pat.mean()) / (c_pat.std() + 1e-8)) / 2
+                    scores = zq
+                else:
+                    kw = dict(pca=pca, prec=prec) if mode == "mahal" else dict()
+                    scores = score_patches(query_p, mem, mode, topk=topk, **kw)
+                    thr = support_loo_threshold(sup_p, mode, topk=topk, **kw)
                 preds = (scores > thr).astype(int)
                 agg[(mode, topk)]["auroc"].append(roc_auc_score(query_labels, scores))
                 agg[(mode, topk)]["acc"].append(accuracy_score(query_labels, preds))

@@ -229,7 +229,10 @@ def train(args):
     else:
         model = MaskDecompositionModel(
             num_classes=args.num_classes,
-            num_domains=num_domains
+            num_domains=num_domains,
+            # 계층적 도메인: all_domains가 RPM당 3배치 구조일 때만 의미 있음 (fine15)
+            num_rpm_groups=(num_domains // 3 if (args.rpm_domain_weight > 0 or args.hier_md) else None),
+            hierarchical_md=args.hier_md,
         ).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -327,7 +330,16 @@ def train(args):
                 class_logits    = model.classifier(z_c_notd)
                 class_loss      = ce(class_logits, binary_label)
                 domain_loss     = ce(out["domain_logits"], domain)
-                domain_disc_loss = ce(out["domain_logits_disc"], domain)
+                if args.hier_md:
+                    # 계층적 md: RPM/배치 disc를 각자 라벨로 학습 (15-way disc 대체)
+                    rpm_lb = torch.div(domain, 3, rounding_mode="floor")
+                    batch_lb = domain % 3
+                    domain_disc_loss = 0.5 * (
+                        ce(out["domain_logits_disc_rpm"], rpm_lb)
+                        + ce(out["domain_logits_disc_batch"], batch_lb)
+                    )
+                else:
+                    domain_disc_loss = ce(out["domain_logits_disc"], domain)
                 domain_inv_loss = ce(out["domain_logits_inv"], domain)
                 mask_loss       = torch.mean(mc * md)
 
@@ -351,6 +363,12 @@ def train(args):
                 else:
                     patch_episodic = torch.tensor(0.0, device=device)
 
+                if args.rpm_domain_weight > 0 and out["domain_logits_rpm"] is not None:
+                    rpm_label = torch.div(domain, 3, rounding_mode="floor")
+                    rpm_domain_loss = ce(out["domain_logits_rpm"], rpm_label)
+                else:
+                    rpm_domain_loss = torch.tensor(0.0, device=device)
+
                 loss = (class_loss
                         + args.domain_weight * domain_loss
                         + args.domain_disc_weight * domain_disc_loss
@@ -359,7 +377,8 @@ def train(args):
                         + args.supcon_weight * supcon_loss
                         + args.proto_weight * proto_loss
                         + args.episodic_weight * episodic_loss
-                        + args.patch_episodic_weight * patch_episodic)
+                        + args.patch_episodic_weight * patch_episodic
+                        + args.rpm_domain_weight * rpm_domain_loss)
 
             optimizer.zero_grad()
             loss.backward()
@@ -448,6 +467,10 @@ def main():
                         help="patch memory episodic loss 가중치 (0=기존 동작)")
     parser.add_argument("--patch_topk", type=int, default=5,
                         help="patch score 집계 top-k")
+    parser.add_argument("--rpm_domain_weight", type=float, default=0.0,
+                        help="계층적 도메인 1단계: 5-way RPM adversarial 헤드 가중치 (0=기존 동작)")
+    parser.add_argument("--hier_md", action="store_true",
+                        help="계층적 도메인 2단계: md를 RPM/배치 disc로 분리 계산 (encoder 무영향)")
     parser.add_argument("--domain_disc_weight", type=float, default=1.0)
     parser.add_argument("--domain_inv_weight", type=float, default=0.0)
     parser.add_argument("--domain_episodes", action="store_true",

@@ -63,7 +63,8 @@ class DomainClassifier(nn.Module):
 
 
 class MaskDecompositionModel(nn.Module):
-    def __init__(self, num_classes=2, num_domains=5, encoder_layer='layer4'):
+    def __init__(self, num_classes=2, num_domains=5, encoder_layer='layer4',
+                 num_rpm_groups=None, hierarchical_md=False, num_batches=3):
         super().__init__()
 
         self.feature_extractor = FeatureExtractor(encoder_layer=encoder_layer)
@@ -75,6 +76,20 @@ class MaskDecompositionModel(nn.Module):
         # Used solely for computing md — gradient w.r.t. z gives true domain-relevant regions.
         # Updated only via domain_logits_disc (z.detach()) in training, so encoder is unaffected.
         self.domain_classifier_disc = DomainClassifier(in_dim=in_dim, num_domains=num_domains)
+        # 계층적 도메인 (선택): RPM 그룹(물리적 변동) 전용 adversarial 헤드.
+        # 15-way flat 헤드는 RPM 변동과 측정 배치 변동을 동일 취급하므로,
+        # RPM 축(테스트 hold-out 축)을 명시적으로 지우는 5-way 헤드를 병행한다.
+        self.domain_classifier_rpm = (
+            DomainClassifier(in_dim=in_dim, num_domains=num_rpm_groups)
+            if num_rpm_groups else None
+        )
+        # 계층적 md (2단계): md를 RPM 변동(물리)과 배치 변동(측정)으로 분리 계산.
+        # disc 헤드들은 z.detach() 위에서만 학습 → encoder 무영향 (1단계 GRL 방식과 다름)
+        self.hierarchical_md = hierarchical_md
+        if hierarchical_md:
+            n_rpm = num_rpm_groups or max(num_domains // 3, 1)
+            self.domain_classifier_disc_rpm = DomainClassifier(in_dim=in_dim, num_domains=n_rpm)
+            self.domain_classifier_disc_batch = DomainClassifier(in_dim=in_dim, num_domains=num_batches)
 
     def forward(self, x, alpha=1.0, class_label=None):
         with torch.enable_grad():
@@ -98,15 +113,36 @@ class MaskDecompositionModel(nn.Module):
             # --- md: domain gradient mask from discriminative classifier ---
             # z_for_md is detached so this gradient does not affect the encoder;
             # grad_d is also detached so md is a fixed mask during the main backward pass.
-            z_for_md = z.detach().requires_grad_(True)
-            domain_score_disc = self.domain_classifier_disc(z_for_md).max(dim=1)[0].sum()
-            grad_d = torch.autograd.grad(domain_score_disc, z_for_md)[0].detach()
-            md = torch.relu(grad_d)
-            md = md / (md.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+            md_rpm, md_batch = None, None
+            if self.hierarchical_md:
+                # 계층적 md: RPM(물리)·배치(측정) disc에서 각각 마스크 → 합집합(max)
+                z_md_r = z.detach().requires_grad_(True)
+                score_r = self.domain_classifier_disc_rpm(z_md_r).max(dim=1)[0].sum()
+                g_r = torch.autograd.grad(score_r, z_md_r)[0].detach()
+                md_rpm = torch.relu(g_r)
+                md_rpm = md_rpm / (md_rpm.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+
+                z_md_b = z.detach().requires_grad_(True)
+                score_b = self.domain_classifier_disc_batch(z_md_b).max(dim=1)[0].sum()
+                g_b = torch.autograd.grad(score_b, z_md_b)[0].detach()
+                md_batch = torch.relu(g_b)
+                md_batch = md_batch / (md_batch.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
+
+                md = torch.max(md_rpm, md_batch)
+            else:
+                z_for_md = z.detach().requires_grad_(True)
+                domain_score_disc = self.domain_classifier_disc(z_for_md).max(dim=1)[0].sum()
+                grad_d = torch.autograd.grad(domain_score_disc, z_for_md)[0].detach()
+                md = torch.relu(grad_d)
+                md = md / (md.amax(dim=(1, 2, 3), keepdim=True) + 1e-6)
 
             # --- GRL adversarial path (forces encoder to be domain-blind) ---
             z_grl = grad_reverse(z, alpha)
             domain_logits = self.domain_classifier(z_grl)
+            domain_logits_rpm = (
+                self.domain_classifier_rpm(z_grl)
+                if self.domain_classifier_rpm is not None else None
+            )
 
             # --- Gradient orthogonalization: remove domain direction from mc ---
             # Gram-Schmidt: mc_orth = mc - proj(mc onto md)
@@ -125,6 +161,11 @@ class MaskDecompositionModel(nn.Module):
 
             # --- disc classifier training signal (z.detach() → only disc weights update) ---
             domain_logits_disc = self.domain_classifier_disc(z.detach())
+            if self.hierarchical_md:
+                domain_logits_disc_rpm = self.domain_classifier_disc_rpm(z.detach())
+                domain_logits_disc_batch = self.domain_classifier_disc_batch(z.detach())
+            else:
+                domain_logits_disc_rpm = domain_logits_disc_batch = None
 
         return {
             "z": z,
@@ -139,4 +180,9 @@ class MaskDecompositionModel(nn.Module):
             "z_c_notd": z_inv,   # backward compat with eval script
             "z_inv": z_inv,
             "domain_logits_inv": domain_logits_inv,
+            "domain_logits_rpm": domain_logits_rpm,
+            "domain_logits_disc_rpm": domain_logits_disc_rpm,
+            "domain_logits_disc_batch": domain_logits_disc_batch,
+            "md_rpm": md_rpm,
+            "md_batch": md_batch,
         }

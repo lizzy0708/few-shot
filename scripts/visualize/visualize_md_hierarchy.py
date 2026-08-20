@@ -11,7 +11,7 @@ Figure 구성 (영문 — 논문용):
 """
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import numpy as np
 import torch
@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 
 from datasets.hust_image import HUSTDataset
 from models.mask_decomposition_model import MaskDecompositionModel
-from experiments.eval_all_folds import transform, FINE_ALL
+from scripts.eval.eval_all_folds import transform, FINE_ALL
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 CKPT = "checkpoints/hier15_md_fold500.pth"

@@ -23,24 +23,24 @@ pip install -r requirements.txt
 ```
 
 이 저장소는 소스코드와 함께 GADF 변환 데이터(`processed_gadf_fine_4096/`)를 포함한다.
-제외 대상 (로컬 준비 필요): 원본 `HUST bearing dataset/`, `checkpoints/`(*.pth), `results/`, `processed_gadf_coarse_4096/`(→ `experiments/make_coarse_dataset.py`로 생성).
+제외 대상 (로컬 준비 필요): 원본 `HUST bearing dataset/`, `checkpoints/`(*.pth), `results/`, `processed_gadf_coarse_4096/`(→ `scripts/data/make_coarse_dataset.py`로 생성).
 
 ## 주요 파일
 
 | 경로 | 역할 |
 |---|---|
 | `models/mask_decomposition_model.py` | 메인 모델 (ResNet50 layer4 + gradient mask 분해) |
-| `experiments/train_mask_decomposition.py` | fine15 학습 |
-| `experiments/eval_all_folds.py` | 4-fold 평가 (fine/coarse 모드) |
-| `experiments/eval_coarse_folds.py` | coarse5 전용 평가 (sub-batch 균등 support) |
-| `experiments/train_original_mask.py` 등 | coarse5 재현·ablation 변형들 |
+| `scripts/train/train_mask_decomposition.py` | fine15 학습 |
+| `scripts/eval/eval_all_folds.py` | 4-fold 평가 (fine/coarse 모드) |
+| `scripts/eval/eval_coarse_folds.py` | coarse5 전용 평가 (sub-batch 균등 support) |
+| `scripts/train/train_original_mask.py` 등 | coarse5 재현·ablation 변형들 |
 | `checkpoints/fine15_fold{500..800}.pth` | best 체크포인트 (git 미포함) |
 
 ## 학습 / 평가
 
 ```bash
 # 학습 (fold_500 예시)
-python experiments/train_mask_decomposition.py \
+python scripts/train/train_mask_decomposition.py \
   --root processed_gadf_fine_4096 \
   --train_domains 400 402 404 600 602 604 700 702 704 800 802 804 \
   --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \
@@ -50,7 +50,7 @@ python experiments/train_mask_decomposition.py \
   --seed 42 --save_path checkpoints/fine15_fold500.pth
 
 # 평가 (전체 4 fold)
-python experiments/eval_all_folds.py \
+python scripts/eval/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
   --ckpt_fold_500 checkpoints/fine15_fold500.pth \
   --ckpt_fold_600 checkpoints/fine15_fold600.pth \

@@ -1,7 +1,7 @@
 # 추론 (Inference)
 
 ## 스크립트
-`experiments/eval_all_folds.py`
+`scripts/eval/eval_all_folds.py`
 
 ## 방식
 4-shot few-shot anomaly detection (정상 샘플 4개만 사용)
@@ -64,7 +64,7 @@ seeds [0, 1, 2, 3, 4] × 3개 test 도메인 = 15회 평균
 
 ### 단일 fold (빠른 검증)
 ```bash
-conda run -n torch python experiments/eval_all_folds.py \
+conda run -n torch python scripts/eval/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
   --ckpt_fold_500 checkpoints/fine15_fold500.pth \
   --test_fold 500
@@ -72,7 +72,7 @@ conda run -n torch python experiments/eval_all_folds.py \
 
 ### 전체 4 fold
 ```bash
-conda run -n torch python experiments/eval_all_folds.py \
+conda run -n torch python scripts/eval/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
   --ckpt_fold_500 checkpoints/fine15_fold500.pth \
   --ckpt_fold_600 checkpoints/fine15_fold600.pth \

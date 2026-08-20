@@ -9,11 +9,11 @@ eval_dc_folds.py — Distribution Calibration (Free Lunch, ICLR'21 변형) 평�
 재학습 없음 (fine15 체크포인트 사용). threshold 프로토콜 유지 (support 점수 평균).
 
 사용:
-  python experiments/eval_dc_folds.py --ckpt checkpoints/fine15_fold500.pth --test_fold 500
+  python scripts/eval/eval_dc_folds.py --ckpt checkpoints/fine15_fold500.pth --test_fold 500
 """
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import argparse
 import random
@@ -26,8 +26,8 @@ from sklearn.decomposition import PCA
 
 from datasets.hust_image import HUSTDataset
 from models.mask_decomposition_model import MaskDecompositionModel
-from experiments.eval_all_folds import transform, FINE_ALL, get_features
-from experiments.eval_patch_folds import FINE_FOLDS
+from scripts.eval.eval_all_folds import transform, FINE_ALL, get_features
+from scripts.eval.eval_patch_folds import FINE_FOLDS
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 

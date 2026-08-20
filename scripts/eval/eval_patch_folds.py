@@ -11,12 +11,12 @@ eval_patch_folds.py — z_inv patch memory 기반 few-shot 이상탐지 (파일�
 사전 체크: z_inv patch norm 분포 (mask sparsity 확인).
 
 사용:
-  python experiments/eval_patch_folds.py \
+  python scripts/eval/eval_patch_folds.py \
     --ckpt checkpoints/fine15_fold500.pth --test_fold 500 --seeds 0 1 2 3 4
 """
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import argparse
 import random
@@ -30,7 +30,7 @@ from sklearn.decomposition import PCA
 
 from datasets.hust_image import HUSTDataset
 from models.mask_decomposition_model import MaskDecompositionModel
-from experiments.eval_all_folds import transform, FINE_ALL
+from scripts.eval.eval_all_folds import transform, FINE_ALL
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 

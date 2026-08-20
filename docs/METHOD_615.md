@@ -99,7 +99,7 @@ Seeds: [0, 1, 2, 3, 4] → 5-seed 평균
 
 ```bash
 # fold_500
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed \
   --train_domains 400 600 700 800 \
   --all_domains 400 500 600 700 800 \
@@ -107,7 +107,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
   --save_path checkpoints/decomposition_400_600_700_800.pth
 
 # fold_600
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed \
   --train_domains 400 500 700 800 \
   --all_domains 400 500 600 700 800 \
@@ -115,7 +115,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
   --save_path checkpoints/decomposition_400_500_700_800.pth
 
 # fold_700
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed \
   --train_domains 400 500 600 800 \
   --all_domains 400 500 600 700 800 \
@@ -123,7 +123,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
   --save_path checkpoints/decomposition_400_500_600_800.pth
 
 # fold_800
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed \
   --train_domains 400 500 600 700 \
   --all_domains 400 500 600 700 800 \
@@ -135,7 +135,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
 
 ```bash
 # 현재 eval (Mahalanobis + Youden, no PCA, seeds 0~4)
-conda run -n torch python experiments/eval_all_folds.py \
+conda run -n torch python scripts/eval/eval_all_folds.py \
   --root processed --mode coarse --num_classes 2 \
   --ckpt_fold_500 checkpoints/decomposition_400_600_700_800.pth \
   --ckpt_fold_600 checkpoints/decomposition_400_500_700_800.pth \

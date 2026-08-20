@@ -46,7 +46,7 @@ flat 15-way adversarial은 물리적 변동(RPM)과 측정 변동(배치)을 동
 3. 분석 figure: ✅ **성과** — 채널 상관 r=-0.007, top-100 겹침 3/100 (랜덤 이하).
    물리(RPM) 변동과 측정(배치) 변동이 사실상 분리된 채널 집합에 인코딩됨.
    flat 15-way md가 이미 그 합집합을 커버하기에 분리가 성능 개선으로 이어지지 않은 것으로 해석.
-   → `results/md_hierarchy_fold500.png`, `experiments/visualize_md_hierarchy.py`
+   → `results/md_hierarchy_fold500.png`, `scripts/visualize/visualize_md_hierarchy.py`
 
 ### C. DINOv2 — 베이스라인으로 강등 (미실행)
 
@@ -54,7 +54,7 @@ flat 15-way adversarial은 물리적 변동(RPM)과 측정 변동(배치)을 동
 
 ### D. Distribution Calibration — ❌ 종료 (7/10)
 
-Tukey 변환 + 프로토타입 calib-통계 보정 (`experiments/eval_dc_folds.py`, 평가만).
+Tukey 변환 + 프로토타입 calib-통계 보정 (`scripts/eval/eval_dc_folds.py`, 평가만).
 4-fold avg: baseline 0.9233 / Tukey 0.9117↓ / DC β=0.2 0.9222 / Tukey+DC 0.9096↓ —
 전 조건 동률~열세. 4-shot 프로토타입 통계는 현 LedoitWolf+PCA 체계에서 이미 포화.
 

@@ -106,7 +106,7 @@ EpisodicProto: 각 배치에서 정상 4개→prototype→L2거리→BCE (학습
 ### 학습 (fold_500, fine15 설정)
 
 ```bash
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed_gadf_fine_4096 \
   --train_domains 400 402 404 600 602 604 700 702 704 800 802 804 \
   --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \
@@ -119,7 +119,7 @@ conda run -n torch python experiments/train_mask_decomposition.py \
 ### 평가 (전체 4 fold)
 
 ```bash
-conda run -n torch python experiments/eval_all_folds.py \
+conda run -n torch python scripts/eval/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
   --ckpt_fold_500 checkpoints/fine15_fold500.pth \
   --ckpt_fold_600 checkpoints/fine15_fold600.pth \
@@ -130,7 +130,7 @@ conda run -n torch python experiments/eval_all_folds.py \
 ### 평가 (단일 fold)
 
 ```bash
-conda run -n torch python experiments/eval_all_folds.py \
+conda run -n torch python scripts/eval/eval_all_folds.py \
   --root processed_gadf_fine_4096 --mode fine --num_classes 2 \
   --ckpt_fold_500 checkpoints/fine15_fold500.pth --test_fold 500
 ```

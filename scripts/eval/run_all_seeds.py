@@ -53,7 +53,7 @@ def main():
     for seed in args.seeds:
         if args.method == "baseline":
             cmd = [
-                "python", "experiments/run_baseline_fsad.py",
+                "python", "scripts/eval/run_baseline_fsad.py",
                 "--support_domain", args.support_domain,
                 "--query_domain", args.query_domain,
                 "--shot", str(args.shot),
@@ -62,7 +62,7 @@ def main():
 
         elif args.method == "decomposition":
             cmd = [
-                "python", "experiments/run_fewshot.py",
+                "python", "scripts/eval/run_fewshot.py",
                 "--support_domain", args.support_domain,
                 "--query_domain", args.query_domain,
                 "--shot", str(args.shot),
@@ -75,7 +75,7 @@ def main():
                 raise ValueError("--mix_domains is required for mixing method.")
 
             cmd = [
-                "python", "experiments/run_mixing_fsad.py",
+                "python", "scripts/eval/run_mixing_fsad.py",
                 "--support_domain", args.support_domain,
                 "--query_domain", args.query_domain,
                 "--mix_domains",

@@ -1,7 +1,7 @@
 # 학습 (Training)
 
 ## 스크립트
-`experiments/train_mask_decomposition.py`  
+`scripts/train/train_mask_decomposition.py`  
 `models/mask_decomposition_model.py`
 
 ## 4-Fold LOO 구조
@@ -103,7 +103,7 @@ epoch >= 3: mask_weight_eff = mask_weight × min(1.0, linear_ramp)
 
 ## 실행 명령 (fold_500 예시)
 ```bash
-conda run -n torch python experiments/train_mask_decomposition.py \
+conda run -n torch python scripts/train/train_mask_decomposition.py \
   --root processed_gadf_fine_4096 \
   --train_domains 400 402 404 600 602 604 700 702 704 800 802 804 \
   --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \

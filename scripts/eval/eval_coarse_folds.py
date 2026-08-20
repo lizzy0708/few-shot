@@ -11,7 +11,7 @@ Fine eval과의 차이:
     → fine 대비 3× 더 많은 normal → 더 안정적인 LedoitWolf covariance
 
 사용법:
-  python experiments/eval_coarse_folds.py \\
+  python scripts/eval/eval_coarse_folds.py \\
     --ckpt_fold_500 resnet50_coarse_fold_500.pth \\
     [--ckpt_fold_600 ...] [--ckpt_fold_700 ...] [--ckpt_fold_800 ...] \\
     [--n_sigma 0.0] [--pca_dim 128]
@@ -19,7 +19,7 @@ Fine eval과의 차이:
 
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import argparse
 import random

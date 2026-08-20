@@ -6,7 +6,7 @@ Good disentanglement:
   z_notc_d domain accuracy → high (>0.7)
 
 Usage:
-    python experiments/check_disentangle.py \
+    python scripts/eval/check_disentangle.py \
         --ckpt mask_decomposition.pth \
         --root processed_cwt \
         --all_domains 400 402 404 500 502 504 600 602 604 700 702 704 800 802 804 \
@@ -14,7 +14,7 @@ Usage:
 """
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import argparse
 import torch

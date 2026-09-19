@@ -42,7 +42,8 @@ def train(args):
     model = GatedMaskModel(num_classes=args.num_classes, num_domains=num_domains,
                             encoder_layer=args.encoder_layer,
                             use_domain_gate=(not args.no_domain_gate),
-                            domain_gate_grl=args.domain_gate_grl).to(device)
+                            domain_gate_grl=args.domain_gate_grl,
+                            use_gate_orth=args.use_gate_orth).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
@@ -62,6 +63,7 @@ def train(args):
     print("LR            :", args.lr)
     print("Use domain gate:", not args.no_domain_gate)
     print("Domain gate GRL:", args.domain_gate_grl)
+    print("Use gate orth :", args.use_gate_orth)
     print("Mask weight   :", args.mask_weight)
     print("Domain weight :", args.domain_weight)
     print("DomDisc weight:", args.domain_disc_weight)
@@ -154,6 +156,12 @@ def main():
     parser.add_argument("--domain_gate_grl", action="store_true",
                         help="domain_gate_net 학습을 detach+직접분류 대신 GRL(adversarial)로 전환. "
                              "encoder는 여전히 detach로 보호(z_pool.detach()*domain_gate에 GRL).")
+    parser.add_argument("--use_gate_orth", action="store_true",
+                        help="Stage 2 (2026-09-19): class_gate를 domain_classifier.weight의 행 "
+                             "부분공간에 대해 Gram-Schmidt 직교화한 뒤 z_inv를 구성 (fine15의 "
+                             "mc_orth와 유사하나 동일하지 않음 — models/gated_mask_model.py의 "
+                             "_orthogonalize_gate_against_domain 참고). class_logits 경로는 "
+                             "영향받지 않음 — 기존 nodg와 학습 dynamics 동일, z_inv만 변경.")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--save_path", type=str, required=True)
     args = parser.parse_args()

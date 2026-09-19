@@ -4,9 +4,11 @@
 
 **도메인 불변성 기반 정상 특징 메모리 퓨샷 이상탐지 (Few-shot Anomaly Detection)**
 
-미학습 RPM 도메인(예: 700/702/704)에서 정상 샘플 4개만으로 이상 탐지.
+미학습 베어링 타입 도메인(예: 700/702/704 = 베어링 6207의 3가지 부하조건)에서 정상 샘플 4개만으로 이상 탐지.
 
-- 원 논문: AUROC + cosine similarity + 5개 coarse domain
+> **도메인 정의 정정 (2026-08-13)**: 파일 코드의 숫자는 RPM이 아니라 **[베어링 타입][부하조건]**이다 — 첫 자리(4~8)=베어링 모델 6204~6208, 둘째 자리(0/2/4)=부하 0W/200W/400W ([원 논문](https://pmc.ncbi.nlm.nih.gov/articles/PMC10327369/) 확인). "RPM"으로 적힌 이 문서의 이전 서술은 전부 오류였음. coarse5=베어링 타입 도메인, fine15=베어링 타입×부하조건 조합 도메인.
+
+- 원 논문: AUROC + cosine similarity + 5개 coarse domain (베어링 타입)
 - 저널 확장: **15개 fine-grained domain + Acc/F1** + z_inv 도메인 불변성 강화
 
 ---
@@ -45,7 +47,7 @@ Feature decomposition:
 
 1. support 4개 정상 샘플 → z_inv 추출 → prototype (mean)
 2. LedoitWolf shrinkage로 calib domain normal 공분산 추정
-3. Mahalanobis distance → threshold = support_mean + 2σ
+3. Mahalanobis distance → threshold = support_mean + n_sigma·σ (n_sigma=0.0 in the current best setting → threshold = support_mean; "2σ" here was stale prose predating that finding — verified via eval_all_folds.py's `--n_sigma` default=0.0 and its help text, 2026-09-17)
 4. query domain Acc/F1/AUROC 평가
 
 ### Training Loss
@@ -139,13 +141,17 @@ conda run -n torch python experiments/eval_all_folds.py \
 
 ## HUST 데이터셋 구조
 
-| 파일 그룹 | 의미 |
-|----------|------|
-| N400/500/.../800 | 측정 배치 1 (fs=24.93 kHz) |
-| N402/502/.../802 | 측정 배치 2 (fs=24.22 kHz) |
-| N404/504/.../804 | 측정 배치 3 (fs≈23.0 kHz) |
+숫자 코드 = **[베어링 타입 자리][부하조건 자리]** (RPM 아님, 원 논문 확인됨):
 
-5개 RPM 조건 × 3회 반복 = 15개 도메인. B400, IB400 없음 (400 RPM ball/compound 미수집).
+| 파일 그룹 | 베어링 타입 | 부하조건 | 로컬 fs 필드 |
+|----------|------|------|------|
+| N400/500/.../800 | 6204/6205/6206/6207/6208 | 0W | fs=24.93 kHz |
+| N402/502/.../802 | 6204/6205/6206/6207/6208 | 200W | fs=24.22 kHz |
+| N404/504/.../804 | 6204/6205/6206/6207/6208 | 400W | fs≈23.0 kHz |
+
+(fs 필드가 정확히 센서 샘플링 주파수인지 회전 주파수인지는 미확인 — 원 논문 명시 샘플링레이트 51,200Hz와 단위가 다름. 부하가 커질수록 fs가 줄어드는 패턴은 유도모터 slip으로 회전속도가 소폭 감소하는 현상과 일치하므로 회전 주파수일 가능성도 있음.)
+
+5개 베어링 타입(6204~6208) × 3개 부하조건(0/200/400W) = 15개 도메인. B400, IB400 없음 (베어링 6204의 ball/compound 결함 데이터 미수집).
 
 ---
 

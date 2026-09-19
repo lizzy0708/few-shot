@@ -40,3 +40,10 @@ Thumbs.db
 
 # Generated coarse dataset (reproducible via experiments/make_coarse_dataset.py)
 processed_gadf_coarse_4096/
+
+# Other generated/processed data variants (not covered by processed/ exact-match above)
+processed_envelope/
+processed_gadf_fine_4096/
+
+# Generated analysis outputs (figures/CSVs, reproducible from analyze_*.py scripts)
+out/

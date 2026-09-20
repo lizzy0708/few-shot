@@ -82,6 +82,30 @@ F1(0.9174→0.9429, +0.0255)도 z_inv가 전 지표 우위. fold별로는 500/60
 800만 raw가 근소 우위. 도메인 불변성(z_inv)이 실제로 기여하려면 encoder가 GRL로
 domain-adversarial 학습을 받아야 한다는 근거. 상세: `docs/design-docs/gate-vs-gradient-threshold.md`.
 
+#### 실험 3 (2026-09-20): leakage-fix 스크립트로 재현 + paired 검증
+
+`experiments/eval_gated_folds_rawz.py`(z_inv→raw z만 교체, 나머지는 `eval_gated_folds.py` 재사용)와
+`eval_gated_folds.py`를 같은 환경에서 순차 실행(3 train-seed × 4 fold × 5 eval-seed, β=0.5, n_σ=2.0).
+위 08-17 표를 **재현**한 것이지 새 수치가 아님 (raw 0.9449/0.8684/0.9174 ≈ 0.9450/0.8684/0.9174).
+
+| | AUROC | Acc | F1 |
+|---|---|---|---|
+| z_inv (재실행) | 0.9539 | 0.9054 | 0.9430 |
+| raw z | 0.9449 | 0.8684 | 0.9174 |
+| Δ (z_inv − raw), paired n=20 | +0.0090 (p=0.07, 15/20승) | +0.0369 (p<1e-6, 19/20승) | +0.0256 (p<1e-6, 19/20승) |
+
+- **Acc/F1**: 4개 fold 전부에서 z_inv 우위(fold별 +0.016~+0.048), 노이즈 범위 밖.
+- **AUROC**: +0.009는 노이즈 범위 안. fold 700(+0.040)이 끌고 가고 fold 800은 반대(−0.0145, 0/5승).
+  fold 단위(n=4) 기준 평균 +0.009, sd 0.023 → 유의하다고 말할 수 없음.
+- 한계: eval-seed(support 재추출) 변동만 반영. 3 train-seed는 앙상블로 합쳐져 train-seed 분산은 미반영.
+  raw z는 체크포인트가 z_pool*class_gate 경로로 학습된 모델의 gate 이전 feature라 "분해 없이 학습한 모델"이 아님.
+- Acc/F1 차이(+0.037)가 AUROC 차이(+0.009)보다 훨씬 큰 것은 임계값 보정 차이가 섞였을 가능성을 시사
+  (raw z 공간에서 support mean + 2σ가 덜 맞음) — **가설, 미검증**.
+- 해석 주의: Exp.1(도메인 acc 60.8%→60.2%)상 gate가 도메인 정보를 거의 못 지우므로, 이 이득을
+  "도메인 불변성" 덕으로 귀속할 근거는 없음. class_gate의 채널 재가중 효과일 수 있음(대조군 없음).
+
+원본 로그·paired 분석: `docs/generated/exp3_rawz/`.
+
 ### 절대 baseline (단일 seed, 참고용)
 
 | 설정 | AUROC | Acc | F1 |

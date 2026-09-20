@@ -1,0 +1,15 @@
+== Paired diff (z_inv - raw z), n=20 (fold x eval_seed) ==
+AUROC  mean=+0.0090 sd=0.0209 wins(z_inv>raw)=15/20 t-p=0.07 wilcoxon-p=0.13
+Acc    mean=+0.0369 sd=0.0214 wins(z_inv>raw)=19/20 t-p=2.8e-07 wilcoxon-p=3.8e-06
+F1     mean=+0.0256 sd=0.0162 wins(z_inv>raw)=19/20 t-p=9.9e-07 wilcoxon-p=3.8e-06
+
+== Per-fold paired diff (mean over 5 eval seeds; wins/5) ==
+fold 500: AUROC +0.0050 (5/5) | Acc +0.0161 (5/5) | F1 +0.0101 (5/5)
+fold 600: AUROC +0.0056 (5/5) | Acc +0.0358 (5/5) | F1 +0.0253 (5/5)
+fold 700: AUROC +0.0399 (5/5) | Acc +0.0481 (5/5) | F1 +0.0291 (5/5)
+fold 800: AUROC -0.0145 (0/5) | Acc +0.0478 (4/5) | F1 +0.0378 (4/5)
+
+== Fold-level (n=4, cluster-robust view: fold means) ==
+AUROC  fold-mean diffs=[0.005, 0.0056, 0.0399, -0.0145]  mean=+0.0090  sd=0.0226
+Acc    fold-mean diffs=[0.0161, 0.0358, 0.0481, 0.0478]  mean=+0.0369  sd=0.0150
+F1     fold-mean diffs=[0.0101, 0.0253, 0.0291, 0.0378]  mean=+0.0256  sd=0.0116

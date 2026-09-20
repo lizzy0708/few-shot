@@ -21,7 +21,18 @@ from models.mask_decomposition_model import MaskDecompositionModel
 from models.inv_encoder_model import InvEncoderModel
 from models.mc_model import MCModel
 from models.channel_mask_model import ChannelMaskModel
-from models.original_mask_model import OriginalMaskModel
+from models.original_mask_model import OriginalMaskModel, FeatureExtractor
+
+
+class RawPretrainedModel(torch.nn.Module):
+    """Ablation stage 1: untrained pretrained ResNet50 (encoder_layer), no mc/md decomposition at all."""
+    def __init__(self, encoder_layer='layer3'):
+        super().__init__()
+        self.feature_extractor = FeatureExtractor(encoder_layer=encoder_layer)
+
+    def forward(self, x, **kwargs):
+        z = self.feature_extractor(x)
+        return {"z_c_notd": z, "z": z}
 
 
 class PretrainedExtractor(torch.nn.Module):
@@ -66,6 +77,17 @@ transform = transforms.Compose([
 ])
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# cuDNN algorithm selection is nondeterministic across runs/batch sizes; this feeds
+# tiny feature-level noise into Youden's J threshold selection (argmax over observed
+# scores), which can jump between candidate thresholds and swing Acc/F1 by 10-20pp
+# even though AUROC barely moves. Force determinism so eval is bit-reproducible.
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+try:
+    torch.use_deterministic_algorithms(True, warn_only=True)
+except TypeError:
+    torch.use_deterministic_algorithms(True)
 
 
 def get_features(model, loader, feature_key="z_c_notd", md=None):
@@ -194,9 +216,10 @@ def make_coarse_domain_map(all_domains):
     return {str(d): rpm_to_idx[int(d) // 100 * 100] for d in all_domains}
 
 
-def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=False, n_sigma=2.0, use_classifier=False, proto_beta=1.0, model_type="mask", pca_dim=0, coarse=False, use_youden=False, use_cosine=False, use_f1_thresh=False, use_acc_thresh=False, use_zmc=False, use_nomd=False):
+def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=False, n_sigma=2.0, use_classifier=False, proto_beta=1.0, model_type="mask", pca_dim=0, coarse=False, use_youden=False, use_cosine=False, use_f1_thresh=False, use_acc_thresh=False, use_zmc=False, use_nomd=False, eval_batch_size=32, cov_type="auto"):
     all_base, all_zinv = [], []
     all_base_acc, all_base_f1, all_cacc, all_cf1 = [], [], [], []
+    all_zinv_std, all_cacc_std, all_cf1_std = [], [], []
     all_prec, all_rec = [], []
     global_preds, global_labels = [], []
 
@@ -257,6 +280,8 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 num_domains=num_domains,
                 encoder_layer=ckpt_encoder_layer,
             ).to(device)
+        elif model_type == "raw_pretrained":
+            model = RawPretrainedModel(encoder_layer=ckpt_encoder_layer).to(device)
         else:
             # 계층적 md 체크포인트 감지 (disc_rpm 헤드 존재 여부)
             hier_md = "domain_classifier_disc_rpm.fc.weight" in _sd
@@ -269,7 +294,10 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 num_rpm_groups=hier_rpm_groups,
                 hierarchical_md=hier_md,
             ).to(device)
-        model.load_state_dict(_sd, strict=False)
+        if model_type != "raw_pretrained":
+            # raw_pretrained: pretrained ImageNet weights only, ckpt path only used
+            # for the file-exists gate + encoder_layer detection above — no state to load.
+            model.load_state_dict(_sd, strict=False)
         model.eval()
 
         # Baseline용 pretrained extractor (학습 안 함)
@@ -280,6 +308,17 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
         base_accs, base_f1s, accs, f1s, precs, recs = [], [], [], [], [], []
         fold_all_preds, fold_all_labels = [], []
         fold_base_preds, fold_base_labels = [], []
+        # seed 단위로 분리 저장 (도메인 분산과 섞이지 않도록 seed별 평균 후 std 계산)
+        seed_zinv_auroc = {s: [] for s in seeds}
+        seed_acc = {s: [] for s in seeds}
+        seed_f1 = {s: [] for s in seeds}
+        seed_base_auroc = {s: [] for s in seeds}
+        seed_base_acc = {s: [] for s in seeds}
+        seed_base_f1 = {s: [] for s in seeds}
+        # 서브도메인별로도 분리 저장 (500/502/504를 묶지 않고 각각 5-seed mean±std)
+        domain_zinv_auroc = {d: [] for d in test_domains}
+        domain_acc = {d: [] for d in test_domains}
+        domain_f1 = {d: [] for d in test_domains}
 
         # Calib 로딩: youden/cosine 모드는 정상+이상 모두, 아니면 정상만
         calib_sets = []
@@ -292,7 +331,7 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 ))
             except RuntimeError:
                 pass
-        calib_loader = DataLoader(ConcatDataset(calib_sets), batch_size=32, shuffle=False)
+        calib_loader = DataLoader(ConcatDataset(calib_sets), batch_size=eval_batch_size, shuffle=False)
 
         md_calib = None
         if model_type == "channel":
@@ -309,7 +348,7 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                     except RuntimeError:
                         pass
                 md_calib = compute_md_from_calib(
-                    model, DataLoader(ConcatDataset(calib_norm_sets), batch_size=32, shuffle=False)
+                    model, DataLoader(ConcatDataset(calib_norm_sets), batch_size=eval_batch_size, shuffle=False)
                 )
             else:
                 md_calib = compute_md_from_calib(model, calib_loader)
@@ -340,7 +379,8 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                     lbls.extend(batch["label"].numpy().tolist())
             return torch.cat(feats, dim=0), np.array(lbls)
 
-        if use_youden:
+        effective_cov = cov_type if cov_type != "auto" else ("diag" if use_youden else "ledoit")
+        if effective_cov == "diag":
             prec_np = fit_diag_distribution(calib_normal_np)
         else:
             _, prec_np = fit_normal_distribution(calib_normal_np)
@@ -357,16 +397,27 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                         seed=seed, all_domains=all_domains,
                         domain_map=domain_map,
                     )
+                    # 🔴 2026-09-17 leakage fix: query_ds previously included every sample in
+                    # the domain (no shot filtering applied to it), so the exact 4 normal
+                    # windows drawn into support_ds were also scored as query "normal" samples.
+                    # Exclude them explicitly by path.
+                    support_paths = set(s[0] for s in support_ds.samples)
                     query_ds = HUSTDataset(
                         root=root, domain=d, only_normal=False,
                         transform=transform, all_domains=all_domains,
                         domain_map=domain_map,
+                        exclude_paths=support_paths,
+                    )
+                    query_paths = set(s[0] for s in query_ds.samples)
+                    assert support_paths.isdisjoint(query_paths), (
+                        f"support/query leakage in domain={d} seed={seed}: "
+                        f"{support_paths & query_paths}"
                     )
                 except RuntimeError:
                     continue
 
                 support_loader = DataLoader(support_ds, batch_size=shot, shuffle=False)
-                query_loader   = DataLoader(query_ds,   batch_size=32,   shuffle=False)
+                query_loader   = DataLoader(query_ds,   batch_size=eval_batch_size,   shuffle=False)
 
                 query_feats, query_labels = get_features(model, query_loader, feature_key=feature_key, md=md_calib)
                 if len(np.unique(query_labels)) < 2:
@@ -432,6 +483,12 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 f1s.append(f1_score(query_labels, preds, zero_division=0))
                 precs.append(precision_score(query_labels, preds, zero_division=0))
                 recs.append(recall_score(query_labels, preds, zero_division=0))
+                seed_zinv_auroc[seed].append(zinv_aurocs[-1])
+                seed_acc[seed].append(accs[-1])
+                seed_f1[seed].append(f1s[-1])
+                domain_zinv_auroc[d].append(zinv_aurocs[-1])
+                domain_acc[d].append(accs[-1])
+                domain_f1[d].append(f1s[-1])
                 fold_all_preds.extend(preds.tolist())
                 fold_all_labels.extend(query_labels.tolist())
 
@@ -449,6 +506,9 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
                 base_f1s.append(f1_score(query_labels, base_preds, zero_division=0))
                 fold_base_preds.extend(base_preds.tolist())
                 fold_base_labels.extend(query_labels.tolist())
+                seed_base_auroc[seed].append(base_aurocs[-1])
+                seed_base_acc[seed].append(base_accs[-1])
+                seed_base_f1[seed].append(base_f1s[-1])
 
         bm = np.mean(base_aurocs)
         bam = np.mean(base_accs)
@@ -457,12 +517,30 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
         am = np.mean(accs)
         fm = np.mean(f1s)
 
+        # seed별 평균(도메인 3개 묶음) → 5-seed 간 std (fine mode에서만 의미 있음: coarse는 fold당 도메인 1개라 seed 평균=단일 원소)
+        seed_auroc_means = [np.mean(v) for v in seed_zinv_auroc.values() if v]
+        seed_acc_means   = [np.mean(v) for v in seed_acc.values() if v]
+        seed_f1_means    = [np.mean(v) for v in seed_f1.values() if v]
+        z_std = np.std(seed_auroc_means) if len(seed_auroc_means) > 1 else 0.0
+        a_std = np.std(seed_acc_means) if len(seed_acc_means) > 1 else 0.0
+        f_std = np.std(seed_f1_means) if len(seed_f1_means) > 1 else 0.0
+
+        base_seed_auroc_means = [np.mean(v) for v in seed_base_auroc.values() if v]
+        base_seed_acc_means   = [np.mean(v) for v in seed_base_acc.values() if v]
+        base_seed_f1_means    = [np.mean(v) for v in seed_base_f1.values() if v]
+        bz_std = np.std(base_seed_auroc_means) if len(base_seed_auroc_means) > 1 else 0.0
+        ba_std = np.std(base_seed_acc_means) if len(base_seed_acc_means) > 1 else 0.0
+        bf_std = np.std(base_seed_f1_means) if len(base_seed_f1_means) > 1 else 0.0
+
         all_base.append(bm)
         all_base_acc.append(bam)
         all_base_f1.append(bfm)
         all_zinv.append(zm)
         all_cacc.append(am)
         all_cf1.append(fm)
+        all_zinv_std.append(z_std)
+        all_cacc_std.append(a_std)
+        all_cf1_std.append(f_std)
 
         pm = np.mean(precs) if precs else 0.0
         rm = np.mean(recs)  if recs  else 0.0
@@ -472,6 +550,20 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
         test_label = "+".join(test_domains)
         print(f"{test_label:>12} | {bm:>10.4f} | {bam:>8.4f} | {bfm:>7.4f} |"
               f" {zm:>11.4f} | {am:>9.4f} | {fm:>8.4f} | {pm:>6.4f} | {rm:>6.4f}")
+        print(f"  [5-seed mean±std] AUROC {zm:.4f}±{z_std:.4f} | Acc {am:.4f}±{a_std:.4f} | F1 {fm:.4f}±{f_std:.4f}"
+              f"  (n_seeds={len(seed_auroc_means)})")
+        print(f"  [Base 5-seed mean±std] AUROC {bm:.4f}±{bz_std:.4f} | Acc {bam:.4f}±{ba_std:.4f} | F1 {bfm:.4f}±{bf_std:.4f}"
+              f"  (n_seeds={len(base_seed_auroc_means)})")
+
+        # 서브도메인별 breakdown (500/502/504를 묶지 않고 개별 표시, 각각 5-seed mean±std)
+        if len(test_domains) > 1:
+            for d in test_domains:
+                dz, da, df = domain_zinv_auroc[d], domain_acc[d], domain_f1[d]
+                if not dz:
+                    continue
+                print(f"    - {d:>8} | AUROC {np.mean(dz):.4f}±{np.std(dz):.4f}"
+                      f" | Acc {np.mean(da):.4f}±{np.std(da):.4f}"
+                      f" | F1 {np.mean(df):.4f}±{np.std(df):.4f}  (n_seeds={len(dz)})")
 
         # Confusion matrix for this fold
         if fold_all_labels:
@@ -496,6 +588,9 @@ def run_folds(folds, root, seeds, shot, num_classes, calib_pct=95.0, use_l2=Fals
     avg_rec  = np.mean(all_rec)  if all_rec  else 0.0
     print(f"{'Avg':>12} | {np.mean(all_base):>10.4f} | {np.mean(all_base_acc):>8.4f} | {np.mean(all_base_f1):>7.4f} |"
           f" {np.mean(all_zinv):>11.4f} | {np.mean(all_cacc):>9.4f} | {np.mean(all_cf1):>8.4f} | {avg_prec:>6.4f} | {avg_rec:>6.4f}")
+    if all_zinv_std:
+        print(f"  [fold별 5-seed std의 평균 — 참고용, fold간 pooled std 아님]"
+              f" AUROC ±{np.mean(all_zinv_std):.4f} | Acc ±{np.mean(all_cacc_std):.4f} | F1 ±{np.mean(all_cf1_std):.4f}")
 
     if global_labels:
         gcm = confusion_matrix(global_labels, global_preds, labels=[0, 1])
@@ -554,8 +649,8 @@ def main():
     parser.add_argument("--proto_beta", type=float, default=1.0,
                         help="Prototype blend: β*test_proto + (1-β)*calib_centroid (default 1.0 = test only)")
     parser.add_argument("--model_type", type=str, default="mask",
-                        choices=["mask", "inv", "mc", "vit", "channel", "original"],
-                        help="Model type: mask=MaskDecompositionModel, inv=InvEncoderModel, mc=MCModel, channel=ChannelMaskModel, original=OriginalMaskModel")
+                        choices=["mask", "inv", "mc", "vit", "channel", "original", "raw_pretrained"],
+                        help="Model type: mask=MaskDecompositionModel, inv=InvEncoderModel, mc=MCModel, channel=ChannelMaskModel, original=OriginalMaskModel, raw_pretrained=untrained pretrained ResNet50 (ablation stage 1, no decomposition)")
     parser.add_argument("--pca_dim", type=int, default=0,
                         help="PCA dim before Mahalanobis (0=no PCA, e.g. 64, 128, 256)")
     parser.add_argument("--coarse", action="store_true",
@@ -572,6 +667,10 @@ def main():
                         help="z*mc feature 사용 (Gram-Schmidt 없이, 5/1 체크포인트 방식)")
     parser.add_argument("--nomd", action="store_true",
                         help="z*mc*(1-md) feature 사용 (Notion 6/15 원본 공식)")
+    parser.add_argument("--eval_batch_size", type=int, default=32,
+                        help="calib/query DataLoader batch size (GPU 메모리 부족 시 낮출 것)")
+    parser.add_argument("--cov_type", type=str, default="auto", choices=["auto", "diag", "ledoit"],
+                        help="auto: youden=diag/else=ledoit (기존 동작). diag/ledoit로 강제 지정 가능")
     args = parser.parse_args()
 
     print(f"Device   : {device}")
@@ -601,7 +700,7 @@ def main():
             print(f"No fold found for test_fold={args.test_fold}")
             return
 
-    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.use_l2, args.n_sigma, args.use_classifier, args.proto_beta, args.model_type, args.pca_dim, coarse=args.coarse, use_youden=args.youden, use_cosine=args.cosine, use_f1_thresh=args.f1_thresh, use_acc_thresh=args.acc_thresh, use_zmc=args.zmc, use_nomd=args.nomd)
+    run_folds(folds, args.root, args.seeds, args.shot, args.num_classes, args.calib_pct, args.use_l2, args.n_sigma, args.use_classifier, args.proto_beta, args.model_type, args.pca_dim, coarse=args.coarse, use_youden=args.youden, use_cosine=args.cosine, use_f1_thresh=args.f1_thresh, use_acc_thresh=args.acc_thresh, use_zmc=args.zmc, use_nomd=args.nomd, eval_batch_size=args.eval_batch_size, cov_type=args.cov_type)
 
 
 if __name__ == "__main__":

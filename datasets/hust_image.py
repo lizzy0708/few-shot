@@ -28,6 +28,7 @@ class HUSTDataset(Dataset):
         seed=42,
         all_domains=None,
         domain_map=None,
+        exclude_paths=None,
     ):
         self.samples = []
 
@@ -98,6 +99,13 @@ class HUSTDataset(Dataset):
                             (path, label, domain_idx, domain_name, fault_type,
                              rpm_label, batch_label)
                         )
+
+        # 🔴 2026-09-17 leakage fix: exclude_paths lets a caller (e.g. eval_all_folds.py's
+        # query_ds) remove exact samples already drawn elsewhere (e.g. support_ds's shot
+        # selection) so the same window can't appear in both support and query.
+        if exclude_paths is not None:
+            exclude_paths = set(exclude_paths)
+            self.samples = [s for s in self.samples if s[0] not in exclude_paths]
 
         if shot is not None:
             normal_samples = [s for s in self.samples if s[1] == 0]  # s[1] = binary label

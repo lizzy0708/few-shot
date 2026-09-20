@@ -47,7 +47,7 @@ L = CE(class_logits, label)           # 정상/이상 분류
 | 항목 | 값 |
 |------|----|
 | 데이터 | `processed/` (coarse, GADF 224×224) |
-| 도메인 | 5개: 400 / 500 / 600 / 700 / 800 RPM |
+| 도메인 | 5개: 400/500/600/700/800 = 베어링 타입 6204/6205/6206/6207/6208 (RPM 아님 — [원 논문](https://pmc.ncbi.nlm.nih.gov/articles/PMC10327369/) 확인, 2026-08-13 정정) |
 | Epochs | 10 |
 | Batch size | 16 |
 | LR | 1e-4 (Adam) |

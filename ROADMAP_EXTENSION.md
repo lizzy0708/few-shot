@@ -1,5 +1,11 @@
 # 저널 2차 확장 로드맵 (2026-07-09 수립 → 2026-07-10 탐색 종료)
 
+> **용어 정정 (2026-08-13)**: 이 문서의 "RPM"/"측정 배치"는 오류 — 파일 코드 숫자는
+> [베어링 타입][부하조건]이다 (첫 자리=베어링 6204~6208, 둘째 자리=부하 0/200/400W,
+> [원 논문](https://pmc.ncbi.nlm.nih.gov/articles/PMC10327369/) 확인). 즉 "RPM(5) × 측정
+> 배치(3)"는 "베어링 타입(5) × 부하조건(3)"이 맞다. 코드 변수명(`md_rpm`, `md_batch`,
+> `--rpm_domain_weight` 등)은 체크포인트 호환을 위해 그대로 두되, 아래 서술은 실제 의미로 고침.
+
 > **최종 결론 (7/10)**: 4갈래 확장(A patch, B1/B2 hierarchical, DC) 전부 fine15 기준
 > (AUROC 0.9239 / Acc 0.8683 / F1 0.9250) 미초과 → fine15가 이 설정의 천장으로 확정.
 > 탐색 기록은 ablation/discussion 소재로 전환. 아래 각 섹션에 최종 수치 기록.
@@ -34,17 +40,17 @@ AnomalyDINO(WACV'25)의 patch-kNN 패러다임을 z_inv에 적용.
 
 ### B. Hierarchical Domain (다음 착수)
 
-**문제의식**: 15개 도메인은 실제로 RPM(5) × 측정 배치(3)의 2계층인데
-flat 15-way adversarial은 물리적 변동(RPM)과 측정 변동(배치)을 동일 취급.
-테스트 축이 정확히 RPM hold-out이므로 두 변동의 분리 제거가 이론적으로 정합.
+**문제의식**: 15개 도메인은 실제로 베어링 타입(5) × 부하조건(3)의 2계층인데
+flat 15-way adversarial은 물리적 변동(베어링 타입)과 측정 변동(부하조건)을 동일 취급.
+테스트 축이 정확히 베어링 타입 hold-out이므로 두 변동의 분리 제거가 이론적으로 정합.
 
 **결과 (7/10, 둘 다 fold_500 기준 0.9507/0.8847 미달):**
-1. 1단계 (5-way RPM adversarial 헤드): ❌ w=1.0 → 0.9322/0.8706, w=0.5 → 0.9113/0.8808.
+1. 1단계 (5-way 베어링타입 adversarial 헤드, 코드상 `md_rpm`): ❌ w=1.0 → 0.9322/0.8706, w=0.5 → 0.9113/0.8808.
    encoder에 adversarial 압력 추가는 v5 포함 3연속 실패 — 패턴 확정
-2. 2단계 (md_rpm/md_batch disc 분리, encoder 무영향): ❌ 0.9408/0.8789 — 최근접이나 미달.
+2. 2단계 (md_rpm/md_batch — 베어링타입/부하조건 disc 분리, encoder 무영향): ❌ 0.9408/0.8789 — 최근접이나 미달.
    `--hier_md` 플래그로 코드 보존 (`hier15_md_fold500.pth`)
 3. 분석 figure: ✅ **성과** — 채널 상관 r=-0.007, top-100 겹침 3/100 (랜덤 이하).
-   물리(RPM) 변동과 측정(배치) 변동이 사실상 분리된 채널 집합에 인코딩됨.
+   물리(베어링 타입) 변동과 측정(부하조건) 변동이 사실상 분리된 채널 집합에 인코딩됨.
    flat 15-way md가 이미 그 합집합을 커버하기에 분리가 성능 개선으로 이어지지 않은 것으로 해석.
    → `results/md_hierarchy_fold500.png`, `experiments/visualize_md_hierarchy.py`
 
@@ -63,7 +69,7 @@ Tukey 변환 + 프로토타입 calib-통계 보정 (`experiments/eval_dc_folds.p
 ```
 본편  = fine15 (z_inv, GAP, Mahalanobis) — 기존 확정 결과
 비교  = coarse5, baseline(pretrained) 특징
-분석  = ① md 채널 분해 figure (물리 vs 측정 변동의 채널 직교성)
+분석  = ① md 채널 분해 figure (베어링 타입 vs 부하조건 변동의 채널 직교성)
         ② patch vs GAP (GADF 이상의 전역성)
         ③ 확장 4갈래 negative results 요약 (robustness of the recipe)
 ```

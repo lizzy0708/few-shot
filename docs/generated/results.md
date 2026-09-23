@@ -154,3 +154,48 @@ Acc/F1 기여는 실재하는 것으로 결론.** AUROC 기여(+0.009)가 노이
 ### 종료된 방향
 domain_gate weak-GRL 스윕 — collapse로 폐기, `RELIABILITY.md` §7,
 `docs/exec-plans/completed/2026-08-domain-gate-weak-grl-sweep.md`.
+
+## 실험 A (2026-09-23): n_sigma FPR-Recall trade-off (Table 2 / z_inv 파이프라인)
+
+`experiments/sweep_nsigma_zinv.py`(신규, `eval_gated_folds.py` 무수정 — import 재사용).
+모델 forward pass는 기존 Table 2 평가와 동일하게 (fold, eval_seed)당 1번만 수행하고,
+n_sigma 9개 후보 {-1.0 ~ 3.0, 0.5 간격}는 이미 계산된 ensemble score 배열에 threshold
+연산만 다르게 적용해 스윕(추가 forward pass 없음). target 도메인 라벨은 최종 평가
+단계에서만 사용(n_sigma 선택 자체에는 미사용 — 기존 프로토콜과 동일).
+
+**평균(4 fold) Specificity/Recall/BalAcc vs n_sigma**:
+
+| n_sigma | Specificity | Recall | Balanced Acc |
+|---|---|---|---|
+| -1.0 | 0.228 | 0.990 | 0.609 |
+| 0.0 | 0.435 | 0.977 | 0.706 |
+| 1.0 | 0.597 | 0.959 | 0.778 |
+| **2.0 (현재)** | **0.720** | **0.937** | **0.828** |
+| 2.5 | 0.771 | 0.923 | 0.847 |
+| 3.0 | 0.811 | 0.908 | 0.859 |
+
+전체 표(9개 후보 전부, fold별): `docs/generated/expA_fpr_recall/nsigma_sweep.json`.
+ROC operating point 시각화: `roc_nsigma_operating_points.png`, BalAcc 곡선: `balanced_acc_vs_nsigma.png`.
+
+**핵심 발견**: 테스트한 범위 {-1.0~3.0} 안에서 Balanced Accuracy가 4개 fold 전부 **단조
+증가** — 내부 극값(peak)이 없음. 즉 이 범위 안에서는 "BalAcc 최댓값" 기준의 명확한 최적
+n_sigma를 못 찾음(3.0이 매번 최고). 다만 한계 트레이드오프(marginal trade-off)로 보면
+n_sigma=2.0→2.5 구간은 fold 500/600/700에서 Recall 손실이 매우 작으면서(−0.3~1.4%p)
+Specificity가 뚜렷이 개선(+3.9~7.2%p)되는 "무릎점" — **n_sigma=2.5가 합리적인 대안**.
+fold 800만 예외로 같은 구간에서 Recall 손실이 더 큼(−3.6%p) — AUROC가 가장 낮은(0.9008)
+도메일수록 Spec/Recall 트레이드오프가 더 가파름(실험 C의 동기와 일치).
+
+**현재 n_sigma=2.0의 위치**: 4 fold 평균 Recall 93.7%/Specificity 72.0%로, Recall을
+우선하는 쪽에 있음 — 이상탐지에서 미탐지(false negative)가 오탐(false positive)보다
+비용이 큰 경우 합리적 선택. Recall을 조금 양보하고 오탐을 줄이려면 n_sigma=2.5를 고려할
+가치 있음(BalAcc +0.019, 전체 Recall −1.4%p 수준).
+
+**실험 3b LOCO 값(raw z, 참고용)과의 일관성**: 실험 3b는 raw z 공간에서 fold별
+n_sigma를 500=1.5/600=2.5/700=2.0/800=2.5로 선정했음 — **주의: 다른 feature space(raw
+z)에서 나온 값이라 이 실험(z_inv)과 직접 비교 불가**, 방향성만 참고. fold 700(=2.0,
+현재값과 동일)과 fold 600/800(=2.5, 이번 실험의 "무릎점" 추천과 일치)은 방향이 맞고,
+fold 500만 반대 방향(3b는 현재보다 낮은 1.5, 이번 실험은 z_inv 기준 fold 500이 가장
+여유 있어 2.5~3.0도 Recall 손실이 작음)— feature space가 다른 만큼 완전한 교차검증은
+아님.
+
+재현: `conda run -n torch python experiments/sweep_nsigma_zinv.py --beta 0.5`

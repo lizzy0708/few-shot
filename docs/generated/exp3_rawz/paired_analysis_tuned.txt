@@ -1,0 +1,43 @@
+### (1) Original Exp.3: z_inv vs raw z (n_sigma=2.0 reused -- POTENTIALLY UNFAIR) ###
+
+== Paired diff (z_inv - raw(ns=2.0)), n=20 ==
+AUROC  mean=+0.0090 sd=0.0209 wins(z_inv>raw(ns=2.0))=15/20 t-p=0.07 wilcoxon-p=0.13
+Acc    mean=+0.0369 sd=0.0214 wins(z_inv>raw(ns=2.0))=19/20 t-p=2.8e-07 wilcoxon-p=3.8e-06
+F1     mean=+0.0256 sd=0.0162 wins(z_inv>raw(ns=2.0))=19/20 t-p=9.9e-07 wilcoxon-p=3.8e-06
+
+  per-fold mean diff (z_inv-raw(ns=2.0)), wins/5:
+   fold 500: AUROC +0.0050 (5/5) | Acc +0.0161 (5/5) | F1 +0.0101 (5/5)
+   fold 600: AUROC +0.0056 (5/5) | Acc +0.0358 (5/5) | F1 +0.0253 (5/5)
+   fold 700: AUROC +0.0399 (5/5) | Acc +0.0481 (5/5) | F1 +0.0291 (5/5)
+   fold 800: AUROC -0.0145 (0/5) | Acc +0.0478 (4/5) | F1 +0.0378 (4/5)
+
+### (2) Exp.3b: raw z (n_sigma=2.0 reused) vs raw z (LOCO-tuned n_sigma) -- did tuning help raw z itself? ###
+
+== Paired diff (raw(ns=2.0) - raw(tuned)), n=20 ==
+AUROC  mean=+0.0000 sd=0.0000 wins(raw(ns=2.0)>raw(tuned))=0/20 t-p=nan wilcoxon-p=nan
+Acc    mean=+0.0093 sd=0.0118 wins(raw(ns=2.0)>raw(tuned))=11/20 t-p=0.0024 wilcoxon-p=0.009
+F1     mean=+0.0072 sd=0.0094 wins(raw(ns=2.0)>raw(tuned))=11/20 t-p=0.003 wilcoxon-p=0.009
+
+  per-fold mean diff (raw(ns=2.0)-raw(tuned)), wins/5:
+   fold 500: AUROC +0.0000 (0/5) | Acc -0.0021 (1/5) | F1 -0.0016 (1/5)
+   fold 600: AUROC +0.0000 (0/5) | Acc +0.0125 (5/5) | F1 +0.0089 (5/5)
+   fold 700: AUROC +0.0000 (0/5) | Acc +0.0000 (0/5) | F1 +0.0000 (0/5)
+   fold 800: AUROC +0.0000 (0/5) | Acc +0.0266 (5/5) | F1 +0.0214 (5/5)
+
+### (3) Exp.3b key comparison: z_inv vs raw z (LOCO-tuned n_sigma) -- FAIR comparison ###
+
+== Paired diff (z_inv - raw(tuned)), n=20 ==
+AUROC  mean=+0.0090 sd=0.0209 wins(z_inv>raw(tuned))=15/20 t-p=0.07 wilcoxon-p=0.13
+Acc    mean=+0.0462 sd=0.0272 wins(z_inv>raw(tuned))=20/20 t-p=3.7e-07 wilcoxon-p=1.9e-06
+F1     mean=+0.0327 sd=0.0221 wins(z_inv>raw(tuned))=20/20 t-p=2.5e-06 wilcoxon-p=1.9e-06
+
+  per-fold mean diff (z_inv-raw(tuned)), wins/5:
+   fold 500: AUROC +0.0050 (5/5) | Acc +0.0140 (5/5) | F1 +0.0085 (5/5)
+   fold 600: AUROC +0.0056 (5/5) | Acc +0.0483 (5/5) | F1 +0.0342 (5/5)
+   fold 700: AUROC +0.0399 (5/5) | Acc +0.0481 (5/5) | F1 +0.0291 (5/5)
+   fold 800: AUROC -0.0145 (0/5) | Acc +0.0744 (5/5) | F1 +0.0592 (5/5)
+
+### Summary averages ###
+z_inv (ns=2.0)               AUROC=0.9539  Acc=0.9054  F1=0.9430
+raw z (ns=2.0, Exp.3)        AUROC=0.9449  Acc=0.8684  F1=0.9174
+raw z (LOCO-tuned, Exp.3b)   AUROC=0.9449  Acc=0.8592  F1=0.9102

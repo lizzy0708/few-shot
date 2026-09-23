@@ -106,6 +106,40 @@ domain-adversarial 학습을 받아야 한다는 근거. 상세: `docs/design-do
 
 원본 로그·paired 분석: `docs/generated/exp3_rawz/`.
 
+#### 실험 3b (2026-09-23): threshold 공정성 검증 — raw z 전용 n_sigma를 LOCO로 재선정
+
+배경: 실험 3은 z_inv용 n_sigma=2.0을 raw z에도 그대로 재사용했음 — feature space가 다르면
+불공정한 비교일 수 있음. `experiments/tune_nsigma_rawz.py`(신규, 기존 스크립트 무수정)로
+raw z 전용 n_sigma를 **target(test) 도메인 라벨 없이** leave-one-calib-domain-out(LOCO)
+방식으로 fold별 재선정: 각 fold의 calib 도메인 4개 중 하나씩을 돌아가며 "가짜 test 도메인"으로
+삼고(라벨 사용 가능 — nested CV의 inner validation, outer test 도메인과 무관), 나머지 3개
+calib 도메인의 정상 데이터로 scoring해 후보 {-1.0 ~ 3.0, 0.5 간격} 중 Acc/F1 평균이 최고인
+n_sigma를 선택(3 tune-eval-seed × 3 train-seed 앙상블). 선정된 n_sigma로 원래 프로토콜대로
+(target 도메인 라벨 사용) 3×4×5 재평가.
+
+**선정된 n_sigma**: fold500=1.5, fold600=2.5, fold700=2.0(=원래 값과 동일), fold800=2.5
+
+| | n_sigma | AUROC | Acc | F1 |
+|---|---|---|---|---|
+| z_inv (기존) | 2.0 | 0.9539 | 0.9054 | 0.9430 |
+| raw z (실험3, n_sigma 재사용) | 2.0 | 0.9449 | 0.8684 | 0.9174 |
+| **raw z (실험3b, LOCO 자체 튜닝)** | fold별 | 0.9449 | **0.8592** | **0.9102** |
+
+**결과: threshold를 raw z에 맞게 다시 골라도 z_inv와의 격차가 줄지 않고 오히려 커짐**
+(Acc 격차 +0.0369→+0.0462, F1 격차 +0.0256→+0.0327, paired n=20 기준 z_inv가 20/20승,
+p<1e-5). raw z 자체 기준으로도 튜닝 전(n_sigma=2.0 재사용)이 튜닝 후보다 Acc/F1이 더 높음
+(11/20승, p<0.01) — LOCO로 고른 threshold가 실제 held-out 도메인에는 과적합되어 오히려
+전이가 덜 됨(특히 fold800: Acc 0.7847→0.7581). AUROC는 threshold와 무관한 지표라 당연히
+불변(0.9449, 완전히 동일).
+
+**해석**: 실험 3의 Acc/F1 격차(+3.7%p/+2.6%p)는 threshold 불공정 비교의 산물이 아님 —
+가장 공정하게 골라도(그리고 그 결과가 오히려 원래보다 나쁨) 격차는 유지·확대됨. **decomposition의
+Acc/F1 기여는 실재하는 것으로 결론.** AUROC 기여(+0.009)가 노이즈 범위 안이라는 실험 3 결론은
+그대로 유지(threshold와 무관하므로 이 실험이 바꿀 수 없는 부분).
+
+원본 로그·3-way paired 분석: `docs/generated/exp3_rawz/` (`tune_nsigma_run_full.txt`,
+`tuned_nsigma.json`, `rawz_tuned_eval.txt`, `paired_analysis_tuned.py/.txt`).
+
 ### 절대 baseline (단일 seed, 참고용)
 
 | 설정 | AUROC | Acc | F1 |

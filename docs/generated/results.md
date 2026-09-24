@@ -234,3 +234,29 @@ fold 600은 K=1→4에서 뚜렷한 개선(AUROC 0.9316→0.9500, Acc 0.8639→0
 `kshot_auroc_acc.png`).
 
 재현: `conda run -n torch python experiments/sweep_kshot_zinv.py --beta 0.5 --n_sigma 2.0 --k_values 1 2 8 16`
+
+## 🔴 MMD 도메인 정렬 시도 (2026-09-24) — domain leakage 개선 방향 최종 실패, 완전 종료
+
+GRL(직교화)/domain_weight 스윕에 이은 세 번째이자 마지막 시도: discriminator 없이 도메인 간
+z_inv 분포 거리(multi-bandwidth RBF-kernel MMD)를 직접 최소화(`utils/mmd.py`,
+`--mmd_weight 10.0`, 기존 GRL loss는 유지한 채 보조 항으로 추가). 1-seed×4-fold로 빠르게
+판정(3-seed 확장 없이 종료 — 아래 판정 참고).
+
+| | domain-acc | class-acc | AUROC | Acc | F1 |
+|---|---|---|---|---|---|
+| 기존(GRL만) | 0.6017 | 0.9790 | 0.9540 | 0.9053 | 0.9429 |
+| +직교화(실패) | 0.5958 | 0.9800 | 0.9548 | 0.8960 | 0.9359 |
+| +domain_weight=2.0(실패) | 0.5579 | 0.9621 | 0.9231 | 0.8536 | 0.9087 |
+| **+MMD(실패)** | **0.4531** | **0.8925** | **0.9224** | **0.7285** | **0.7976** |
+
+**판정**: domain-acc는 −14.9pp로 사전 등록한 성공 기준(5pp 이상 감소)을 충분히 넘김 — 세
+시도 중 유일하게 이 조건을 만족. 그러나 AUROC/Acc/F1(각각 −1pp 이내 요구)이 −3.2/−17.7/−14.5pp로
+대폭 초과 위반(fold 600은 Acc가 0.90→0.50로 반토막). 두 조건은 AND이므로 **종합 실패**.
+
+**결론**: 3가지 서로 다른 메커니즘(GRL 직교화, GRL 강화, discriminator-free MMD) 모두
+"domain-acc 유의 감소 + Acc/F1 유지"를 동시에 만족 못함. **domain leakage 개선 방향 완전
+종료** — `checkpoints/coarse5_fold*_gated_nodg_s{0,1,2}.pth`(dw=1.0, 비직교화)가 유일한
+유효 선택지로 확정. 논문에는 z_inv가 도메인 정보를 완전히 제거하지 못한다는 한계를 정직하게
+기술할 것.
+
+상세: `docs/exec-plans/completed/2026-09-gated-nodg-mmd.md`. 원본 로그: `docs/generated/mmd_attempt/`.

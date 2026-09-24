@@ -259,4 +259,16 @@ z_inv 분포 거리(multi-bandwidth RBF-kernel MMD)를 직접 최소화(`utils/m
 유효 선택지로 확정. 논문에는 z_inv가 도메인 정보를 완전히 제거하지 못한다는 한계를 정직하게
 기술할 것.
 
+**추가 확인(같은 날, mmd_weight={1.0, 0.1} 재시도)**: weight를 낮춰도 판정 기준을 만족하는
+지점이 없음을 확인 — monotonic trade-off만 관찰됨(weight↓ ⟹ Acc/F1 손상↓이지만 domain-acc
+감소폭도 노이즈 범위 안으로 함께 줄어듦):
+
+| mmd_weight | domain-acc Δ | Acc Δ | F1 Δ | 조건1(5pp↓) | 조건2(±1pp) |
+|---|---|---|---|---|---|
+| 0.1 | −1.04pp | −2.00pp | −1.50pp | ❌ | ❌ |
+| 1.0 | −2.61pp | −1.29pp | −0.92pp | ❌ | 근접(F1만) |
+| 10.0 | −14.86pp | −17.68pp | −14.53pp | ✅ | ❌❌ |
+
+세 값 모두 두 조건 동시 충족 실패 — **3-seed 확장이나 추가 weight 탐색 없이 완전 종료**.
+
 상세: `docs/exec-plans/completed/2026-09-gated-nodg-mmd.md`. 원본 로그: `docs/generated/mmd_attempt/`.

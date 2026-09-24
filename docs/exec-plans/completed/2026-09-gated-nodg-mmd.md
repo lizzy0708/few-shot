@@ -118,3 +118,33 @@ domain-acc 조건은 넘었으나 Acc/F1을 완전히 희생함) — **domain le
 유일한 유효 선택지로 확정. 논문에는 "z_inv가 도메인 정보를 완전히 제거하지 못한다"는 한계를
 정직하게 기록하고, Acc/F1 개선(decomposition의 실재 효과, 실험 3/3b로 별도 확정됨)과는
 구분해서 서술할 것.
+
+---
+
+## 추가: mmd_weight 스윕 {1.0, 0.1} — 2026-09-24, 최종 종료 확정
+
+mmd_weight=10.0의 Acc/F1 붕괴가 weight 과다 때문인지 확인하기 위해 1.0/0.1로 낮춰 재시도
+(1-seed×4-fold, 그 외 설정 동일). `experiments/eval_gated_folds_mmd.py`/
+`experiments/analyze_domain_invariance_tsne_mmd.py`에 `--mmd_tag` 옵션을 추가해 체크포인트
+패밀리(`_mmd1_`/`_mmd01_`)를 구분.
+
+| mmd_weight | domain-acc | class-acc | AUROC | Acc | F1 | domain-acc Δ | Acc Δ | F1 Δ |
+|---|---|---|---|---|---|---|---|---|
+| 0(기존) | 0.6017 | 0.9790 | 0.9540 | 0.9053 | 0.9429 | — | — | — |
+| 0.1 | 0.5913 | 0.9756 | 0.9453 | 0.8853 | 0.9279 | −1.04pp | −2.00pp | −1.50pp |
+| 1.0 | 0.5756 | 0.9800 | 0.9409 | 0.8924 | 0.9337 | −2.61pp | −1.29pp | −0.92pp |
+| 10.0 | 0.4531 | 0.8925 | 0.9224 | 0.7285 | 0.7976 | −14.86pp | −17.68pp | −14.53pp |
+
+**명확한 monotonic trade-off 확인**: weight를 낮출수록 Acc/F1 손상은 줄지만(0.1/1.0은 F1
+−1pp 근방까지 회복) domain-acc 감소폭도 함께 줄어들어 노이즈 범위(±1~4pp, 기존 직교화
+−0.6pp/domain_weight −4.4pp와 같은 수준) 안으로 들어옴 — **0.1, 1.0 둘 다 판정 기준의
+조건 1(domain-acc 5pp 이상 감소)을 충족 못함**. 조건 2(Acc/F1 −1pp 이내)는 1.0에서 F1만
+근접 충족(−0.92pp)하지만 조건 1이 이미 실패라 무의미.
+
+**최종 판정**: 테스트한 mmd_weight {0.1, 1.0, 10.0} 중 domain-acc 조건과 성능 유지 조건을
+동시에 만족하는 값은 없음. 사전 약속대로 **3-seed 확장 없이, 추가 mmd_weight 탐색 없이
+여기서 완전 종료**. domain leakage 개선 방향(직교화/domain_weight/MMD 3가지, 총 5개 설정)
+전체가 실패로 마무리됨 — `checkpoints/coarse5_fold*_gated_nodg_s{0,1,2}.pth`(dw=1.0, GRL만)
+확정 유지.
+
+재현: `docs/generated/mmd_attempt/train_sweep.txt`, `eval_mmd{1,01}.txt`, `probe_mmd{1,01}.txt`.

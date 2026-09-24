@@ -7,10 +7,12 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import DataLoader, ConcatDataset
 
 from datasets.hust_image import HUSTDataset
 from models.gated_mask_model import GatedMaskModel
+from utils.mmd import multi_domain_mmd_loss
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -67,6 +69,7 @@ def train(args):
     print("Mask weight   :", args.mask_weight)
     print("Domain weight :", args.domain_weight)
     print("DomDisc weight:", args.domain_disc_weight)
+    print("MMD weight    :", args.mmd_weight)
     print("Seed          :", args.seed)
     print("Save path     :", args.save_path)
     print("Total samples :", len(dataset))
@@ -78,7 +81,7 @@ def train(args):
         p = epoch / max(1, args.epochs - 1)
         alpha = float(2.0 / (1.0 + np.exp(-10.0 * p)) - 1.0)
 
-        total_loss = total_class = total_dom = total_domdisc = total_mask = 0.0
+        total_loss = total_class = total_dom = total_domdisc = total_mask = total_mmd = 0.0
         correct_cls = correct_dom = total = 0
 
         for batch in loader:
@@ -97,10 +100,19 @@ def train(args):
                 domain_disc_loss = torch.tensor(0.0, device=device)
             mask_loss = out["mask_loss"]
 
+            # 2026-09-24 MMD attempt (see utils/mmd.py docstring): discriminator-free
+            # alignment of z_inv's per-domain distributions, added alongside the
+            # existing GRL domain_loss (not a replacement for it). Computed on the same
+            # GAP-pooled z_inv space that eval-time Mahalanobis scoring and the
+            # independent domain-invariance probe both use.
+            z_inv_pooled = F.adaptive_avg_pool2d(out["z_inv"], 1).flatten(1)
+            mmd_loss = multi_domain_mmd_loss(z_inv_pooled, domain)
+
             loss = (class_loss
                     + args.domain_weight * domain_loss
                     + args.domain_disc_weight * domain_disc_loss
-                    + args.mask_weight * mask_loss)
+                    + args.mask_weight * mask_loss
+                    + args.mmd_weight * mmd_loss)
 
             optimizer.zero_grad()
             loss.backward()
@@ -111,6 +123,7 @@ def train(args):
             total_dom += domain_loss.item()
             total_domdisc += domain_disc_loss.item()
             total_mask += mask_loss.item()
+            total_mmd += mmd_loss.item()
 
             correct_cls += (out["class_logits"].argmax(dim=1) == binary_label).sum().item()
             if out["domain_logits_disc"] is not None:
@@ -123,7 +136,7 @@ def train(args):
               f"lr={scheduler.get_last_lr()[0]:.2e} | "
               f"Loss: {total_loss/n:.4f} | Class: {total_class/n:.4f} | "
               f"Dom(GRL): {total_dom/n:.4f} | DomDisc: {total_domdisc/n:.4f} | "
-              f"Mask(gate_c*gate_d): {total_mask/n:.4f} | "
+              f"Mask(gate_c*gate_d): {total_mask/n:.4f} | MMD: {total_mmd/n:.4f} | "
               f"Cls Acc: {correct_cls/total:.4f} | DomDisc Acc: {correct_dom/total:.4f}")
 
     save_dir = os.path.dirname(args.save_path)
@@ -148,6 +161,17 @@ def main():
     parser.add_argument("--mask_weight", type=float, default=0.1)
     parser.add_argument("--domain_weight", type=float, default=1.0)
     parser.add_argument("--domain_disc_weight", type=float, default=1.0)
+    parser.add_argument("--mmd_weight", type=float, default=0.0,
+                        help="2026-09-24 MMD domain-alignment attempt (utils/mmd.py): weight on "
+                             "multi-bandwidth RBF-kernel MMD^2 between calib-domain z_inv "
+                             "distributions in each batch, added alongside (not replacing) the "
+                             "existing GRL domain_loss. Default 0.0 = fully off, reproduces prior "
+                             "gated_nodg behavior exactly (mmd_loss computed but not backpropped "
+                             "through the weighted sum when weight=0). Discriminator-free "
+                             "alternative to the two failed GRL-based attempts (Gram-Schmidt "
+                             "orthogonalization, raising domain_weight) -- see "
+                             "docs/exec-plans/completed/2026-09-gated-nodg-mmd.md for the measured "
+                             "starting value (10.0) and rationale.")
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--encoder_layer", type=str, default="layer3", choices=["layer3", "layer4"])
     parser.add_argument("--no_domain_gate", action="store_true",

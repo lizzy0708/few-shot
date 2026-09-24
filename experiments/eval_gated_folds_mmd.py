@@ -17,15 +17,23 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import argparse
+
 import experiments.eval_gated_folds as base
 
 
-def ckpt_path_mmd(fold, train_seed):
-    return f"checkpoints/coarse5_fold{fold}_gated_nodg_mmd_s{train_seed}.pth"
-
-
-base.ckpt_path = ckpt_path_mmd
+def make_ckpt_path_fn(tag):
+    def ckpt_path_mmd(fold, train_seed):
+        return f"checkpoints/coarse5_fold{fold}_gated_nodg_{tag}_s{train_seed}.pth"
+    return ckpt_path_mmd
 
 
 if __name__ == "__main__":
+    import sys
+    pre_ap = argparse.ArgumentParser(add_help=False)
+    pre_ap.add_argument("--mmd_tag", type=str, default="mmd",
+                         help="checkpoint suffix tag, e.g. 'mmd' (weight=10.0), 'mmd1' (weight=1.0), 'mmd01' (weight=0.1)")
+    pre_args, remaining_argv = pre_ap.parse_known_args()
+    base.ckpt_path = make_ckpt_path_fn(pre_args.mmd_tag)
+    sys.argv = [sys.argv[0]] + remaining_argv
     base.main()

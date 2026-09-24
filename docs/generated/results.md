@@ -272,3 +272,26 @@ z_inv 분포 거리(multi-bandwidth RBF-kernel MMD)를 직접 최소화(`utils/m
 세 값 모두 두 조건 동시 충족 실패 — **3-seed 확장이나 추가 weight 탐색 없이 완전 종료**.
 
 상세: `docs/exec-plans/completed/2026-09-gated-nodg-mmd.md`. 원본 로그: `docs/generated/mmd_attempt/`.
+
+**추가 확인(같은 날, mmd_weight=1.0 + domain-balanced batch, 4번째이자 정말 마지막 시도)**:
+"batch가 불균형해서(4개 calib 도메인에 batch_size=16 → 도메인당 평균 4개) MMD 추정 자체가
+노이즈였다"는 가설을 직접 검증 — `utils/domain_balanced_sampler.py`로 매 batch가 도메인당
+정확히 16개(batch_size=64)씩 뽑히도록 고정, mmd_weight=1.0(스윕에서 가장 균형 잡혔던 값)
+고정, batch 구성만 격리해서 재학습:
+
+| | domain-acc | Δ | AUROC Δ | Acc Δ | F1 Δ | 조건1 | 조건2 |
+|---|---|---|---|---|---|---|---|
+| MMD w=1.0 (불균형, 기존) | 0.5756 | −2.61pp | −1.31pp | −1.29pp | −0.92pp | ❌ | ❌ |
+| **MMD w=1.0 + balanced batch** | **0.5887** | **−1.30pp** | **−1.88pp** | −0.96pp | −0.69pp | ❌ | ❌ |
+
+**가설 반증**: 노이즈 가설이 맞다면 batch를 균형화했을 때 domain-acc 감소폭이 더 커져야
+하는데, 실제로는 오히려 **더 작아졌다**(−2.61pp → −1.30pp, weight=0.1 수준으로 약화)
+— 동시에 AUROC 손상은 더 커짐(−1.88pp). 즉 batch 불균형/노이즈는 실패의 원인이 아니었음이
+확인됨. 근본 원인은 다른 곳(RBF 커널 MMD와 z_inv 분포 구조의 부정합, GRL·MMD 두 신호의
+상쇄 등)에 있을 가능성이 있으나 추가 검증하지 않음 — 사전 약속대로 여기서 종료.
+
+**domain leakage 개선 방향은 이제 4개 메커니즘(직교화, domain_weight, MMD unbalanced ×3
+weight, MMD balanced batch), 총 6개 설정 전부 실패로 완전히 최종 종료.**
+`checkpoints/coarse5_fold*_gated_nodg_s{0,1,2}.pth`(dw=1.0, GRL만)가 논문 Table 2의
+유일한 유효 체크포인트 패밀리로 확정. 상세: `docs/exec-plans/completed/2026-09-mmd-balanced-batch.md`,
+원본 로그: `docs/generated/mmd_balanced_attempt/`.

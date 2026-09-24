@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 from datasets.hust_image import HUSTDataset
 from models.gated_mask_model import GatedMaskModel
 from utils.mmd import multi_domain_mmd_loss
+from utils.domain_balanced_sampler import DomainBalancedBatchSampler
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -38,8 +39,18 @@ def train(args):
         datasets.append(ds)
     dataset = ConcatDataset(datasets)
 
-    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True,
-                         num_workers=2, drop_last=False)
+    if args.balanced_batch:
+        # 2026-09-24 (utils/domain_balanced_sampler.py): isolate whether the
+        # mmd_weight sweep's failure was caused by noisy per-batch MMD estimates
+        # (small/unbalanced per-domain batch counts), independent of mmd_weight itself.
+        sampler = DomainBalancedBatchSampler(
+            dataset, batch_size=args.batch_size,
+            num_domains=len(args.train_domains), seed=args.seed,
+        )
+        loader = DataLoader(dataset, batch_sampler=sampler, num_workers=2)
+    else:
+        loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True,
+                             num_workers=2, drop_last=False)
 
     model = GatedMaskModel(num_classes=args.num_classes, num_domains=num_domains,
                             encoder_layer=args.encoder_layer,
@@ -70,6 +81,7 @@ def train(args):
     print("Domain weight :", args.domain_weight)
     print("DomDisc weight:", args.domain_disc_weight)
     print("MMD weight    :", args.mmd_weight)
+    print("Balanced batch:", args.balanced_batch)
     print("Seed          :", args.seed)
     print("Save path     :", args.save_path)
     print("Total samples :", len(dataset))
@@ -172,6 +184,15 @@ def main():
                              "orthogonalization, raising domain_weight) -- see "
                              "docs/exec-plans/completed/2026-09-gated-nodg-mmd.md for the measured "
                              "starting value (10.0) and rationale.")
+    parser.add_argument("--balanced_batch", action="store_true",
+                        help="2026-09-24 (utils/domain_balanced_sampler.py): use a "
+                             "DomainBalancedBatchSampler so every batch has exactly "
+                             "batch_size // len(train_domains) samples from each train "
+                             "domain, instead of plain shuffle=True (which gives each "
+                             "domain only that many *on average*, with high variance). "
+                             "Isolates whether the mmd_weight sweep's failure was caused "
+                             "by noisy per-batch MMD estimates. Requires batch_size "
+                             "divisible by len(train_domains).")
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--encoder_layer", type=str, default="layer3", choices=["layer3", "layer4"])
     parser.add_argument("--no_domain_gate", action="store_true",

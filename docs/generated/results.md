@@ -295,3 +295,35 @@ weight, MMD balanced batch), 총 6개 설정 전부 실패로 완전히 최종 �
 `checkpoints/coarse5_fold*_gated_nodg_s{0,1,2}.pth`(dw=1.0, GRL만)가 논문 Table 2의
 유일한 유효 체크포인트 패밀리로 확정. 상세: `docs/exec-plans/completed/2026-09-mmd-balanced-batch.md`,
 원본 로그: `docs/generated/mmd_balanced_attempt/`.
+
+## 🟢 대조군 실험: 도메인 라벨 shuffle (2026-09-25) — Acc/F1 개선의 메커니즘 규명
+
+domain leakage 개선 방향은 종료됐지만("도메인 불변성이 개선 안 됨"), z_inv의 Acc/F1은
+여전히 raw z보다 유의하게 높음(실험 3/3b, p<0.001). 이 개선이 (a) 진짜 도메인 적대적
+학습(GRL) 때문인지, (b) class_gate/mask 구조 자체의 재가중 효과(도메인 라벨 진위와
+무관)인지 직접 검증. `--shuffle_domain_labels`(신규): 학습 샘플의 진짜 도메인 라벨을
+seed 고정 permutation으로 무작위 재배정한 채 GRL/domain_classifier를 학습(class_loss/
+gate 구조는 완전히 동일하게 유지). 1-seed×4-fold.
+
+| | AUROC | Acc | F1 |
+|---|---|---|---|
+| raw z (decomposition 없음) | 0.9449 | 0.8684 | 0.9174 |
+| z_inv (진짜 도메인 라벨) | 0.9540 | 0.9053 | 0.9429 |
+| **z_inv (shuffle 도메인 라벨)** | **0.9465** | **0.9041** | **0.9428** |
+
+**gain 분해(raw z 대비)**: shuffle이 얻는 gain(Acc +3.57pp, F1 +2.54pp)이 진짜 라벨
+버전 전체 gain(Acc +3.69pp, F1 +2.55pp)의 **96.7%/99.6%**를 차지 — 진짜 라벨의 추가
+기여는 사실상 0(Acc +0.12pp, F1 +0.01pp, 노이즈 범위). 반대로 **AUROC**는 gain의
+82.4%(+0.75pp/+0.91pp)가 shuffle에는 없고 진짜 라벨에서만 나타남(절대 크기는 작음 —
+raw z AUROC가 이미 0.9449로 높아 개선 여지 자체가 작았음).
+
+**결론(성공/실패 프레임 아님, 그대로의 발견)**: Acc/F1 개선은 거의 전적으로
+class_gate/mask 구조 자체의 재가중 효과이며 도메인 라벨의 진위와 무관함 — 논문에 명시할
+가치 있는 독립적 발견. AUROC만 예외적으로 진짜 도메인 적대적 학습이 작지만 일관된 추가
+기여(+0.75pp)를 함 — 지표별로 구분해서 서술할 것. 독립 도메인 프로브(z_inv domain-acc
+0.5962)는 진짜 라벨 버전(0.6017)과 사실상 동일 — encoder가 진짜 라벨을 학습한 적 없으므로
+도메인 불변성 지표로 해석 불가, 기존 결론(GRL이 도메인 정보를 유의하게 제거 못함)과
+일관될 뿐 새로운 정보 없음.
+
+상세: `docs/exec-plans/completed/2026-09-shuffled-domain-label-control.md`. 원본 로그:
+`docs/generated/shuffled_domain_attempt/`.

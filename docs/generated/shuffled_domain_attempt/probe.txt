@@ -1,0 +1,51 @@
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+[analyze_domain_invariance_tsne_mmd wrapper] tag=shuffled TRAIN_SEEDS=[0]
+Device  : cuda
+Out dir : out/analyze/domain_invariance_tsne
+Train seeds (probe avg): [0]
+t-SNE representative seed: 0
+
+=== fold 500 | domain pool = ['400', '500', '600', '700', '800'] (n=5, chance=0.2000) ===
+  train_seed=0: extracted 2000 samples, z_dim=1024, zinv_dim=1024
+    [probe] z    domain-acc=0.5950 | z_inv domain-acc=0.5550 | z    class-acc=0.9875 | z_inv class-acc=0.9925
+
+=== fold 600 | domain pool = ['400', '500', '600', '700', '800'] (n=5, chance=0.2000) ===
+  train_seed=0: extracted 2000 samples, z_dim=1024, zinv_dim=1024
+    [probe] z    domain-acc=0.5600 | z_inv domain-acc=0.5925 | z    class-acc=0.9750 | z_inv class-acc=0.9850
+
+=== fold 700 | domain pool = ['400', '500', '600', '700', '800'] (n=5, chance=0.2000) ===
+  train_seed=0: extracted 2000 samples, z_dim=1024, zinv_dim=1024
+    [probe] z    domain-acc=0.5550 | z_inv domain-acc=0.5925 | z    class-acc=1.0000 | z_inv class-acc=1.0000
+
+=== fold 800 | domain pool = ['400', '500', '600', '700', '800'] (n=5, chance=0.2000) ===
+  train_seed=0: extracted 2000 samples, z_dim=1024, zinv_dim=1024
+    [probe] z    domain-acc=0.6100 | z_inv domain-acc=0.6450 | z    class-acc=0.9350 | z_inv class-acc=0.9425
+
+====================================================================================================
+SUMMARY TABLE (mean±std over 3 train-seed probes)
+====================================================================================================
+  Fold |      z dom-acc |   zinv dom-acc |      z cls-acc |   zinv cls-acc |   chance
+-------------------------------------------------------------------------------------
+   500 | 0.5950±0.0000 | 0.5550±0.0000 | 0.9875±0.0000 | 0.9925±0.0000 | 0.2000
+   600 | 0.5600±0.0000 | 0.5925±0.0000 | 0.9750±0.0000 | 0.9850±0.0000 | 0.2000
+   700 | 0.5550±0.0000 | 0.5925±0.0000 | 1.0000±0.0000 | 1.0000±0.0000 | 0.2000
+   800 | 0.6100±0.0000 | 0.6450±0.0000 | 0.9350±0.0000 | 0.9425±0.0000 | 0.2000
+-------------------------------------------------------------------------------------
+   Avg |         0.5800 |         0.5962 |         0.9744 |         0.9800 |   0.2000
+

@@ -37,6 +37,32 @@ def train(args):
         ds = HUSTDataset(root=args.root, domain=domain, only_normal=False, shot=None,
                           all_domains=args.all_domains)
         datasets.append(ds)
+
+    if args.shuffle_domain_labels:
+        # 2026-09-25 control experiment: does the Acc/F1 gain from z_inv come from
+        # genuine domain-adversarial learning (GRL removing real domain info), or
+        # from the class_gate/mask structure itself acting as a regularizer
+        # independent of whether the domain labels it's trained against are real?
+        # Fixed (not per-epoch) label permutation across all training samples --
+        # each sample keeps a consistent but WRONG domain label for the whole run,
+        # so GRL/domain_classifier learn to fit noise instead of real domain
+        # structure, while the gate/mask architecture and class_loss path are
+        # completely unchanged. Only `datasets[i].samples` (in-memory, this
+        # training run only) is mutated -- does not touch files on disk or any
+        # other script's view of HUSTDataset.
+        rng = np.random.RandomState(args.seed)
+        all_true_domains = [s[2] for ds in datasets for s in ds.samples]
+        shuffled_domains = rng.permutation(all_true_domains)
+        ptr = 0
+        for ds in datasets:
+            new_samples = []
+            for s in ds.samples:
+                path, label, _domain_idx, domain_name, fault_type, rpm_label, batch_label = s
+                new_samples.append((path, label, int(shuffled_domains[ptr]), domain_name,
+                                     fault_type, rpm_label, batch_label))
+                ptr += 1
+            ds.samples = new_samples
+
     dataset = ConcatDataset(datasets)
 
     if args.balanced_batch:
@@ -82,6 +108,7 @@ def train(args):
     print("DomDisc weight:", args.domain_disc_weight)
     print("MMD weight    :", args.mmd_weight)
     print("Balanced batch:", args.balanced_batch)
+    print("Shuffled dom labels:", args.shuffle_domain_labels)
     print("Seed          :", args.seed)
     print("Save path     :", args.save_path)
     print("Total samples :", len(dataset))
@@ -207,6 +234,14 @@ def main():
                              "mc_orth와 유사하나 동일하지 않음 — models/gated_mask_model.py의 "
                              "_orthogonalize_gate_against_domain 참고). class_logits 경로는 "
                              "영향받지 않음 — 기존 nodg와 학습 dynamics 동일, z_inv만 변경.")
+    parser.add_argument("--shuffle_domain_labels", action="store_true",
+                        help="2026-09-25 control experiment: train GRL/domain_classifier against "
+                             "a fixed random permutation of the true domain labels (class_loss "
+                             "and the gate/mask architecture are unaffected) -- isolates whether "
+                             "z_inv's Acc/F1 gain over raw z comes from genuine domain-adversarial "
+                             "learning or from the class_gate structure itself acting as a "
+                             "regularizer independent of label truthfulness. Default off, fully "
+                             "backward-compatible.")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--save_path", type=str, required=True)
     args = parser.parse_args()

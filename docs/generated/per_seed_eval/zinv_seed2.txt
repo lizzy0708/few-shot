@@ -1,0 +1,71 @@
+Device      : cuda
+Root        : processed
+beta        : 0.5
+n_sigma     : 2.0
+train_seeds : [2]
+eval_seeds  : [0, 1, 2, 3, 4]
+
+  Fold |            AUROC |              Acc |               F1
+---------------------------------------------------------------
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    fold=500 eval_seed=0 beta=0.5 n_sigma=2.0 | AUROC=0.9736 Acc=0.9452 F1=0.9680
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    fold=500 eval_seed=1 beta=0.5 n_sigma=2.0 | AUROC=0.9736 Acc=0.9453 F1=0.9681
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    fold=500 eval_seed=2 beta=0.5 n_sigma=2.0 | AUROC=0.9689 Acc=0.9394 F1=0.9646
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    fold=500 eval_seed=3 beta=0.5 n_sigma=2.0 | AUROC=0.9743 Acc=0.9470 F1=0.9692
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    fold=500 eval_seed=4 beta=0.5 n_sigma=2.0 | AUROC=0.9697 Acc=0.9380 F1=0.9642
+   500 | 0.9720±0.0022 | 0.9430±0.0036 | 0.9668±0.0020
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    fold=600 eval_seed=0 beta=0.5 n_sigma=2.0 | AUROC=0.9458 Acc=0.9068 F1=0.9464
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    fold=600 eval_seed=1 beta=0.5 n_sigma=2.0 | AUROC=0.9465 Acc=0.9071 F1=0.9457
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    fold=600 eval_seed=2 beta=0.5 n_sigma=2.0 | AUROC=0.9394 Acc=0.8937 F1=0.9365
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    fold=600 eval_seed=3 beta=0.5 n_sigma=2.0 | AUROC=0.9454 Acc=0.9070 F1=0.9466
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    fold=600 eval_seed=4 beta=0.5 n_sigma=2.0 | AUROC=0.9409 Acc=0.9064 F1=0.9453
+   600 | 0.9436±0.0029 | 0.9042±0.0053 | 0.9441±0.0038
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    fold=700 eval_seed=0 beta=0.5 n_sigma=2.0 | AUROC=0.9778 Acc=0.9293 F1=0.9588
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    fold=700 eval_seed=1 beta=0.5 n_sigma=2.0 | AUROC=0.9767 Acc=0.9362 F1=0.9625
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    fold=700 eval_seed=2 beta=0.5 n_sigma=2.0 | AUROC=0.9864 Acc=0.9470 F1=0.9687
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    fold=700 eval_seed=3 beta=0.5 n_sigma=2.0 | AUROC=0.9704 Acc=0.9190 F1=0.9529
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    fold=700 eval_seed=4 beta=0.5 n_sigma=2.0 | AUROC=0.9706 Acc=0.9247 F1=0.9560
+   700 | 0.9764±0.0059 | 0.9312±0.0097 | 0.9598±0.0055
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    fold=800 eval_seed=0 beta=0.5 n_sigma=2.0 | AUROC=0.8857 Acc=0.8580 F1=0.9156
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    fold=800 eval_seed=1 beta=0.5 n_sigma=2.0 | AUROC=0.8838 Acc=0.8536 F1=0.9123
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    fold=800 eval_seed=2 beta=0.5 n_sigma=2.0 | AUROC=0.8857 Acc=0.8360 F1=0.8990
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    fold=800 eval_seed=3 beta=0.5 n_sigma=2.0 | AUROC=0.8828 Acc=0.7997 F1=0.8712
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    fold=800 eval_seed=4 beta=0.5 n_sigma=2.0 | AUROC=0.8783 Acc=0.8298 F1=0.8950
+   800 | 0.8833±0.0027 | 0.8354±0.0207 | 0.8986±0.0158
+---------------------------------------------------------------
+   Avg |           0.9438 |           0.9035 |           0.9423

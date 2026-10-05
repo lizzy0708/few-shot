@@ -1,0 +1,163 @@
+beta=0.5 n_sigma=2.0 train_seeds=[0, 1, 2] eval_seeds=[0, 1, 2, 3, 4]
+
+=== FOLD 500 (test_domain=500, calib_domains=['400', '600', '700', '800']) ===
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+  [current] eval_seed=0 AUROC=0.9844 Acc=0.9566 F1=0.9750 Spec=0.7736 TP=8868 FP=338 TN=1155 FN=117 n_normal_query=1493
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+  [current] eval_seed=1 AUROC=0.9846 Acc=0.9569 F1=0.9751 Spec=0.7790 TP=8863 FP=330 TN=1163 FN=122 n_normal_query=1493
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+  [current] eval_seed=2 AUROC=0.9794 Acc=0.9483 F1=0.9701 Spec=0.7723 TP=8783 FP=340 TN=1153 FN=202 n_normal_query=1493
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+  [current] eval_seed=3 AUROC=0.9844 Acc=0.9561 F1=0.9747 Spec=0.7743 TP=8862 FP=337 TN=1156 FN=123 n_normal_query=1493
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+  [current] eval_seed=4 AUROC=0.9818 Acc=0.9485 F1=0.9704 Spec=0.7214 TP=8861 FP=416 TN=1077 FN=124 n_normal_query=1493
+  [current] FOLD CONFUSION (summed over 5 eval-seeds): {'tp': 44237, 'fp': 1761, 'tn': 5704, 'fn': 688}
+  recordings for domain 500: ['N500', 'N502', 'N504']
+  [recording=N500] eval_seed=0 AUROC=0.9750 Acc=0.9490 F1=0.9717 Spec=0.7244 n_normal_query=998
+  [recording=N500] eval_seed=1 AUROC=0.9772 Acc=0.9394 F1=0.9655 Spec=0.9068 n_normal_query=998
+  [recording=N500] eval_seed=2 AUROC=0.9713 Acc=0.9447 F1=0.9692 Spec=0.7525 n_normal_query=998
+  [recording=N500] eval_seed=3 AUROC=0.9669 Acc=0.9370 F1=0.9646 Spec=0.7856 n_normal_query=998
+  [recording=N500] eval_seed=4 AUROC=0.9719 Acc=0.9453 F1=0.9698 Spec=0.6663 n_normal_query=998
+  [recording=N502] eval_seed=0 AUROC=0.9841 Acc=0.9648 F1=0.9807 Spec=0.7275 n_normal_query=998
+  [recording=N502] eval_seed=1 AUROC=0.9838 Acc=0.9672 F1=0.9819 Spec=0.7886 n_normal_query=998
+  [recording=N502] eval_seed=2 AUROC=0.9836 Acc=0.9658 F1=0.9812 Spec=0.7535 n_normal_query=998
+  [recording=N502] eval_seed=3 AUROC=0.9838 Acc=0.9635 F1=0.9797 Spec=0.8387 n_normal_query=998
+  [recording=N502] eval_seed=4 AUROC=0.9838 Acc=0.9563 F1=0.9754 Spec=0.8948 n_normal_query=998
+  [recording=N504] eval_seed=0 AUROC=0.9793 Acc=0.9512 F1=0.9734 Spec=0.5842 n_normal_query=998
+  [recording=N504] eval_seed=1 AUROC=0.9772 Acc=0.9502 F1=0.9727 Spec=0.6172 n_normal_query=998
+  [recording=N504] eval_seed=2 AUROC=0.9783 Acc=0.9515 F1=0.9735 Spec=0.6112 n_normal_query=998
+  [recording=N504] eval_seed=3 AUROC=0.9720 Acc=0.9083 F1=0.9468 Spec=0.9208 n_normal_query=998
+  [recording=N504] eval_seed=4 AUROC=0.9677 Acc=0.9416 F1=0.9677 Spec=0.6543 n_normal_query=998
+
+=== FOLD 600 (test_domain=600, calib_domains=['400', '500', '700', '800']) ===
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+  [current] eval_seed=0 AUROC=0.9511 Acc=0.9146 F1=0.9509 Spec=0.5954 TP=8451 FP=604 TN=889 FN=268 n_normal_query=1493
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+  [current] eval_seed=1 AUROC=0.9520 Acc=0.9090 F1=0.9466 Spec=0.6979 TP=8241 FP=451 TN=1042 FN=478 n_normal_query=1493
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+  [current] eval_seed=2 AUROC=0.9478 Acc=0.8691 F1=0.9187 Spec=0.8828 TP=7557 FP=175 TN=1318 FN=1162 n_normal_query=1493
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+  [current] eval_seed=3 AUROC=0.9511 Acc=0.9147 F1=0.9511 Spec=0.5807 TP=8474 FP=626 TN=867 FN=245 n_normal_query=1493
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+  [current] eval_seed=4 AUROC=0.9480 Acc=0.9095 F1=0.9471 Spec=0.6825 TP=8269 FP=474 TN=1019 FN=450 n_normal_query=1493
+  [current] FOLD CONFUSION (summed over 5 eval-seeds): {'tp': 40992, 'fp': 2330, 'tn': 5135, 'fn': 2603}
+  recordings for domain 600: ['N600', 'N602', 'N604']
+  [recording=N600] eval_seed=0 AUROC=0.9417 Acc=0.8426 F1=0.9040 Spec=0.9890 n_normal_query=998
+  [recording=N600] eval_seed=1 AUROC=0.9627 Acc=0.8776 F1=0.9271 Spec=0.9749 n_normal_query=998
+  [recording=N600] eval_seed=2 AUROC=0.9300 Acc=0.8099 F1=0.8816 Spec=0.9980 n_normal_query=998
+  [recording=N600] eval_seed=3 AUROC=0.9686 Acc=0.9153 F1=0.9509 Spec=0.9309 n_normal_query=998
+  [recording=N600] eval_seed=4 AUROC=0.9648 Acc=0.8851 F1=0.9318 Spec=0.9739 n_normal_query=998
+  [recording=N602] eval_seed=0 AUROC=0.9435 Acc=0.9263 F1=0.9596 Spec=0.4970 n_normal_query=998
+  [recording=N602] eval_seed=1 AUROC=0.9374 Acc=0.8819 F1=0.9312 Spec=0.7976 n_normal_query=998
+  [recording=N602] eval_seed=2 AUROC=0.9429 Acc=0.9260 F1=0.9592 Spec=0.5391 n_normal_query=998
+  [recording=N602] eval_seed=3 AUROC=0.9366 Acc=0.8939 F1=0.9390 Spec=0.7555 n_normal_query=998
+  [recording=N602] eval_seed=4 AUROC=0.9355 Acc=0.8870 F1=0.9346 Spec=0.7766 n_normal_query=998
+  [recording=N604] eval_seed=0 AUROC=0.9348 Acc=0.9151 F1=0.9532 Spec=0.4860 n_normal_query=998
+  [recording=N604] eval_seed=1 AUROC=0.9357 Acc=0.9185 F1=0.9554 Spec=0.4389 n_normal_query=998
+  [recording=N604] eval_seed=2 AUROC=0.9352 Acc=0.9173 F1=0.9549 Spec=0.4108 n_normal_query=998
+  [recording=N604] eval_seed=3 AUROC=0.9354 Acc=0.9178 F1=0.9550 Spec=0.4309 n_normal_query=998
+  [recording=N604] eval_seed=4 AUROC=0.9354 Acc=0.9172 F1=0.9549 Spec=0.3818 n_normal_query=998
+
+=== FOLD 700 (test_domain=700, calib_domains=['400', '500', '600', '800']) ===
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+  [current] eval_seed=0 AUROC=0.9837 Acc=0.9334 F1=0.9617 Spec=0.6792 TP=8763 FP=479 TN=1014 FN=219 n_normal_query=1493
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+  [current] eval_seed=1 AUROC=0.9812 Acc=0.9316 F1=0.9606 Spec=0.6792 TP=8744 FP=479 TN=1014 FN=238 n_normal_query=1493
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+  [current] eval_seed=2 AUROC=0.9886 Acc=0.9539 F1=0.9731 Spec=0.8312 TP=8751 FP=252 TN=1241 FN=231 n_normal_query=1493
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+  [current] eval_seed=3 AUROC=0.9795 Acc=0.9274 F1=0.9583 Spec=0.6557 TP=8735 FP=514 TN=979 FN=247 n_normal_query=1493
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+  [current] eval_seed=4 AUROC=0.9770 Acc=0.9154 F1=0.9517 Spec=0.5720 TP=8735 FP=639 TN=854 FN=247 n_normal_query=1493
+  [current] FOLD CONFUSION (summed over 5 eval-seeds): {'tp': 43728, 'fp': 2363, 'tn': 5102, 'fn': 1182}
+  recordings for domain 700: ['N700', 'N702', 'N704']
+  [recording=N700] eval_seed=0 AUROC=0.9840 Acc=0.9463 F1=0.9703 Spec=0.6824 n_normal_query=998
+  [recording=N700] eval_seed=1 AUROC=0.9822 Acc=0.9465 F1=0.9704 Spec=0.6954 n_normal_query=998
+  [recording=N700] eval_seed=2 AUROC=0.9890 Acc=0.9626 F1=0.9790 Spec=0.9038 n_normal_query=998
+  [recording=N700] eval_seed=3 AUROC=0.9837 Acc=0.9528 F1=0.9737 Spec=0.7966 n_normal_query=998
+  [recording=N700] eval_seed=4 AUROC=0.9913 Acc=0.9639 F1=0.9798 Spec=0.8878 n_normal_query=998
+  [recording=N702] eval_seed=0 AUROC=0.9715 Acc=0.9078 F1=0.9502 Spec=0.2796 n_normal_query=998
+  [recording=N702] eval_seed=1 AUROC=0.9748 Acc=0.9159 F1=0.9544 Spec=0.3637 n_normal_query=998
+  [recording=N702] eval_seed=2 AUROC=0.9809 Acc=0.9535 F1=0.9740 Spec=0.8196 n_normal_query=998
+  [recording=N702] eval_seed=3 AUROC=0.9810 Acc=0.9406 F1=0.9672 Spec=0.6323 n_normal_query=998
+  [recording=N702] eval_seed=4 AUROC=0.9761 Acc=0.9196 F1=0.9564 Spec=0.3818 n_normal_query=998
+  [recording=N704] eval_seed=0 AUROC=0.9924 Acc=0.9671 F1=0.9816 Spec=0.9128 n_normal_query=998
+  [recording=N704] eval_seed=1 AUROC=0.9876 Acc=0.9581 F1=0.9766 Spec=0.8246 n_normal_query=998
+  [recording=N704] eval_seed=2 AUROC=0.9890 Acc=0.9582 F1=0.9768 Spec=0.8036 n_normal_query=998
+  [recording=N704] eval_seed=3 AUROC=0.9961 Acc=0.9704 F1=0.9833 Spec=0.9870 n_normal_query=998
+  [recording=N704] eval_seed=4 AUROC=0.9869 Acc=0.9584 F1=0.9768 Spec=0.8447 n_normal_query=998
+
+=== FOLD 800 (test_domain=800, calib_domains=['400', '500', '600', '700']) ===
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+  [current] eval_seed=0 AUROC=0.9004 Acc=0.8599 F1=0.9153 Spec=0.6611 TP=7304 FP=506 TN=987 FN=845 n_normal_query=1493
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+  [current] eval_seed=1 AUROC=0.9013 Acc=0.8476 F1=0.9062 Spec=0.7187 TP=7100 FP=420 TN=1073 FN=1049 n_normal_query=1493
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+  [current] eval_seed=2 AUROC=0.9028 Acc=0.8130 F1=0.8804 Spec=0.8044 TP=6638 FP=292 TN=1201 FN=1511 n_normal_query=1493
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+  [current] eval_seed=3 AUROC=0.9013 Acc=0.7900 F1=0.8624 Spec=0.8500 TP=6348 FP=224 TN=1269 FN=1801 n_normal_query=1493
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+  [current] eval_seed=4 AUROC=0.8981 Acc=0.8520 F1=0.9097 Spec=0.6879 TP=7188 FP=466 TN=1027 FN=961 n_normal_query=1493
+  [current] FOLD CONFUSION (summed over 5 eval-seeds): {'tp': 34578, 'fp': 1908, 'tn': 5557, 'fn': 6167}
+  recordings for domain 800: ['N800', 'N802', 'N804']
+  [recording=N800] eval_seed=0 AUROC=0.9225 Acc=0.7539 F1=0.8412 Spec=0.9369 n_normal_query=998
+  [recording=N800] eval_seed=1 AUROC=0.9223 Acc=0.8377 F1=0.9019 Spec=0.8337 n_normal_query=998
+  [recording=N800] eval_seed=2 AUROC=0.9161 Acc=0.6960 F1=0.7952 Spec=0.9699 n_normal_query=998
+  [recording=N800] eval_seed=3 AUROC=0.9238 Acc=0.8146 F1=0.8857 Spec=0.8798 n_normal_query=998
+  [recording=N800] eval_seed=4 AUROC=0.9207 Acc=0.7799 F1=0.8607 Spec=0.9168 n_normal_query=998
+  [recording=N802] eval_seed=0 AUROC=0.8886 Acc=0.8233 F1=0.8938 Spec=0.7325 n_normal_query=998
+  [recording=N802] eval_seed=1 AUROC=0.8895 Acc=0.8420 F1=0.9066 Spec=0.6924 n_normal_query=998
+  [recording=N802] eval_seed=2 AUROC=0.8816 Acc=0.8887 F1=0.9380 Spec=0.4319 n_normal_query=998
+  [recording=N802] eval_seed=3 AUROC=0.8819 Acc=0.8726 F1=0.9275 Spec=0.5341 n_normal_query=998
+  [recording=N802] eval_seed=4 AUROC=0.8864 Acc=0.8087 F1=0.8835 Spec=0.7625 n_normal_query=998
+  [recording=N804] eval_seed=0 AUROC=0.8867 Acc=0.8733 F1=0.9275 Spec=0.5762 n_normal_query=998
+  [recording=N804] eval_seed=1 AUROC=0.8890 Acc=0.8649 F1=0.9218 Spec=0.6253 n_normal_query=998
+  [recording=N804] eval_seed=2 AUROC=0.8893 Acc=0.8598 F1=0.9185 Spec=0.6403 n_normal_query=998
+  [recording=N804] eval_seed=3 AUROC=0.8862 Acc=0.7079 F1=0.8063 Spec=0.9148 n_normal_query=998
+  [recording=N804] eval_seed=4 AUROC=0.8909 Acc=0.7810 F1=0.8633 Spec=0.8186 n_normal_query=998
+
+====================================================================================================
+SUMMARY (mean +- std over eval-seeds)
+====================================================================================================
+  Fold |        Condition |            AUROC |              Acc |               F1 |             Spec | n_normal_q
+------------------------------------------------------------------------------------------------------------------
+   500 |          current | 0.9829±0.0020 | 0.9533±0.0040 | 0.9731±0.0023 | 0.7641±0.0215 |       1493
+   500 |   recording_N500 | 0.9725±0.0035 | 0.9431±0.0043 | 0.9682±0.0027 | 0.7671±0.0801 |        998
+   500 |   recording_N502 | 0.9838±0.0001 | 0.9636±0.0038 | 0.9798±0.0023 | 0.8006±0.0601 |        998
+   500 |   recording_N504 | 0.9749±0.0044 | 0.9406±0.0165 | 0.9668±0.0102 | 0.6776±0.1237 |        998
+   600 |          current | 0.9500±0.0018 | 0.9034±0.0173 | 0.9429±0.0122 | 0.6879±0.1078 |       1493
+   600 |   recording_N600 | 0.9535±0.0151 | 0.8661±0.0364 | 0.9191±0.0240 | 0.9733±0.0231 |        998
+   600 |   recording_N602 | 0.9392±0.0033 | 0.9030±0.0193 | 0.9447±0.0122 | 0.6731±0.1280 |        998
+   600 |   recording_N604 | 0.9353±0.0003 | 0.9172±0.0011 | 0.9547±0.0008 | 0.4297±0.0344 |        998
+   700 |          current | 0.9820±0.0039 | 0.9323±0.0125 | 0.9611±0.0069 | 0.6835±0.0837 |       1493
+   700 |   recording_N700 | 0.9861±0.0035 | 0.9544±0.0076 | 0.9746±0.0041 | 0.7932±0.0928 |        998
+   700 |   recording_N702 | 0.9768±0.0037 | 0.9275±0.0169 | 0.9605±0.0088 | 0.4954±0.2004 |        998
+   700 |   recording_N704 | 0.9904±0.0034 | 0.9625±0.0053 | 0.9790±0.0029 | 0.8745±0.0671 |        998
+   800 |          current | 0.9008±0.0016 | 0.8325±0.0266 | 0.8948±0.0201 | 0.7444±0.0715 |       1493
+   800 |   recording_N800 | 0.9211±0.0027 | 0.7764±0.0494 | 0.8569±0.0372 | 0.9074±0.0471 |        998
+   800 |   recording_N802 | 0.8856±0.0033 | 0.8471±0.0298 | 0.9099±0.0203 | 0.6307±0.1268 |        998
+   800 |   recording_N804 | 0.8884±0.0018 | 0.8174±0.0640 | 0.8875±0.0467 | 0.7150±0.1293 |        998
+
+GRAND CONFUSION MATRIX, current condition, all folds summed:
+{'tp': 163535, 'fp': 8362, 'tn': 21498, 'fn': 10640}
+Recall(TPR)=0.9389 Specificity(TNR)=0.7200
+
+DONE
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+

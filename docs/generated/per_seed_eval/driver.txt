@@ -1,0 +1,14 @@
+=== z_inv seed=0 START 22:08:58 ===
+=== z_inv seed=0 DONE 22:16:49 ===
+=== z_inv seed=1 START 22:16:49 ===
+=== z_inv seed=1 DONE 22:24:35 ===
+=== z_inv seed=2 START 22:24:35 ===
+=== z_inv seed=2 DONE 22:32:26 ===
+=== rawz seed=0 START 22:32:26 ===
+=== rawz seed=0 DONE 22:40:15 ===
+=== rawz seed=1 START 22:40:15 ===
+=== rawz seed=1 DONE 22:48:17 ===
+=== rawz seed=2 START 22:48:17 ===
+=== rawz seed=2 DONE 22:56:07 ===
+ALL_PER_SEED_DONE
+

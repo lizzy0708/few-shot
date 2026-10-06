@@ -1,0 +1,125 @@
+beta=0.5 n_sigma=2.0 train_seeds=[0, 1, 2] eval_seeds=[0, 1, 2, 3, 4]
+
+=== FOLD 500 ===
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+  [current] eval_seed=0 AUROC=0.9844 Acc=0.9566 F1=0.9750 BalAcc=0.8803 Spec=0.7736 Recall=0.9870 Prec=0.9633 n_query=10478
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+  [current] eval_seed=1 AUROC=0.9846 Acc=0.9569 F1=0.9751 BalAcc=0.8827 Spec=0.7790 Recall=0.9864 Prec=0.9641 n_query=10478
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+  [current] eval_seed=2 AUROC=0.9794 Acc=0.9483 F1=0.9701 BalAcc=0.8749 Spec=0.7723 Recall=0.9775 Prec=0.9627 n_query=10478
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+  [current] eval_seed=3 AUROC=0.9844 Acc=0.9561 F1=0.9747 BalAcc=0.8803 Spec=0.7743 Recall=0.9863 Prec=0.9634 n_query=10478
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+  [current] eval_seed=4 AUROC=0.9818 Acc=0.9485 F1=0.9704 BalAcc=0.8538 Spec=0.7214 Recall=0.9862 Prec=0.9552 n_query=10478
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+  [balanced] eval_seed=0 AUROC=0.9850 Acc=0.8814 F1=0.8930 BalAcc=0.8814 Spec=0.7736 Recall=0.9893 Prec=0.8138 n_query=2986
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+  [balanced] eval_seed=1 AUROC=0.9833 Acc=0.8818 F1=0.8928 BalAcc=0.8818 Spec=0.7790 Recall=0.9846 Prec=0.8167 n_query=2986
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+  [balanced] eval_seed=2 AUROC=0.9807 Acc=0.8764 F1=0.8881 BalAcc=0.8764 Spec=0.7723 Recall=0.9806 Prec=0.8115 n_query=2986
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+  [balanced] eval_seed=3 AUROC=0.9829 Acc=0.8794 F1=0.8909 BalAcc=0.8794 Spec=0.7743 Recall=0.9846 Prec=0.8135 n_query=2986
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+  [balanced] eval_seed=4 AUROC=0.9829 Acc=0.8547 F1=0.8717 BalAcc=0.8547 Spec=0.7214 Recall=0.9879 Prec=0.7800 n_query=2986
+
+=== FOLD 600 ===
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+  [current] eval_seed=0 AUROC=0.9511 Acc=0.9146 F1=0.9509 BalAcc=0.7824 Spec=0.5954 Recall=0.9693 Prec=0.9333 n_query=10212
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+  [current] eval_seed=1 AUROC=0.9520 Acc=0.9090 F1=0.9466 BalAcc=0.8216 Spec=0.6979 Recall=0.9452 Prec=0.9481 n_query=10212
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+  [current] eval_seed=2 AUROC=0.9478 Acc=0.8691 F1=0.9187 BalAcc=0.8748 Spec=0.8828 Recall=0.8667 Prec=0.9774 n_query=10212
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+  [current] eval_seed=3 AUROC=0.9511 Acc=0.9147 F1=0.9511 BalAcc=0.7763 Spec=0.5807 Recall=0.9719 Prec=0.9312 n_query=10212
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+  [current] eval_seed=4 AUROC=0.9480 Acc=0.9095 F1=0.9471 BalAcc=0.8155 Spec=0.6825 Recall=0.9484 Prec=0.9458 n_query=10212
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+  [balanced] eval_seed=0 AUROC=0.9500 Acc=0.7837 F1=0.8179 BalAcc=0.7837 Spec=0.5954 Recall=0.9719 Prec=0.7061 n_query=2986
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+  [balanced] eval_seed=1 AUROC=0.9518 Acc=0.8208 F1=0.8404 BalAcc=0.8208 Spec=0.6979 Recall=0.9437 Prec=0.7575 n_query=2986
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+  [balanced] eval_seed=2 AUROC=0.9398 Acc=0.8721 F1=0.8707 BalAcc=0.8721 Spec=0.8828 Recall=0.8614 Prec=0.8802 n_query=2986
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+  [balanced] eval_seed=3 AUROC=0.9511 Acc=0.7770 F1=0.8135 BalAcc=0.7770 Spec=0.5807 Recall=0.9732 Prec=0.6989 n_query=2986
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+  [balanced] eval_seed=4 AUROC=0.9530 Acc=0.8188 F1=0.8406 BalAcc=0.8188 Spec=0.6825 Recall=0.9551 Prec=0.7505 n_query=2986
+
+=== FOLD 700 ===
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+  [current] eval_seed=0 AUROC=0.9837 Acc=0.9334 F1=0.9617 BalAcc=0.8274 Spec=0.6792 Recall=0.9756 Prec=0.9482 n_query=10475
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+  [current] eval_seed=1 AUROC=0.9812 Acc=0.9316 F1=0.9606 BalAcc=0.8263 Spec=0.6792 Recall=0.9735 Prec=0.9481 n_query=10475
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+  [current] eval_seed=2 AUROC=0.9886 Acc=0.9539 F1=0.9731 BalAcc=0.9027 Spec=0.8312 Recall=0.9743 Prec=0.9720 n_query=10475
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+  [current] eval_seed=3 AUROC=0.9795 Acc=0.9274 F1=0.9583 BalAcc=0.8141 Spec=0.6557 Recall=0.9725 Prec=0.9444 n_query=10475
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+  [current] eval_seed=4 AUROC=0.9770 Acc=0.9154 F1=0.9517 BalAcc=0.7723 Spec=0.5720 Recall=0.9725 Prec=0.9318 n_query=10475
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+  [balanced] eval_seed=0 AUROC=0.9801 Acc=0.8238 F1=0.8461 BalAcc=0.8238 Spec=0.6792 Recall=0.9685 Prec=0.7512 n_query=2986
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+  [balanced] eval_seed=1 AUROC=0.9838 Acc=0.8285 F1=0.8508 BalAcc=0.8285 Spec=0.6792 Recall=0.9779 Prec=0.7530 n_query=2986
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+  [balanced] eval_seed=2 AUROC=0.9907 Acc=0.9052 F1=0.9118 BalAcc=0.9052 Spec=0.8312 Recall=0.9792 Prec=0.8530 n_query=2986
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+  [balanced] eval_seed=3 AUROC=0.9805 Acc=0.8141 F1=0.8395 BalAcc=0.8141 Spec=0.6557 Recall=0.9725 Prec=0.7386 n_query=2986
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+  [balanced] eval_seed=4 AUROC=0.9756 Acc=0.7729 F1=0.8109 BalAcc=0.7729 Spec=0.5720 Recall=0.9739 Prec=0.6947 n_query=2986
+
+=== FOLD 800 ===
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+  [current] eval_seed=0 AUROC=0.9004 Acc=0.8599 F1=0.9153 BalAcc=0.7787 Spec=0.6611 Recall=0.8963 Prec=0.9352 n_query=9642
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+  [current] eval_seed=1 AUROC=0.9013 Acc=0.8476 F1=0.9062 BalAcc=0.7950 Spec=0.7187 Recall=0.8713 Prec=0.9441 n_query=9642
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+  [current] eval_seed=2 AUROC=0.9028 Acc=0.8130 F1=0.8804 BalAcc=0.8095 Spec=0.8044 Recall=0.8146 Prec=0.9579 n_query=9642
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+  [current] eval_seed=3 AUROC=0.9013 Acc=0.7900 F1=0.8624 BalAcc=0.8145 Spec=0.8500 Recall=0.7790 Prec=0.9659 n_query=9642
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+  [current] eval_seed=4 AUROC=0.8981 Acc=0.8520 F1=0.9097 BalAcc=0.7850 Spec=0.6879 Recall=0.8821 Prec=0.9391 n_query=9642
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+  [balanced] eval_seed=0 AUROC=0.9040 Acc=0.7813 F1=0.8048 BalAcc=0.7813 Spec=0.6611 Recall=0.9015 Prec=0.7268 n_query=2986
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+  [balanced] eval_seed=1 AUROC=0.9088 Acc=0.7991 F1=0.8140 BalAcc=0.7991 Spec=0.7187 Recall=0.8794 Prec=0.7576 n_query=2986
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+  [balanced] eval_seed=2 AUROC=0.8941 Acc=0.8017 F1=0.8012 BalAcc=0.8017 Spec=0.8044 Recall=0.7991 Prec=0.8034 n_query=2986
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+  [balanced] eval_seed=3 AUROC=0.8976 Acc=0.8098 F1=0.8018 BalAcc=0.8098 Spec=0.8500 Recall=0.7696 Prec=0.8369 n_query=2986
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+  [balanced] eval_seed=4 AUROC=0.8970 Acc=0.7850 F1=0.8040 BalAcc=0.7850 Spec=0.6879 Recall=0.8821 Prec=0.7386 n_query=2986
+
+==============================================================================================================
+SUMMARY (mean +- std over eval-seeds)
+==============================================================================================================
+fold=500 cond=  current | AUROC=0.9829±0.0020 Acc=0.9533±0.0040 F1=0.9731±0.0023 BalAcc=0.8744±0.0106 Spec=0.7641±0.0215 Recall=0.9847±0.0036 n_query(seed0)=10478
+fold=500 cond= balanced | AUROC=0.9829±0.0014 Acc=0.8747±0.0102 F1=0.8873±0.0080 BalAcc=0.8747±0.0102 Spec=0.7641±0.0215 Recall=0.9854±0.0030 n_query(seed0)=2986
+fold=600 cond=  current | AUROC=0.9500±0.0018 Acc=0.9034±0.0173 F1=0.9429±0.0122 BalAcc=0.8141±0.0351 Spec=0.6879±0.1078 Recall=0.9403±0.0383 n_query(seed0)=10212
+fold=600 cond= balanced | AUROC=0.9491±0.0048 Acc=0.8145±0.0339 F1=0.8366±0.0204 BalAcc=0.8145±0.0339 Spec=0.6879±0.1078 Recall=0.9411±0.0413 n_query(seed0)=2986
+fold=700 cond=  current | AUROC=0.9820±0.0039 Acc=0.9323±0.0125 F1=0.9611±0.0069 BalAcc=0.8286±0.0422 Spec=0.6835±0.0837 Recall=0.9737±0.0012 n_query(seed0)=10475
+fold=700 cond= balanced | AUROC=0.9821±0.0050 Acc=0.8289±0.0429 F1=0.8518±0.0330 BalAcc=0.8289±0.0429 Spec=0.6835±0.0837 Recall=0.9744±0.0038 n_query(seed0)=2986
+fold=800 cond=  current | AUROC=0.9008±0.0016 Acc=0.8325±0.0266 F1=0.8948±0.0201 BalAcc=0.7965±0.0137 Spec=0.7444±0.0715 Recall=0.8486±0.0445 n_query(seed0)=9642
+fold=800 cond= balanced | AUROC=0.9003±0.0053 Acc=0.7954±0.0106 F1=0.8052±0.0046 BalAcc=0.7954±0.0106 Spec=0.7444±0.0715 Recall=0.8463±0.0521 n_query(seed0)=2986
+
+GRAND CONFUSION MATRICES (summed over all folds+eval-seeds):
+  [current] {'tp': 163535, 'fp': 8362, 'tn': 21498, 'fn': 10640} | Precision=0.9514 Recall=0.9389 Specificity=0.7200 BalAcc=0.8294 F1(anomaly)=0.9451 F1(normal)=0.6935 macroF1=0.8193
+  [balanced] {'tp': 27973, 'fp': 8362, 'tn': 21498, 'fn': 1887} | Precision=0.7699 Recall=0.9368 Specificity=0.7200 BalAcc=0.8284 F1(anomaly)=0.8452 F1(normal)=0.8075 macroF1=0.8263
+
+DONE
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+

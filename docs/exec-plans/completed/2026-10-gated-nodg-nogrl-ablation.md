@@ -39,12 +39,27 @@ fold=700: calib=400,500,600,800 / fold=800: calib=400,500,600,700
   기존 `eval_gated_folds_rawz.py`는 태그를 지원하지 않아 그대로는 재사용 불가하므로 최소 래퍼 추가)
   `--ckpt_tag nogrl --train_seeds 0`
 
-## 비교 대상
+## 결과 (2026-10-06, 학습·평가 완료)
+
 | | AUROC | Acc | F1 |
 |---|---|---|---|
 | GRL-on seed0 z_inv | 0.9486 | 0.8846 | 0.9278 |
 | GRL-on seed0 raw z | 0.9337 | 0.8508 | 0.9055 |
-| GRL-off seed0 z_inv | ? | ? | ? |
-| GRL-off seed0 raw z | ? | ? | ? |
+| **GRL-off seed0 z_inv** | **0.9438** | **0.9089** | **0.9457** |
+| **GRL-off seed0 raw z** | **0.9503** | **0.8830** | **0.9265** |
 
-(결과는 학습·평가 완료 후 이 문서에 추가)
+### fold별
+| Fold | GRL-off z_inv (AUROC/Acc/F1) | GRL-off raw z (AUROC/Acc/F1) |
+|---|---|---|
+| 500 | 0.9880/0.9645/0.9794 | 0.9869/0.9552/0.9736 |
+| 600 | 0.9320/0.8905/0.9342 | 0.9384/0.8662/0.9170 |
+| 700 | 0.9753/0.9277/0.9578 | 0.9630/0.9127/0.9484 |
+| 800 | 0.8797/0.8529/0.9114 | 0.9129/0.7981/0.8670 |
+
+### 해석
+- **GRL-off z_inv vs GRL-on z_inv**: AUROC는 GRL-off가 소폭 낮음(−0.48pp)이지만 **Acc(+2.43pp)/F1(+1.79pp)는 GRL-off가 오히려 더 높음** — 단일 seed라 노이즈 가능성 있으나, 적어도 "GRL이 Acc/F1에 필수적"이라는 가정과는 반대 방향.
+- **GRL-off raw z vs GRL-on raw z**: 세 지표 모두 **GRL-off가 더 높음**(AUROC+1.66pp, Acc+3.22pp, F1+2.10pp) — encoder 자체도 GRL 없이 더 잘 나온 단일-seed 결과.
+- **GRL-off 안에서 z_inv vs raw z**: AUROC는 raw z가 근소 우위(+0.65pp)지만 **Acc(+2.59pp)/F1(+1.92pp)는 z_inv가 우위** — GRL을 완전히 꺼도 decomposition(gate)의 Acc/F1 기여는 그대로 남음. 이는 2026-09-25 "도메인 라벨 shuffle" 대조실험 결론(Acc/F1 개선이 거의 전적으로 class_gate 구조 자체의 재가중 효과이며 GRL/도메인 라벨 진위와 무관)과 **독립적인 방법(label shuffle vs domain_weight=0)으로 같은 결론에 도달** — 교차검증됨.
+- 전부 **단일 seed(seed=0)** 결과이므로 해석에 주의 — fold 600/800은 이미 알려진 고분산 fold라 단일 seed 결과만으로 일반화하기엔 약함(3-seed 확장은 이번 요청 범위 밖).
+
+원본 로그: `docs/generated/nogrl_ablation/{driver,eval_zinv,eval_rawz}.txt`.

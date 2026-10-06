@@ -13,8 +13,10 @@ or touching either existing script.
 Usage:
   conda run -n torch python experiments/eval_gated_folds_rawz_tagged.py --ckpt_tag nogrl --train_seeds 0 --beta 0.5 --n_sigma 2.0
 """
-import argparse
+import os
 import sys
+import argparse
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.eval_gated_folds_rawz  # noqa: F401 -- import alone applies its score_one_model monkey-patch
 import experiments.eval_gated_folds as base

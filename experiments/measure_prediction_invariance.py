@@ -109,16 +109,19 @@ def score_domain(model, query_domain, calib_domains, feature_key, eval_seed):
     return bal_acc
 
 
-def risk_for_domain_ensemble(models_by_seed, query_domain, calib_domains, feature_key):
-    """3-seed score ensemble (or 1-model if len(models_by_seed)==1), averaged over
-    EVAL_SEEDS, mirroring Table 2's ensembling convention."""
+def scores_for_domain_all_seeds(models_by_seed, query_domain, calib_domains, feature_key):
+    """Computes, ONCE, per-eval-seed x per-individual-seed raw score arrays (query/
+    support/calib). Returns {eval_seed: {seed: (sc_q, sc_s, sc_c, labels)}} so both
+    the ensemble-average risk AND each individual seed's own risk can be derived
+    from this single pass -- avoids re-running the same forward passes twice
+    (first version of this function did; this is the compute-reduced rewrite used
+    for the actual run, see module docstring's "bonus" note for the other cut)."""
     seeds = list(models_by_seed.keys())
-    per_eval_seed_bal = []
+    out = {}
     for eval_seed in EVAL_SEEDS:
         support_ds, query_ds = build_support_query_generic(query_domain, calib_domains, eval_seed)
         calib_ds = base.build_calib_normal(calib_domains)
-        per_model_scores = []
-        ref_labels = None
+        per_seed = {}
         for s in seeds:
             model = models_by_seed[s]
             support_loader = DataLoader(support_ds, batch_size=len(support_ds), shuffle=False)
@@ -133,44 +136,66 @@ def risk_for_domain_ensemble(models_by_seed, query_domain, calib_domains, featur
             sc_s = mahalanobis_score(support_np, blended, prec_np)
             sc_c = mahalanobis_score(calib_np, blended, prec_np)
             sc_q = mahalanobis_score(query_np, blended, prec_np)
-            if ref_labels is None:
-                ref_labels = labels
-            per_model_scores.append((sc_q, sc_s, sc_c))
-        ens_q = np.mean(np.stack([t[0] for t in per_model_scores]), axis=0)
-        ens_s = np.mean(np.stack([t[1] for t in per_model_scores]), axis=0)
-        ens_c = np.mean(np.stack([t[2] for t in per_model_scores]), axis=0)
+            per_seed[s] = (sc_q, sc_s, sc_c, labels)
+        out[eval_seed] = per_seed
+    return out
+
+
+def risk_from_scores(scores_by_eval_seed, seeds_subset):
+    per_eval_seed_bal = []
+    for eval_seed, per_seed in scores_by_eval_seed.items():
+        q_list = [per_seed[s][0] for s in seeds_subset]
+        s_list = [per_seed[s][1] for s in seeds_subset]
+        c_list = [per_seed[s][2] for s in seeds_subset]
+        labels = per_seed[seeds_subset[0]][3]
+        ens_q = np.mean(np.stack(q_list), axis=0)
+        ens_s = np.mean(np.stack(s_list), axis=0)
+        ens_c = np.mean(np.stack(c_list), axis=0)
         threshold = ens_s.mean() + N_SIGMA * ens_c.std()
         preds = (ens_q > threshold).astype(int)
-        per_eval_seed_bal.append(balanced_accuracy_score(ref_labels, preds))
+        per_eval_seed_bal.append(balanced_accuracy_score(labels, preds))
     return float(np.mean(per_eval_seed_bal))
 
 
-def run_variant(model_name, models_by_fold_seed, feature_key):
+def risk_for_domain_ensemble(models_by_seed, query_domain, calib_domains, feature_key):
+    scores = scores_for_domain_all_seeds(models_by_seed, query_domain, calib_domains, feature_key)
+    seeds = list(models_by_seed.keys())
+    return risk_from_scores(scores, seeds), scores
+
+
+def run_variant(model_name, models_by_fold_seed, feature_key, run_bonus=False):
     """models_by_fold_seed: dict[fold] -> dict[seed] -> model (seed key arbitrary
-    for single-seed variants, e.g. {0: model})."""
-    primary_risk = {}  # fold -> risk (ensembled over available seeds)
-    bonus_risk = {}    # (checkpoint_fold, query_domain) -> risk (single ensemble call per combo)
+    for single-seed variants, e.g. {0: model}). Compute-reduced: per-seed risk is
+    derived from the SAME scores computed for the ensemble (no duplicate forward
+    passes); bonus (calib-domains-as-query) sweep is OFF by default -- it was
+    explicitly conditional ("가능하면") in the request and, at the originally
+    planned scope, would have added ~4x compute (~8h total) -- skipped to fit the
+    turn's time budget, noted explicitly in the report rather than silently
+    dropped."""
+    primary_risk = {}
     per_seed_primary = {s: {} for s in next(iter(models_by_fold_seed.values())).keys()}
+    bonus_risk = {}
 
     for fold in OFFICIAL_HELDOUT:
         models_by_seed = models_by_fold_seed[fold]
         calib = [d for d in ALL_DOMAINS if d != fold]
-        bal = risk_for_domain_ensemble(models_by_seed, fold, calib, feature_key)
-        primary_risk[fold] = 1.0 - bal
-        print(f"  [{model_name}/{feature_key}] PRIMARY fold={fold} query={fold} BalAcc={bal:.4f} risk={1-bal:.4f}")
+        bal_ens, scores = risk_for_domain_ensemble(models_by_seed, fold, calib, feature_key)
+        primary_risk[fold] = 1.0 - bal_ens
+        print(f"  [{model_name}/{feature_key}] PRIMARY fold={fold} query={fold} BalAcc={bal_ens:.4f} risk={1-bal_ens:.4f}")
 
-        for s, model in models_by_seed.items():
-            bal_s = risk_for_domain_ensemble({s: model}, fold, calib, feature_key)
+        for s in models_by_seed.keys():
+            bal_s = risk_from_scores(scores, [s])
             per_seed_primary[s][fold] = 1.0 - bal_s
 
-        for d in ALL_DOMAINS:
-            if d == fold:
-                continue
-            calib_bonus = [x for x in ALL_DOMAINS if x != d]
-            bal_b = risk_for_domain_ensemble(models_by_seed, d, calib_bonus, feature_key)
-            bonus_risk[(fold, d)] = 1.0 - bal_b
-            print(f"  [{model_name}/{feature_key}] BONUS checkpoint_fold={fold} query={d} "
-                  f"BalAcc={bal_b:.4f} risk={1-bal_b:.4f}")
+        if run_bonus:
+            for d in ALL_DOMAINS:
+                if d == fold:
+                    continue
+                calib_bonus = [x for x in ALL_DOMAINS if x != d]
+                bal_b, _ = risk_for_domain_ensemble(models_by_seed, d, calib_bonus, feature_key)
+                bonus_risk[(fold, d)] = 1.0 - bal_b
+                print(f"  [{model_name}/{feature_key}] BONUS checkpoint_fold={fold} query={d} "
+                      f"BalAcc={bal_b:.4f} risk={1-bal_b:.4f}")
 
     primary_values = list(primary_risk.values())
     primary_var = float(np.var(primary_values))
@@ -180,7 +205,8 @@ def run_variant(model_name, models_by_fold_seed, feature_key):
     print(f"  [{model_name}/{feature_key}] PRIMARY variance (ensemble): {primary_var:.6g}")
     print(f"  [{model_name}/{feature_key}] PRIMARY variance per-seed: {per_seed_vars} "
           f"mean={np.mean(per_seed_vars):.6g} std={np.std(per_seed_vars):.6g}")
-    print(f"  [{model_name}/{feature_key}] BONUS risk values: {bonus_risk}")
+    if run_bonus:
+        print(f"  [{model_name}/{feature_key}] BONUS risk values: {bonus_risk}")
 
     return dict(model=model_name, feature=feature_key, primary_risk=primary_risk,
                 primary_var=primary_var, per_seed_vars=per_seed_vars, bonus_risk=bonus_risk)

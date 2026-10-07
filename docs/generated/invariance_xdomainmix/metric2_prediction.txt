@@ -1,0 +1,95 @@
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+
+### MODEL: pretrained ###
+  [pretrained/z] PRIMARY fold=500 query=500 BalAcc=0.7929 risk=0.2071
+  [pretrained/z] PRIMARY fold=600 query=600 BalAcc=0.8434 risk=0.1566
+  [pretrained/z] PRIMARY fold=700 query=700 BalAcc=0.7591 risk=0.2409
+  [pretrained/z] PRIMARY fold=800 query=800 BalAcc=0.8006 risk=0.1994
+
+  [pretrained/z] PRIMARY risk values: {'500': 0.20705123259313263, '600': 0.15664340074762628, '700': 0.24092363487114132, '800': 0.199425601060358}
+  [pretrained/z] PRIMARY variance (ensemble): 0.000900125
+  [pretrained/z] PRIMARY variance per-seed: [0.0009001250463372417] mean=0.000900125 std=0
+
+### MODEL: GRL-on (3 seed) ###
+  [GRL-on/z] PRIMARY fold=500 query=500 BalAcc=0.8966 risk=0.1034
+  [GRL-on/z] PRIMARY fold=600 query=600 BalAcc=0.8648 risk=0.1352
+  [GRL-on/z] PRIMARY fold=700 query=700 BalAcc=0.7833 risk=0.2167
+  [GRL-on/z] PRIMARY fold=800 query=800 BalAcc=0.8308 risk=0.1692
+
+  [GRL-on/z] PRIMARY risk values: {'500': 0.10335682638437726, '600': 0.13516270868979352, '700': 0.21673293748321232, '800': 0.1691743454976251}
+  [GRL-on/z] PRIMARY variance (ensemble): 0.00176688
+  [GRL-on/z] PRIMARY variance per-seed: [0.0018510624677759895, 0.0020214752210335907, 0.0009073440938328207] mean=0.00159329 std=0.000490004
+  [GRL-on/z_c_notd] PRIMARY fold=500 query=500 BalAcc=0.8744 risk=0.1256
+  [GRL-on/z_c_notd] PRIMARY fold=600 query=600 BalAcc=0.8141 risk=0.1859
+  [GRL-on/z_c_notd] PRIMARY fold=700 query=700 BalAcc=0.8286 risk=0.1714
+  [GRL-on/z_c_notd] PRIMARY fold=800 query=800 BalAcc=0.7965 risk=0.2035
+
+  [GRL-on/z_c_notd] PRIMARY risk values: {'500': 0.1256076418202401, '600': 0.18591596199168414, '700': 0.17143158833854366, '800': 0.20347438042151478}
+  [GRL-on/z_c_notd] PRIMARY variance (ensemble): 0.000834062
+  [GRL-on/z_c_notd] PRIMARY variance per-seed: [0.0010154831853643278, 0.0017180816782504937, 0.0022818092890336907] mean=0.00167179 std=0.000518011
+
+### MODEL: GRL-off (seed0) ###
+  [GRL-off/z] PRIMARY fold=500 query=500 BalAcc=0.9275 risk=0.0725
+  [GRL-off/z] PRIMARY fold=600 query=600 BalAcc=0.8572 risk=0.1428
+  [GRL-off/z] PRIMARY fold=700 query=700 BalAcc=0.8549 risk=0.1451
+  [GRL-off/z] PRIMARY fold=800 query=800 BalAcc=0.8310 risk=0.1690
+
+  [GRL-off/z] PRIMARY risk values: {'500': 0.07249872061085672, '600': 0.14282769451230415, '700': 0.14512490039243464, '800': 0.16901549892462542}
+  [GRL-off/z] PRIMARY variance (ensemble): 0.00129988
+  [GRL-off/z] PRIMARY variance per-seed: [0.0012998783755491087] mean=0.00129988 std=0
+  [GRL-off/z_c_notd] PRIMARY fold=500 query=500 BalAcc=0.9127 risk=0.0873
+  [GRL-off/z_c_notd] PRIMARY fold=600 query=600 BalAcc=0.8306 risk=0.1694
+  [GRL-off/z_c_notd] PRIMARY fold=700 query=700 BalAcc=0.8577 risk=0.1423
+  [GRL-off/z_c_notd] PRIMARY fold=800 query=800 BalAcc=0.7488 risk=0.2512
+
+  [GRL-off/z_c_notd] PRIMARY risk values: {'500': 0.08725160375575725, '600': 0.16943832467560704, '700': 0.14228259301963297, '800': 0.25119489593396005}
+  [GRL-off/z_c_notd] PRIMARY variance (ensemble): 0.0034965
+  [GRL-off/z_c_notd] PRIMARY variance per-seed: [0.003496495647308826] mean=0.0034965 std=0
+
+### MODEL: domain-label-shuffle (seed0) ###
+  [shuffle/z] PRIMARY fold=500 query=500 BalAcc=0.9227 risk=0.0773
+  [shuffle/z] PRIMARY fold=600 query=600 BalAcc=0.8554 risk=0.1446
+  [shuffle/z] PRIMARY fold=700 query=700 BalAcc=0.8186 risk=0.1814
+  [shuffle/z] PRIMARY fold=800 query=800 BalAcc=0.8259 risk=0.1741
+
+  [shuffle/z] PRIMARY risk values: {'500': 0.07725597585616573, '600': 0.1446108832079236, '700': 0.18144411916785863, '800': 0.17409415904728875}
+  [shuffle/z] PRIMARY variance (ensemble): 0.00169059
+  [shuffle/z] PRIMARY variance per-seed: [0.0016905912008833473] mean=0.00169059 std=0
+  [shuffle/z_c_notd] PRIMARY fold=500 query=500 BalAcc=0.9118 risk=0.0882
+  [shuffle/z_c_notd] PRIMARY fold=600 query=600 BalAcc=0.8251 risk=0.1749
+  [shuffle/z_c_notd] PRIMARY fold=700 query=700 BalAcc=0.8356 risk=0.1644
+  [shuffle/z_c_notd] PRIMARY fold=800 query=800 BalAcc=0.7596 risk=0.2404
+
+  [shuffle/z_c_notd] PRIMARY risk values: {'500': 0.08822845696910198, '600': 0.17489845758779343, '700': 0.16443389122518304, '800': 0.24035621874141344}
+  [shuffle/z_c_notd] PRIMARY variance (ensemble): 0.00291376
+  [shuffle/z_c_notd] PRIMARY variance per-seed: [0.0029137649111961638] mean=0.00291376 std=0
+
+====================================================================================================
+FINAL SUMMARY (domain count=4/5 -> variance estimate is unstable, see docstring)
+====================================================================================================
+model=pretrained feature=         z primary_var=0.000900125 per_seed_var_mean=0.000900125 per_seed_var_std=nan
+model=    GRL-on feature=         z primary_var=0.00176688 per_seed_var_mean=0.00159329 per_seed_var_std=0.000490004
+model=    GRL-on feature=  z_c_notd primary_var=0.000834062 per_seed_var_mean=0.00167179 per_seed_var_std=0.000518011
+model=   GRL-off feature=         z primary_var=0.00129988 per_seed_var_mean=0.00129988 per_seed_var_std=nan
+model=   GRL-off feature=  z_c_notd primary_var=0.0034965 per_seed_var_mean=0.0034965 per_seed_var_std=nan
+model=   shuffle feature=         z primary_var=0.00169059 per_seed_var_mean=0.00169059 per_seed_var_std=nan
+model=   shuffle feature=  z_c_notd primary_var=0.00291376 per_seed_var_mean=0.00291376 per_seed_var_std=nan
+
+DONE
+

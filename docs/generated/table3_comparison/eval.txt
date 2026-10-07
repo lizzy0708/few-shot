@@ -1,0 +1,444 @@
+
+####################################################################################################
+ROW: pretrained
+####################################################################################################
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=0 AUROC=0.8637 Acc=0.7860 F1=0.8626 BalAcc=0.7923 Spec=0.8011 Recall=0.7835
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=1 AUROC=0.8706 Acc=0.7751 F1=0.8523 BalAcc=0.8200 Spec=0.8828 Recall=0.7572
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=2 AUROC=0.8569 Acc=0.7994 F1=0.8750 BalAcc=0.7509 Spec=0.6832 Recall=0.8187
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=3 AUROC=0.8712 Acc=0.7800 F1=0.8572 BalAcc=0.8055 Spec=0.8413 Recall=0.7698
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=4 AUROC=0.8560 Acc=0.7607 F1=0.8426 BalAcc=0.7960 Spec=0.8453 Recall=0.7467
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=0 AUROC=0.8713 Acc=0.7981 F1=0.7974 BalAcc=0.7981 Spec=0.8011 Recall=0.7950
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=1 AUROC=0.8640 Acc=0.8115 F1=0.7970 BalAcc=0.8115 Spec=0.8828 Recall=0.7401
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=2 AUROC=0.8595 Acc=0.7495 F1=0.7651 BalAcc=0.7495 Spec=0.6832 Recall=0.8158
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=3 AUROC=0.8710 Acc=0.8024 F1=0.7944 BalAcc=0.8024 Spec=0.8413 Recall=0.7636
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=4 AUROC=0.8629 Acc=0.7967 F1=0.7863 BalAcc=0.7967 Spec=0.8453 Recall=0.7482
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=0 AUROC=0.9067 Acc=0.8211 F1=0.8852 BalAcc=0.8536 Spec=0.8995 Recall=0.8077
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=1 AUROC=0.8931 Acc=0.8014 F1=0.8703 BalAcc=0.8515 Spec=0.9223 Recall=0.7807
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=2 AUROC=0.8819 Acc=0.7913 F1=0.8627 BalAcc=0.8478 Spec=0.9277 Recall=0.7680
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=3 AUROC=0.8891 Acc=0.8069 F1=0.8751 BalAcc=0.8417 Spec=0.8908 Recall=0.7925
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=4 AUROC=0.8806 Acc=0.8068 F1=0.8762 BalAcc=0.8222 Spec=0.8439 Recall=0.8004
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=0 AUROC=0.9094 Acc=0.8480 F1=0.8397 BalAcc=0.8480 Spec=0.8995 Recall=0.7964
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=1 AUROC=0.8955 Acc=0.8523 F1=0.8412 BalAcc=0.8523 Spec=0.9223 Recall=0.7823
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=2 AUROC=0.8831 Acc=0.8473 F1=0.8339 BalAcc=0.8473 Spec=0.9277 Recall=0.7669
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=3 AUROC=0.8866 Acc=0.8392 F1=0.8305 BalAcc=0.8392 Spec=0.8908 Recall=0.7877
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=4 AUROC=0.8840 Acc=0.8248 F1=0.8214 BalAcc=0.8248 Spec=0.8439 Recall=0.8058
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=0 AUROC=0.8481 Acc=0.7909 F1=0.8671 BalAcc=0.7790 Spec=0.7622 Recall=0.7957
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=1 AUROC=0.8326 Acc=0.7800 F1=0.8613 BalAcc=0.7383 Spec=0.6798 Recall=0.7967
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=2 AUROC=0.8435 Acc=0.7893 F1=0.8659 BalAcc=0.7797 Spec=0.7662 Recall=0.7931
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=3 AUROC=0.8367 Acc=0.7838 F1=0.8603 BalAcc=0.8024 Spec=0.8285 Recall=0.7763
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=4 AUROC=0.8144 Acc=0.7660 F1=0.8533 BalAcc=0.6960 Spec=0.5981 Recall=0.7939
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=0 AUROC=0.8446 Acc=0.7760 F1=0.7790 BalAcc=0.7760 Spec=0.7622 Recall=0.7897
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=1 AUROC=0.8317 Acc=0.7374 F1=0.7517 BalAcc=0.7374 Spec=0.6798 Recall=0.7950
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=2 AUROC=0.8446 Acc=0.7796 F1=0.7826 BalAcc=0.7796 Spec=0.7662 Recall=0.7930
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=3 AUROC=0.8423 Acc=0.8068 F1=0.8025 BalAcc=0.8068 Spec=0.8285 Recall=0.7850
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=4 AUROC=0.8120 Acc=0.6932 F1=0.7199 BalAcc=0.6932 Spec=0.5981 Recall=0.7883
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=0 AUROC=0.8670 Acc=0.6954 F1=0.7823 BalAcc=0.8020 Spec=0.9565 Recall=0.6476
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=1 AUROC=0.8673 Acc=0.7474 F1=0.8283 BalAcc=0.8062 Spec=0.8915 Recall=0.7209
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=2 AUROC=0.8469 Acc=0.6868 F1=0.7750 BalAcc=0.7953 Spec=0.9524 Recall=0.6381
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=3 AUROC=0.8578 Acc=0.7047 F1=0.7910 BalAcc=0.8018 Spec=0.9424 Recall=0.6612
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=4 AUROC=0.8464 Acc=0.7156 F1=0.8014 BalAcc=0.7976 Spec=0.9163 Recall=0.6789
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=0 AUROC=0.8662 Acc=0.8004 F1=0.7635 BalAcc=0.8004 Spec=0.9565 Recall=0.6443
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=1 AUROC=0.8765 Acc=0.8104 F1=0.7937 BalAcc=0.8104 Spec=0.8915 Recall=0.7294
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=2 AUROC=0.8376 Acc=0.7827 F1=0.7382 BalAcc=0.7827 Spec=0.9524 Recall=0.6129
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=3 AUROC=0.8574 Acc=0.8011 F1=0.7683 BalAcc=0.8011 Spec=0.9424 Recall=0.6597
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=4 AUROC=0.8443 Acc=0.7947 F1=0.7663 BalAcc=0.7947 Spec=0.9163 Recall=0.6731
+
+--- SUMMARY for pretrained ---
+row=pretrained fold= 500 cond=  current | auroc=0.8637 acc=0.7802 f1=0.8579 bal_acc=0.7929 specificity=0.8107 recall=0.7752
+row=pretrained fold= 500 cond= balanced | auroc=0.8657 acc=0.7916 f1=0.7881 bal_acc=0.7916 specificity=0.8107 recall=0.7725
+row=pretrained fold= 600 cond=  current | auroc=0.8903 acc=0.8055 f1=0.8739 bal_acc=0.8434 specificity=0.8969 recall=0.7899
+row=pretrained fold= 600 cond= balanced | auroc=0.8917 acc=0.8423 f1=0.8334 bal_acc=0.8423 specificity=0.8969 recall=0.7878
+row=pretrained fold= 700 cond=  current | auroc=0.8351 acc=0.7820 f1=0.8616 bal_acc=0.7591 specificity=0.7270 recall=0.7912
+row=pretrained fold= 700 cond= balanced | auroc=0.8351 acc=0.7586 f1=0.7671 bal_acc=0.7586 specificity=0.7270 recall=0.7902
+row=pretrained fold= 800 cond=  current | auroc=0.8571 acc=0.7100 f1=0.7956 bal_acc=0.8006 specificity=0.9318 recall=0.6693
+row=pretrained fold= 800 cond= balanced | auroc=0.8564 acc=0.7979 f1=0.7660 bal_acc=0.7979 specificity=0.9318 recall=0.6639
+row=pretrained fold= Avg cond=  current | auroc=0.8615 acc=0.7694 f1=0.8473 bal_acc=0.7990 specificity=0.8416 recall=0.7564
+row=pretrained fold= Avg cond= balanced | auroc=0.8622 acc=0.7976 f1=0.7886 bal_acc=0.7976 specificity=0.8416 recall=0.7536
+
+####################################################################################################
+ROW: raw_z
+####################################################################################################
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=0 AUROC=0.9827 Acc=0.9470 F1=0.9690 BalAcc=0.9024 Spec=0.8399 Recall=0.9648
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=1 AUROC=0.9823 Acc=0.9452 F1=0.9678 BalAcc=0.9061 Spec=0.8513 Recall=0.9608
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=2 AUROC=0.9690 Acc=0.9204 F1=0.9527 BalAcc=0.8846 Spec=0.8346 Recall=0.9347
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=3 AUROC=0.9811 Acc=0.9402 F1=0.9646 BalAcc=0.9107 Spec=0.8694 Recall=0.9519
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=4 AUROC=0.9746 Acc=0.9332 F1=0.9608 BalAcc=0.8795 Spec=0.8044 Recall=0.9546
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=0 AUROC=0.9836 Acc=0.9032 F1=0.9090 BalAcc=0.9032 Spec=0.8399 Recall=0.9665
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=1 AUROC=0.9820 Acc=0.9056 F1=0.9104 BalAcc=0.9056 Spec=0.8513 Recall=0.9598
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=2 AUROC=0.9712 Acc=0.8881 F1=0.8938 BalAcc=0.8881 Spec=0.8346 Recall=0.9417
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=3 AUROC=0.9801 Acc=0.9082 F1=0.9117 BalAcc=0.9082 Spec=0.8694 Recall=0.9471
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=4 AUROC=0.9753 Acc=0.8784 F1=0.8868 BalAcc=0.8784 Spec=0.8044 Recall=0.9524
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=0 AUROC=0.9478 Acc=0.8917 F1=0.9347 BalAcc=0.8536 Spec=0.7997 Recall=0.9074
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=1 AUROC=0.9494 Acc=0.8602 F1=0.9125 BalAcc=0.8762 Spec=0.8989 Recall=0.8535
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=2 AUROC=0.9357 Acc=0.8231 F1=0.8854 BalAcc=0.8789 Spec=0.9578 Recall=0.8001
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=3 AUROC=0.9474 Acc=0.8942 F1=0.9364 BalAcc=0.8512 Spec=0.7904 Recall=0.9120
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=4 AUROC=0.9418 Acc=0.8687 F1=0.9188 BalAcc=0.8643 Spec=0.8580 Recall=0.8705
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=0 AUROC=0.9463 Acc=0.8506 F1=0.8579 BalAcc=0.8506 Spec=0.7997 Recall=0.9015
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=1 AUROC=0.9497 Acc=0.8734 F1=0.8701 BalAcc=0.8734 Spec=0.8989 Recall=0.8480
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=2 AUROC=0.9314 Acc=0.8804 F1=0.8704 BalAcc=0.8804 Spec=0.9578 Recall=0.8031
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=3 AUROC=0.9474 Acc=0.8506 F1=0.8591 BalAcc=0.8506 Spec=0.7904 Recall=0.9109
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=4 AUROC=0.9465 Acc=0.8691 F1=0.8705 BalAcc=0.8691 Spec=0.8580 Recall=0.8801
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=0 AUROC=0.9475 Acc=0.8953 F1=0.9389 BalAcc=0.7856 Spec=0.6323 Recall=0.9390
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=1 AUROC=0.9411 Acc=0.8810 F1=0.9296 BalAcc=0.7924 Spec=0.6685 Recall=0.9163
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=2 AUROC=0.9648 Acc=0.9081 F1=0.9454 BalAcc=0.8579 Spec=0.7877 Recall=0.9281
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=3 AUROC=0.9323 Acc=0.8726 F1=0.9252 BalAcc=0.7554 Spec=0.5914 Recall=0.9193
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=4 AUROC=0.9247 Acc=0.8642 F1=0.9208 BalAcc=0.7251 Spec=0.5305 Recall=0.9197
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=0 AUROC=0.9440 Acc=0.7823 F1=0.8107 BalAcc=0.7823 Spec=0.6323 Recall=0.9324
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=1 AUROC=0.9434 Acc=0.7944 F1=0.8174 BalAcc=0.7944 Spec=0.6685 Recall=0.9203
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=2 AUROC=0.9652 Acc=0.8593 F1=0.8688 BalAcc=0.8593 Spec=0.7877 Recall=0.9310
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=3 AUROC=0.9342 Acc=0.7569 F1=0.7914 BalAcc=0.7569 Spec=0.5914 Recall=0.9223
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=4 AUROC=0.9209 Acc=0.7197 F1=0.7643 BalAcc=0.7197 Spec=0.5305 Recall=0.9089
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=0 AUROC=0.9168 Acc=0.7994 F1=0.8686 BalAcc=0.8329 Spec=0.8814 Recall=0.7844
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=1 AUROC=0.9169 Acc=0.7678 F1=0.8435 BalAcc=0.8292 Spec=0.9183 Recall=0.7402
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=2 AUROC=0.9136 Acc=0.7764 F1=0.8505 BalAcc=0.8291 Spec=0.9056 Recall=0.7527
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=3 AUROC=0.9162 Acc=0.7932 F1=0.8637 BalAcc=0.8328 Spec=0.8902 Recall=0.7754
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=4 AUROC=0.9131 Acc=0.7867 F1=0.8587 BalAcc=0.8300 Spec=0.8928 Recall=0.7672
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=0 AUROC=0.9184 Acc=0.8366 F1=0.8289 BalAcc=0.8366 Spec=0.8814 Recall=0.7917
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=1 AUROC=0.9254 Acc=0.8352 F1=0.8203 BalAcc=0.8352 Spec=0.9183 Recall=0.7522
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=2 AUROC=0.9056 Acc=0.8195 F1=0.8025 BalAcc=0.8195 Spec=0.9056 Recall=0.7334
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=3 AUROC=0.9128 Acc=0.8275 F1=0.8160 BalAcc=0.8275 Spec=0.8902 Recall=0.7649
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=4 AUROC=0.9139 Acc=0.8315 F1=0.8205 BalAcc=0.8315 Spec=0.8928 Recall=0.7703
+
+--- SUMMARY for raw_z ---
+row=raw_z fold= 500 cond=  current | auroc=0.9779 acc=0.9372 f1=0.9630 bal_acc=0.8966 specificity=0.8399 recall=0.9534
+row=raw_z fold= 500 cond= balanced | auroc=0.9784 acc=0.8967 f1=0.9023 bal_acc=0.8967 specificity=0.8399 recall=0.9535
+row=raw_z fold= 600 cond=  current | auroc=0.9444 acc=0.8676 f1=0.9176 bal_acc=0.8648 specificity=0.8610 recall=0.8687
+row=raw_z fold= 600 cond= balanced | auroc=0.9443 acc=0.8648 f1=0.8656 bal_acc=0.8648 specificity=0.8610 recall=0.8687
+row=raw_z fold= 700 cond=  current | auroc=0.9421 acc=0.8842 f1=0.9320 bal_acc=0.7833 specificity=0.6421 recall=0.9245
+row=raw_z fold= 700 cond= balanced | auroc=0.9415 acc=0.7825 f1=0.8105 bal_acc=0.7825 specificity=0.6421 recall=0.9230
+row=raw_z fold= 800 cond=  current | auroc=0.9153 acc=0.7847 f1=0.8570 bal_acc=0.8308 specificity=0.8977 recall=0.7640
+row=raw_z fold= 800 cond= balanced | auroc=0.9153 acc=0.8301 f1=0.8176 bal_acc=0.8301 specificity=0.8977 recall=0.7625
+row=raw_z fold= Avg cond=  current | auroc=0.9449 acc=0.8684 f1=0.9174 bal_acc=0.8439 specificity=0.8101 recall=0.8776
+row=raw_z fold= Avg cond= balanced | auroc=0.9449 acc=0.8435 f1=0.8490 bal_acc=0.8435 specificity=0.8101 recall=0.8769
+
+####################################################################################################
+ROW: gradient_mask
+####################################################################################################
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=0 AUROC=0.9883 Acc=0.9677 F1=0.9813 BalAcc=0.9128 Spec=0.8359 Recall=0.9896
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=1 AUROC=0.9885 Acc=0.9673 F1=0.9811 BalAcc=0.9111 Spec=0.8326 Recall=0.9896
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=2 AUROC=0.9856 Acc=0.9606 F1=0.9770 BalAcc=0.9192 Spec=0.8614 Recall=0.9771
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=3 AUROC=0.9880 Acc=0.9610 F1=0.9775 BalAcc=0.8890 Spec=0.7883 Recall=0.9896
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [current] fold=500 eval_seed=4 AUROC=0.9877 Acc=0.9676 F1=0.9812 BalAcc=0.9189 Spec=0.8506 Recall=0.9871
+    [leakage-check] fold_domain=500 eval_seed=0 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=0 AUROC=0.9886 Acc=0.9133 F1=0.9195 BalAcc=0.9133 Spec=0.8359 Recall=0.9906
+    [leakage-check] fold_domain=500 eval_seed=1 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=1 AUROC=0.9880 Acc=0.9102 F1=0.9167 BalAcc=0.9102 Spec=0.8326 Recall=0.9879
+    [leakage-check] fold_domain=500 eval_seed=2 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=2 AUROC=0.9874 Acc=0.9206 F1=0.9251 BalAcc=0.9206 Spec=0.8614 Recall=0.9799
+    [leakage-check] fold_domain=500 eval_seed=3 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=3 AUROC=0.9872 Acc=0.8885 F1=0.8986 BalAcc=0.8885 Spec=0.7883 Recall=0.9886
+    [leakage-check] fold_domain=500 eval_seed=4 support=4 query=10478 disjoint=True
+    [balanced] fold=500 eval_seed=4 AUROC=0.9893 Acc=0.9206 F1=0.9258 BalAcc=0.9206 Spec=0.8506 Recall=0.9906
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=0 AUROC=0.9447 Acc=0.9103 F1=0.9478 BalAcc=0.8031 Spec=0.6517 Recall=0.9546
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=1 AUROC=0.9455 Acc=0.9096 F1=0.9472 BalAcc=0.8113 Spec=0.6725 Recall=0.9502
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=2 AUROC=0.9417 Acc=0.8932 F1=0.9360 BalAcc=0.8406 Spec=0.7662 Recall=0.9149
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=3 AUROC=0.9459 Acc=0.9134 F1=0.9505 BalAcc=0.7661 Spec=0.5579 Recall=0.9743
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [current] fold=600 eval_seed=4 AUROC=0.9422 Acc=0.9083 F1=0.9465 BalAcc=0.8081 Spec=0.6664 Recall=0.9498
+    [leakage-check] fold_domain=600 eval_seed=0 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=0 AUROC=0.9436 Acc=0.8044 F1=0.8303 BalAcc=0.8044 Spec=0.6517 Recall=0.9571
+    [leakage-check] fold_domain=600 eval_seed=1 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=1 AUROC=0.9471 Acc=0.8118 F1=0.8348 BalAcc=0.8118 Spec=0.6725 Recall=0.9511
+    [leakage-check] fold_domain=600 eval_seed=2 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=2 AUROC=0.9348 Acc=0.8329 F1=0.8433 BalAcc=0.8329 Spec=0.7662 Recall=0.8995
+    [leakage-check] fold_domain=600 eval_seed=3 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=3 AUROC=0.9460 Acc=0.7666 F1=0.8069 BalAcc=0.7666 Spec=0.5579 Recall=0.9752
+    [leakage-check] fold_domain=600 eval_seed=4 support=4 query=10212 disjoint=True
+    [balanced] fold=600 eval_seed=4 AUROC=0.9451 Acc=0.8104 F1=0.8343 BalAcc=0.8104 Spec=0.6664 Recall=0.9545
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=0 AUROC=0.9735 Acc=0.9251 F1=0.9564 BalAcc=0.8396 Spec=0.7200 Recall=0.9591
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=1 AUROC=0.9689 Acc=0.9189 F1=0.9530 BalAcc=0.8195 Spec=0.6805 Recall=0.9586
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=2 AUROC=0.9776 Acc=0.9379 F1=0.9636 BalAcc=0.8862 Spec=0.8138 Recall=0.9586
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=3 AUROC=0.9582 Acc=0.9001 F1=0.9427 BalAcc=0.7533 Spec=0.5479 Recall=0.9587
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [current] fold=700 eval_seed=4 AUROC=0.9575 Acc=0.9015 F1=0.9435 BalAcc=0.7585 Spec=0.5586 Recall=0.9585
+    [leakage-check] fold_domain=700 eval_seed=0 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=0 AUROC=0.9703 Acc=0.8372 F1=0.8543 BalAcc=0.8372 Spec=0.7200 Recall=0.9545
+    [leakage-check] fold_domain=700 eval_seed=1 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=1 AUROC=0.9715 Acc=0.8202 F1=0.8422 BalAcc=0.8202 Spec=0.6805 Recall=0.9598
+    [leakage-check] fold_domain=700 eval_seed=2 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=2 AUROC=0.9804 Acc=0.8881 F1=0.8959 BalAcc=0.8881 Spec=0.8138 Recall=0.9625
+    [leakage-check] fold_domain=700 eval_seed=3 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=3 AUROC=0.9576 Acc=0.7522 F1=0.7942 BalAcc=0.7522 Spec=0.5479 Recall=0.9565
+    [leakage-check] fold_domain=700 eval_seed=4 support=4 query=10475 disjoint=True
+    [balanced] fold=700 eval_seed=4 AUROC=0.9562 Acc=0.7575 F1=0.7978 BalAcc=0.7575 Spec=0.5586 Recall=0.9565
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=0 AUROC=0.8792 Acc=0.8797 F1=0.9314 BalAcc=0.6873 Spec=0.4086 Recall=0.9660
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=1 AUROC=0.8733 Acc=0.8798 F1=0.9314 BalAcc=0.6887 Spec=0.4119 Recall=0.9655
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=2 AUROC=0.8814 Acc=0.1547 F1=0.0000 BalAcc=0.4997 Spec=0.9993 Recall=0.0000
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=3 AUROC=0.8800 Acc=0.1549 F1=0.0005 BalAcc=0.4998 Spec=0.9993 Recall=0.0002
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [current] fold=800 eval_seed=4 AUROC=0.8795 Acc=0.8797 F1=0.9313 BalAcc=0.6903 Spec=0.4159 Recall=0.9647
+    [leakage-check] fold_domain=800 eval_seed=0 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=0 AUROC=0.8811 Acc=0.6849 F1=0.7531 BalAcc=0.6849 Spec=0.4086 Recall=0.9612
+    [leakage-check] fold_domain=800 eval_seed=1 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=1 AUROC=0.8782 Acc=0.6919 F1=0.7593 BalAcc=0.6919 Spec=0.4119 Recall=0.9719
+    [leakage-check] fold_domain=800 eval_seed=2 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=2 AUROC=0.8738 Acc=0.4997 F1=0.0000 BalAcc=0.4997 Spec=0.9993 Recall=0.0000
+    [leakage-check] fold_domain=800 eval_seed=3 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=3 AUROC=0.8766 Acc=0.5000 F1=0.0013 BalAcc=0.5000 Spec=0.9993 Recall=0.0007
+    [leakage-check] fold_domain=800 eval_seed=4 support=4 query=9642 disjoint=True
+    [balanced] fold=800 eval_seed=4 AUROC=0.8764 Acc=0.6906 F1=0.7572 BalAcc=0.6906 Spec=0.4159 Recall=0.9652
+
+--- SUMMARY for gradient_mask ---
+row=gradient_mask fold= 500 cond=  current | auroc=0.9876 acc=0.9648 f1=0.9796 bal_acc=0.9102 specificity=0.8338 recall=0.9866
+row=gradient_mask fold= 500 cond= balanced | auroc=0.9881 acc=0.9106 f1=0.9171 bal_acc=0.9106 specificity=0.8338 recall=0.9875
+row=gradient_mask fold= 600 cond=  current | auroc=0.9440 acc=0.9070 f1=0.9456 bal_acc=0.8059 specificity=0.6630 recall=0.9488
+row=gradient_mask fold= 600 cond= balanced | auroc=0.9433 acc=0.8052 f1=0.8299 bal_acc=0.8052 specificity=0.6630 recall=0.9475
+row=gradient_mask fold= 700 cond=  current | auroc=0.9671 acc=0.9167 f1=0.9519 bal_acc=0.8114 specificity=0.6642 recall=0.9587
+row=gradient_mask fold= 700 cond= balanced | auroc=0.9672 acc=0.8111 f1=0.8369 bal_acc=0.8111 specificity=0.6642 recall=0.9579
+row=gradient_mask fold= 800 cond=  current | auroc=0.8787 acc=0.5898 f1=0.5589 bal_acc=0.6132 specificity=0.6470 recall=0.5793
+row=gradient_mask fold= 800 cond= balanced | auroc=0.8772 acc=0.6134 f1=0.4542 bal_acc=0.6134 specificity=0.6470 recall=0.5798
+row=gradient_mask fold= Avg cond=  current | auroc=0.9444 acc=0.8446 f1=0.8590 bal_acc=0.7852 specificity=0.7020 recall=0.8683
+row=gradient_mask fold= Avg cond= balanced | auroc=0.9440 acc=0.7851 f1=0.7595 bal_acc=0.7851 specificity=0.7020 recall=0.8682
+
+DONE
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torch/autograd/graph.py:841: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:304.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+
+

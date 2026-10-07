@@ -1,0 +1,386 @@
+====================================================================================================
+Feature-mixing/augmentation check: grep found ZERO matches in train_gated_mask_model.py/gated_mask_model.py/hust_image.py for mixup/mixing/cutmix/augment/lam/Beta-sampling -- NONE present.
+====================================================================================================
+
+### MODEL: pretrained ###
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [pretrained/raw_z] fold=500 scope(i) calib-calib: raw=0.0101177 norm=0.561033 noise_floor=0.0227464
+  [pretrained/raw_z] fold=500 scope(ii) held-vs-calib: raw=0.00352697 norm=0.199131 noise_floor=0.0216122
+  [pretrained/raw_z] fold=600 scope(i) calib-calib: raw=0.00903132 norm=0.559311 noise_floor=0.0222338
+  [pretrained/raw_z] fold=600 scope(ii) held-vs-calib: raw=0.00461335 norm=0.260467 noise_floor=0.0216122
+  [pretrained/raw_z] fold=700 scope(i) calib-calib: raw=0.0100698 norm=0.552707 noise_floor=0.0219912
+  [pretrained/raw_z] fold=700 scope(ii) held-vs-calib: raw=0.00357482 norm=0.201832 noise_floor=0.0216122
+  [pretrained/raw_z] fold=800 scope(i) calib-calib: raw=0.00717398 norm=0.475157 noise_floor=0.0211373
+  [pretrained/raw_z] fold=800 scope(ii) held-vs-calib: raw=0.00647069 norm=0.365331 noise_floor=0.0216122
+
+### MODEL: GRL-on (gate) ###
+  loading GRL-on seed=0 fold=500
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s0/raw_z] fold=500 scope(i) calib-calib: raw=4198.94 norm=1.42869 noise_floor=0.00645197
+  [GRL-on_s0/raw_z] fold=500 scope(ii) held-vs-calib: raw=1235.25 norm=0.456282 noise_floor=0.0105991
+  [GRL-on_s0/z_inv] fold=500 scope(i) calib-calib: raw=2798.96 norm=1.36065 noise_floor=0.0056884
+  [GRL-on_s0/z_inv] fold=500 scope(ii) held-vs-calib: raw=856.366 norm=0.445134 noise_floor=0.00983637
+  loading GRL-on seed=0 fold=600
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s0/raw_z] fold=600 scope(i) calib-calib: raw=5786.37 norm=1.83551 noise_floor=0.0399525
+  [GRL-on_s0/raw_z] fold=600 scope(ii) held-vs-calib: raw=1622.67 norm=0.583998 noise_floor=0.0322805
+  [GRL-on_s0/z_inv] fold=600 scope(i) calib-calib: raw=2048.46 norm=1.66563 noise_floor=0.0306256
+  [GRL-on_s0/z_inv] fold=600 scope(ii) held-vs-calib: raw=664.923 norm=0.582298 noise_floor=0.0248886
+  loading GRL-on seed=0 fold=700
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s0/raw_z] fold=700 scope(i) calib-calib: raw=1050.72 norm=0.960956 noise_floor=0.00303699
+  [GRL-on_s0/raw_z] fold=700 scope(ii) held-vs-calib: raw=339.767 norm=0.340378 noise_floor=0.00347962
+  [GRL-on_s0/z_inv] fold=700 scope(i) calib-calib: raw=616.581 norm=0.830026 noise_floor=0.00235862
+  [GRL-on_s0/z_inv] fold=700 scope(ii) held-vs-calib: raw=207.535 norm=0.295342 noise_floor=0.00297942
+  loading GRL-on seed=0 fold=800
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s0/raw_z] fold=800 scope(i) calib-calib: raw=289.102 norm=0.64085 noise_floor=0.00490094
+  [GRL-on_s0/raw_z] fold=800 scope(ii) held-vs-calib: raw=282.201 norm=0.666897 noise_floor=0.0055807
+  [GRL-on_s0/z_inv] fold=800 scope(i) calib-calib: raw=186.86 norm=0.5771 noise_floor=0.00435376
+  [GRL-on_s0/z_inv] fold=800 scope(ii) held-vs-calib: raw=204.956 norm=0.659507 noise_floor=0.00469436
+  loading GRL-on seed=1 fold=500
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s1/raw_z] fold=500 scope(i) calib-calib: raw=4484.44 norm=1.34738 noise_floor=0.00602864
+  [GRL-on_s1/raw_z] fold=500 scope(ii) held-vs-calib: raw=1217.83 norm=0.387784 noise_floor=0.00752561
+  [GRL-on_s1/z_inv] fold=500 scope(i) calib-calib: raw=3213.12 norm=1.33106 noise_floor=0.00546238
+  [GRL-on_s1/z_inv] fold=500 scope(ii) held-vs-calib: raw=907.825 norm=0.395325 noise_floor=0.0075304
+  loading GRL-on seed=1 fold=600
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s1/raw_z] fold=600 scope(i) calib-calib: raw=4617.76 norm=1.47153 noise_floor=0.0141911
+  [GRL-on_s1/raw_z] fold=600 scope(ii) held-vs-calib: raw=1279.14 norm=0.441622 noise_floor=0.0116226
+  [GRL-on_s1/z_inv] fold=600 scope(i) calib-calib: raw=2582.79 norm=1.36176 noise_floor=0.0114028
+  [GRL-on_s1/z_inv] fold=600 scope(ii) held-vs-calib: raw=800.909 norm=0.437446 noise_floor=0.00944588
+  loading GRL-on seed=1 fold=700
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s1/raw_z] fold=700 scope(i) calib-calib: raw=3206.46 norm=1.22264 noise_floor=0.0091005
+  [GRL-on_s1/raw_z] fold=700 scope(ii) held-vs-calib: raw=1063.43 norm=0.464294 noise_floor=0.00913441
+  [GRL-on_s1/z_inv] fold=700 scope(i) calib-calib: raw=1990.03 norm=1.12667 noise_floor=0.00809059
+  [GRL-on_s1/z_inv] fold=700 scope(ii) held-vs-calib: raw=659.702 norm=0.419406 noise_floor=0.00852312
+  loading GRL-on seed=1 fold=800
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s1/raw_z] fold=800 scope(i) calib-calib: raw=455.657 norm=0.64664 noise_floor=0.00542596
+  [GRL-on_s1/raw_z] fold=800 scope(ii) held-vs-calib: raw=648.674 norm=0.807736 noise_floor=0.00544787
+  [GRL-on_s1/z_inv] fold=800 scope(i) calib-calib: raw=187.64 norm=0.562802 noise_floor=0.00539255
+  [GRL-on_s1/z_inv] fold=800 scope(ii) held-vs-calib: raw=318.423 norm=0.780287 noise_floor=0.00505376
+  loading GRL-on seed=2 fold=500
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s2/raw_z] fold=500 scope(i) calib-calib: raw=9863.27 norm=1.51466 noise_floor=0.00484034
+  [GRL-on_s2/raw_z] fold=500 scope(ii) held-vs-calib: raw=2553.14 norm=0.433918 noise_floor=0.00599949
+  [GRL-on_s2/z_inv] fold=500 scope(i) calib-calib: raw=6536.17 norm=1.51777 noise_floor=0.00462666
+  [GRL-on_s2/z_inv] fold=500 scope(ii) held-vs-calib: raw=1705.3 norm=0.436379 noise_floor=0.00616354
+  loading GRL-on seed=2 fold=600
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s2/raw_z] fold=600 scope(i) calib-calib: raw=8977.18 norm=1.86811 noise_floor=0.0206116
+  [GRL-on_s2/raw_z] fold=600 scope(ii) held-vs-calib: raw=2364.26 norm=0.548607 noise_floor=0.0174425
+  [GRL-on_s2/z_inv] fold=600 scope(i) calib-calib: raw=3962.7 norm=1.67636 noise_floor=0.0163764
+  [GRL-on_s2/z_inv] fold=600 scope(ii) held-vs-calib: raw=1140.25 norm=0.517927 noise_floor=0.0138371
+  loading GRL-on seed=2 fold=700
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s2/raw_z] fold=700 scope(i) calib-calib: raw=906.853 norm=0.883428 noise_floor=0.00848789
+  [GRL-on_s2/raw_z] fold=700 scope(ii) held-vs-calib: raw=315.808 norm=0.33485 noise_floor=0.0077545
+  [GRL-on_s2/z_inv] fold=700 scope(i) calib-calib: raw=515.628 norm=0.806932 noise_floor=0.00753456
+  [GRL-on_s2/z_inv] fold=700 scope(ii) held-vs-calib: raw=191.631 norm=0.314462 noise_floor=0.00684765
+  loading GRL-on seed=2 fold=800
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-on_s2/raw_z] fold=800 scope(i) calib-calib: raw=189.796 norm=0.306996 noise_floor=0.0031684
+  [GRL-on_s2/raw_z] fold=800 scope(ii) held-vs-calib: raw=236.811 norm=0.357503 noise_floor=0.00310934
+  [GRL-on_s2/z_inv] fold=800 scope(i) calib-calib: raw=111.629 norm=0.249053 noise_floor=0.00270454
+  [GRL-on_s2/z_inv] fold=800 scope(ii) held-vs-calib: raw=191.178 norm=0.390855 noise_floor=0.0024805
+
+### MODEL: GRL-off (seed0) ###
+  loading GRL-off fold=500
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-off/raw_z] fold=500 scope(i) calib-calib: raw=13.7183 norm=0.537232 noise_floor=0.00650928
+  [GRL-off/raw_z] fold=500 scope(ii) held-vs-calib: raw=15.4123 norm=0.506137 noise_floor=0.00735036
+  [GRL-off/z_inv] fold=500 scope(i) calib-calib: raw=13.6109 norm=0.543032 noise_floor=0.00545563
+  [GRL-off/z_inv] fold=500 scope(ii) held-vs-calib: raw=30.956 norm=0.885228 noise_floor=0.00731436
+  loading GRL-off fold=600
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-off/raw_z] fold=600 scope(i) calib-calib: raw=13.4392 norm=0.41824 noise_floor=0.00620086
+  [GRL-off/raw_z] fold=600 scope(ii) held-vs-calib: raw=27.0499 norm=0.673495 noise_floor=0.00652349
+  [GRL-off/z_inv] fold=600 scope(i) calib-calib: raw=12.554 norm=0.418005 noise_floor=0.00525509
+  [GRL-off/z_inv] fold=600 scope(ii) held-vs-calib: raw=70.8447 norm=1.45648 noise_floor=0.00543246
+  loading GRL-off fold=700
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-off/raw_z] fold=700 scope(i) calib-calib: raw=12.5055 norm=0.394906 noise_floor=0.0129122
+  [GRL-off/raw_z] fold=700 scope(ii) held-vs-calib: raw=10.314 norm=0.316095 noise_floor=0.0119931
+  [GRL-off/z_inv] fold=700 scope(i) calib-calib: raw=12.1423 norm=0.401892 noise_floor=0.0115981
+  [GRL-off/z_inv] fold=700 scope(ii) held-vs-calib: raw=14.2296 norm=0.441328 noise_floor=0.0105794
+  loading GRL-off fold=800
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [GRL-off/raw_z] fold=800 scope(i) calib-calib: raw=33.268 norm=0.574464 noise_floor=0.00577435
+  [GRL-off/raw_z] fold=800 scope(ii) held-vs-calib: raw=25.784 norm=0.49739 noise_floor=0.00595959
+  [GRL-off/z_inv] fold=800 scope(i) calib-calib: raw=31.5912 norm=0.556535 noise_floor=0.00526617
+  [GRL-off/z_inv] fold=800 scope(ii) held-vs-calib: raw=30.5522 norm=0.567726 noise_floor=0.00563953
+
+### MODEL: domain-label-shuffle (seed0) ###
+  loading shuffle fold=500
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [shuffle/raw_z] fold=500 scope(i) calib-calib: raw=1888.44 norm=1.20092 noise_floor=0.0044566
+  [shuffle/raw_z] fold=500 scope(ii) held-vs-calib: raw=631.301 norm=0.431344 noise_floor=0.0100557
+  [shuffle/z_inv] fold=500 scope(i) calib-calib: raw=1554.7 norm=1.2091 noise_floor=0.0038406
+  [shuffle/z_inv] fold=500 scope(ii) held-vs-calib: raw=545.009 norm=0.446701 noise_floor=0.0102146
+  loading shuffle fold=600
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [shuffle/raw_z] fold=600 scope(i) calib-calib: raw=24069.2 norm=1.61449 noise_floor=0.0405071
+  [shuffle/raw_z] fold=600 scope(ii) held-vs-calib: raw=7382.07 norm=0.481157 noise_floor=0.034544
+  [shuffle/z_inv] fold=600 scope(i) calib-calib: raw=14394.4 norm=1.5867 noise_floor=0.0411717
+  [shuffle/z_inv] fold=600 scope(ii) held-vs-calib: raw=4451.93 norm=0.476504 noise_floor=0.0345505
+  loading shuffle fold=700
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [shuffle/raw_z] fold=700 scope(i) calib-calib: raw=818.398 norm=1.00112 noise_floor=0.0173839
+  [shuffle/raw_z] fold=700 scope(ii) held-vs-calib: raw=297.457 norm=0.399946 noise_floor=0.024484
+  [shuffle/z_inv] fold=700 scope(i) calib-calib: raw=502.921 norm=0.915717 noise_floor=0.0166981
+  [shuffle/z_inv] fold=700 scope(ii) held-vs-calib: raw=181.723 norm=0.349229 noise_floor=0.0213798
+  loading shuffle fold=800
+    extracted domain=400 label=0 n=1497
+    extracted domain=400 label=1 n=1497
+    extracted domain=500 label=0 n=1497
+    extracted domain=500 label=1 n=1497
+    extracted domain=600 label=0 n=1497
+    extracted domain=600 label=1 n=1497
+    extracted domain=700 label=0 n=1497
+    extracted domain=700 label=1 n=1497
+    extracted domain=800 label=0 n=1497
+    extracted domain=800 label=1 n=1497
+  [shuffle/raw_z] fold=800 scope(i) calib-calib: raw=2772.83 norm=1.48887 noise_floor=0.0654262
+  [shuffle/raw_z] fold=800 scope(ii) held-vs-calib: raw=4738.68 norm=1.41673 noise_floor=0.0543408
+  [shuffle/z_inv] fold=800 scope(i) calib-calib: raw=1428.55 norm=1.41604 noise_floor=0.0580089
+  [shuffle/z_inv] fold=800 scope(ii) held-vs-calib: raw=2572.7 norm=1.41646 noise_floor=0.048243
+
+====================================================================================================
+FULL RESULTS TABLE (one row per model/feature/seed/fold)
+====================================================================================================
+model | feature | seed | fold | scope_i_norm | scope_i_noise | scope_ii_norm | scope_ii_noise
+pretrained | raw_z | None | 500 | 0.5610332928085363 | 0.022746440677880946 | 0.19913071266412996 | 0.02161223067770177
+pretrained | raw_z | None | 600 | 0.5593105851484677 | 0.02223384828915769 | 0.2604666147850227 | 0.021612230677701773
+pretrained | raw_z | None | 700 | 0.5527068590093257 | 0.02199123944716226 | 0.20183189370802823 | 0.02161223067770177
+pretrained | raw_z | None | 800 | 0.4751571313414704 | 0.02113727612018674 | 0.3653309101621523 | 0.021612230677701773
+GRL-on | raw_z | 0 | 500 | 1.4286899894331309 | 0.006451973309593192 | 0.45628215858492827 | 0.010599136059747926
+GRL-on | z_inv | 0 | 500 | 1.3606511901485272 | 0.005688400142958977 | 0.44513368587710683 | 0.00983637341393728
+GRL-on | raw_z | 0 | 600 | 1.8355100245143312 | 0.03995249257279082 | 0.5839976141910609 | 0.0322805112645627
+GRL-on | z_inv | 0 | 600 | 1.665633998674366 | 0.030625633632425358 | 0.5822978703003695 | 0.0248886318100076
+GRL-on | raw_z | 0 | 700 | 0.960955894919802 | 0.0030369918506009653 | 0.34037769181688204 | 0.0034796202912264636
+GRL-on | z_inv | 0 | 700 | 0.8300264962173568 | 0.0023586205339255215 | 0.29534150218147753 | 0.002979415204717028
+GRL-on | raw_z | 0 | 800 | 0.6408498961963334 | 0.004900939529854984 | 0.6668973331144741 | 0.0055806954470571015
+GRL-on | z_inv | 0 | 800 | 0.5771002270169762 | 0.004353761986887408 | 0.659507450354983 | 0.004694360488590684
+GRL-on | raw_z | 1 | 500 | 1.3473807259576487 | 0.006028636805874343 | 0.3877843988094654 | 0.00752561437634017
+GRL-on | z_inv | 1 | 500 | 1.3310628298892444 | 0.005462382472442431 | 0.39532548745642493 | 0.007530397264643196
+GRL-on | raw_z | 1 | 600 | 1.4715253858571915 | 0.014191097694239778 | 0.4416223238384073 | 0.011622605025872203
+GRL-on | z_inv | 1 | 600 | 1.3617614971470526 | 0.011402761193944575 | 0.4374457283721899 | 0.009445881839915755
+GRL-on | raw_z | 1 | 700 | 1.2226429616345273 | 0.009100496522046687 | 0.4642940018950975 | 0.00913440891737974
+GRL-on | z_inv | 1 | 700 | 1.1266729968957203 | 0.008090592950965418 | 0.4194062491031256 | 0.008523120952043536
+GRL-on | raw_z | 1 | 800 | 0.6466404426889141 | 0.005425962945908837 | 0.8077355722363733 | 0.005447869412232688
+GRL-on | z_inv | 1 | 800 | 0.5628018078238057 | 0.0053925498886411745 | 0.7802867197693695 | 0.005053761853100068
+GRL-on | raw_z | 2 | 500 | 1.5146572570529822 | 0.00484034440308998 | 0.43391779698424954 | 0.005999491076372502
+GRL-on | z_inv | 2 | 500 | 1.5177727266440943 | 0.004626659326297886 | 0.43637879124464424 | 0.00616354299186756
+GRL-on | raw_z | 2 | 600 | 1.8681055496489836 | 0.020611554055574955 | 0.548606795102768 | 0.017442518600804358
+GRL-on | z_inv | 2 | 600 | 1.6763558777979908 | 0.016376358534966187 | 0.5179272909376678 | 0.01383713366005913
+GRL-on | raw_z | 2 | 700 | 0.8834280876353002 | 0.008487894954374749 | 0.3348496876118298 | 0.007754503627970992
+GRL-on | z_inv | 2 | 700 | 0.8069321244783432 | 0.007534563649055456 | 0.3144622764896369 | 0.006847654853756625
+GRL-on | raw_z | 2 | 800 | 0.30699557380548237 | 0.003168402529205568 | 0.35750257431494037 | 0.0031093355968530153
+GRL-on | z_inv | 2 | 800 | 0.24905277289729028 | 0.0027045393222074705 | 0.39085507747541387 | 0.002480497805756438
+GRL-off | raw_z | 0 | 500 | 0.5372321974866996 | 0.006509275464268075 | 0.5061371468277667 | 0.007350358100744092
+GRL-off | z_inv | 0 | 500 | 0.5430322118483867 | 0.005455627887935868 | 0.8852279591259289 | 0.007314356810459212
+GRL-off | raw_z | 0 | 600 | 0.4182400776057787 | 0.006200859181074261 | 0.6734947648452357 | 0.0065234903709064694
+GRL-off | z_inv | 0 | 600 | 0.4180052955219441 | 0.005255086380514625 | 1.456475626620522 | 0.005432459479375008
+GRL-off | raw_z | 0 | 700 | 0.3949057680778562 | 0.012912176158359445 | 0.3160945542567354 | 0.01199306457648372
+GRL-off | z_inv | 0 | 700 | 0.4018917729455315 | 0.011598133158194992 | 0.4413275200995775 | 0.010579353981014318
+GRL-off | raw_z | 0 | 800 | 0.5744642721782335 | 0.005774345317231765 | 0.4973896342470019 | 0.005959589148757214
+GRL-off | z_inv | 0 | 800 | 0.5565349749082287 | 0.005266174222789341 | 0.5677255159035467 | 0.0056395288468083496
+shuffle | raw_z | 0 | 500 | 1.2009185511857985 | 0.004456597315151875 | 0.431344012217113 | 0.010055722306845677
+shuffle | z_inv | 0 | 500 | 1.2090997588957046 | 0.0038406039289581168 | 0.4467012171423803 | 0.010214616635140011
+shuffle | raw_z | 0 | 600 | 1.6144872547193898 | 0.04050713275437861 | 0.4811569013450461 | 0.03454395778303659
+shuffle | z_inv | 0 | 600 | 1.5866991390364187 | 0.0411717100581468 | 0.4765037316228022 | 0.03455054570272245
+shuffle | raw_z | 0 | 700 | 1.0011245989115647 | 0.017383861946370618 | 0.39994616927196336 | 0.02448399922149743
+shuffle | z_inv | 0 | 700 | 0.9157168472831679 | 0.016698124234344608 | 0.3492289689478966 | 0.02137976672128061
+shuffle | raw_z | 0 | 800 | 1.488873324248563 | 0.06542622541183715 | 1.4167335679486122 | 0.054340815663036945
+shuffle | z_inv | 0 | 800 | 1.4160433601570401 | 0.058008939180232734 | 1.4164578642815941 | 0.0482430440642506
+
+DONE
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+

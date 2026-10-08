@@ -1,0 +1,519 @@
+=== TRAIN fold=500 seed=0 START 16:24:45 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '600', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 0
+Save path     : checkpoints/coarse5_fold500_gated_nodg_fixedenc_s0.pth
+Total samples : 37181
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4170 | Class: 0.1513 | Dom(GRL): 1.2657 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0229 | Cls Acc: 0.9355 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7626 | Class: 0.1355 | Dom(GRL): 1.6271 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0434 | Cls Acc: 0.9446 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.5181 | Class: 0.1089 | Dom(GRL): 1.4091 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0406 | Cls Acc: 0.9552 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.5052 | Class: 0.0955 | Dom(GRL): 1.4097 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0436 | Cls Acc: 0.9610 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4872 | Class: 0.0855 | Dom(GRL): 1.4017 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0422 | Cls Acc: 0.9645 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4624 | Class: 0.0681 | Dom(GRL): 1.3943 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0423 | Cls Acc: 0.9723 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4415 | Class: 0.0541 | Dom(GRL): 1.3875 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0464 | Cls Acc: 0.9787 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4173 | Class: 0.0363 | Dom(GRL): 1.3811 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0412 | Cls Acc: 0.9858 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3993 | Class: 0.0219 | Dom(GRL): 1.3774 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0390 | Cls Acc: 0.9916 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3880 | Class: 0.0127 | Dom(GRL): 1.3753 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0332 | Cls Acc: 0.9961 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold500_gated_nodg_fixedenc_s0.pth
+===================================
+=== DONE fold=500 seed=0 16:45:19 elapsed=1234s ===
+=== TRAIN fold=500 seed=1 START 16:45:19 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '600', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 1
+Save path     : checkpoints/coarse5_fold500_gated_nodg_fixedenc_s1.pth
+Total samples : 37181
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4102 | Class: 0.1506 | Dom(GRL): 1.2595 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0239 | Cls Acc: 0.9356 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7256 | Class: 0.1386 | Dom(GRL): 1.5870 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0473 | Cls Acc: 0.9414 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.5182 | Class: 0.1124 | Dom(GRL): 1.4058 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0413 | Cls Acc: 0.9524 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.5113 | Class: 0.1018 | Dom(GRL): 1.4095 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0477 | Cls Acc: 0.9579 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4872 | Class: 0.0863 | Dom(GRL): 1.4009 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0499 | Cls Acc: 0.9642 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4722 | Class: 0.0756 | Dom(GRL): 1.3966 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0547 | Cls Acc: 0.9687 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4443 | Class: 0.0575 | Dom(GRL): 1.3868 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0460 | Cls Acc: 0.9765 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4215 | Class: 0.0399 | Dom(GRL): 1.3816 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0472 | Cls Acc: 0.9841 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.4024 | Class: 0.0252 | Dom(GRL): 1.3772 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0387 | Cls Acc: 0.9904 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3940 | Class: 0.0190 | Dom(GRL): 1.3749 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0298 | Cls Acc: 0.9931 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold500_gated_nodg_fixedenc_s1.pth
+===================================
+=== DONE fold=500 seed=1 17:06:02 elapsed=1243s ===
+=== TRAIN fold=500 seed=2 START 17:06:02 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '600', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 2
+Save path     : checkpoints/coarse5_fold500_gated_nodg_fixedenc_s2.pth
+Total samples : 37181
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4199 | Class: 0.1515 | Dom(GRL): 1.2684 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0238 | Cls Acc: 0.9337 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7079 | Class: 0.1380 | Dom(GRL): 1.5699 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0453 | Cls Acc: 0.9428 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.5123 | Class: 0.1107 | Dom(GRL): 1.4016 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0361 | Cls Acc: 0.9530 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4966 | Class: 0.0986 | Dom(GRL): 1.3980 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0361 | Cls Acc: 0.9591 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4792 | Class: 0.0888 | Dom(GRL): 1.3904 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0340 | Cls Acc: 0.9644 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4549 | Class: 0.0712 | Dom(GRL): 1.3837 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0316 | Cls Acc: 0.9717 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4367 | Class: 0.0536 | Dom(GRL): 1.3831 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0332 | Cls Acc: 0.9784 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4159 | Class: 0.0364 | Dom(GRL): 1.3795 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0296 | Cls Acc: 0.9862 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3981 | Class: 0.0226 | Dom(GRL): 1.3756 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0173 | Cls Acc: 0.9920 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3901 | Class: 0.0157 | Dom(GRL): 1.3744 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0145 | Cls Acc: 0.9952 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold500_gated_nodg_fixedenc_s2.pth
+===================================
+=== DONE fold=500 seed=2 17:26:13 elapsed=1211s ===
+=== TRAIN fold=600 seed=0 START 17:26:13 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 0
+Save path     : checkpoints/coarse5_fold600_gated_nodg_fixedenc_s0.pth
+Total samples : 37447
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.3713 | Class: 0.1199 | Dom(GRL): 1.2515 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0270 | Cls Acc: 0.9534 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7441 | Class: 0.1083 | Dom(GRL): 1.6358 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0587 | Cls Acc: 0.9590 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4925 | Class: 0.0826 | Dom(GRL): 1.4100 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0550 | Cls Acc: 0.9683 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4771 | Class: 0.0719 | Dom(GRL): 1.4052 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0602 | Cls Acc: 0.9720 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4616 | Class: 0.0597 | Dom(GRL): 1.4019 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0663 | Cls Acc: 0.9761 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4438 | Class: 0.0482 | Dom(GRL): 1.3956 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0688 | Cls Acc: 0.9810 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4214 | Class: 0.0332 | Dom(GRL): 1.3882 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0624 | Cls Acc: 0.9881 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4031 | Class: 0.0215 | Dom(GRL): 1.3816 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0592 | Cls Acc: 0.9921 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3897 | Class: 0.0128 | Dom(GRL): 1.3769 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0522 | Cls Acc: 0.9957 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3830 | Class: 0.0079 | Dom(GRL): 1.3751 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0425 | Cls Acc: 0.9977 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold600_gated_nodg_fixedenc_s0.pth
+===================================
+=== DONE fold=600 seed=0 17:46:41 elapsed=1228s ===
+=== TRAIN fold=600 seed=1 START 17:46:41 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 1
+Save path     : checkpoints/coarse5_fold600_gated_nodg_fixedenc_s1.pth
+Total samples : 37447
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.3914 | Class: 0.1234 | Dom(GRL): 1.2681 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0259 | Cls Acc: 0.9518 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6888 | Class: 0.1060 | Dom(GRL): 1.5828 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0511 | Cls Acc: 0.9588 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4873 | Class: 0.0834 | Dom(GRL): 1.4039 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0416 | Cls Acc: 0.9674 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4724 | Class: 0.0720 | Dom(GRL): 1.4004 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0428 | Cls Acc: 0.9721 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4577 | Class: 0.0621 | Dom(GRL): 1.3956 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0407 | Cls Acc: 0.9756 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4434 | Class: 0.0500 | Dom(GRL): 1.3933 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0459 | Cls Acc: 0.9800 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4207 | Class: 0.0359 | Dom(GRL): 1.3848 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0432 | Cls Acc: 0.9867 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4021 | Class: 0.0216 | Dom(GRL): 1.3806 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0437 | Cls Acc: 0.9919 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3898 | Class: 0.0133 | Dom(GRL): 1.3765 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0352 | Cls Acc: 0.9954 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3834 | Class: 0.0085 | Dom(GRL): 1.3750 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0342 | Cls Acc: 0.9975 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold600_gated_nodg_fixedenc_s1.pth
+===================================
+=== DONE fold=600 seed=1 18:07:17 elapsed=1236s ===
+=== TRAIN fold=600 seed=2 START 18:07:17 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '700', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 2
+Save path     : checkpoints/coarse5_fold600_gated_nodg_fixedenc_s2.pth
+Total samples : 37447
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.3696 | Class: 0.1218 | Dom(GRL): 1.2478 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0300 | Cls Acc: 0.9517 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7351 | Class: 0.1087 | Dom(GRL): 1.6264 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0537 | Cls Acc: 0.9568 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4862 | Class: 0.0838 | Dom(GRL): 1.4023 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0479 | Cls Acc: 0.9669 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4711 | Class: 0.0724 | Dom(GRL): 1.3987 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0475 | Cls Acc: 0.9715 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4565 | Class: 0.0628 | Dom(GRL): 1.3938 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0456 | Cls Acc: 0.9756 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4385 | Class: 0.0493 | Dom(GRL): 1.3892 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0477 | Cls Acc: 0.9799 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4175 | Class: 0.0346 | Dom(GRL): 1.3829 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0401 | Cls Acc: 0.9874 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4020 | Class: 0.0231 | Dom(GRL): 1.3789 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0426 | Cls Acc: 0.9915 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3896 | Class: 0.0138 | Dom(GRL): 1.3759 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0342 | Cls Acc: 0.9950 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3823 | Class: 0.0076 | Dom(GRL): 1.3747 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0280 | Cls Acc: 0.9974 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold600_gated_nodg_fixedenc_s2.pth
+===================================
+=== DONE fold=600 seed=2 18:27:46 elapsed=1229s ===
+=== TRAIN fold=700 seed=0 START 18:27:46 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 0
+Save path     : checkpoints/coarse5_fold700_gated_nodg_fixedenc_s0.pth
+Total samples : 37184
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4162 | Class: 0.1428 | Dom(GRL): 1.2735 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0201 | Cls Acc: 0.9414 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.7518 | Class: 0.1275 | Dom(GRL): 1.6243 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0490 | Cls Acc: 0.9490 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.5130 | Class: 0.1005 | Dom(GRL): 1.4126 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0512 | Cls Acc: 0.9584 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4956 | Class: 0.0883 | Dom(GRL): 1.4073 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0492 | Cls Acc: 0.9637 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4777 | Class: 0.0789 | Dom(GRL): 1.3988 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0476 | Cls Acc: 0.9683 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4603 | Class: 0.0661 | Dom(GRL): 1.3942 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0516 | Cls Acc: 0.9732 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4376 | Class: 0.0501 | Dom(GRL): 1.3875 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0504 | Cls Acc: 0.9802 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4167 | Class: 0.0350 | Dom(GRL): 1.3817 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0416 | Cls Acc: 0.9871 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3988 | Class: 0.0217 | Dom(GRL): 1.3771 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0362 | Cls Acc: 0.9917 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3911 | Class: 0.0146 | Dom(GRL): 1.3766 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0312 | Cls Acc: 0.9950 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold700_gated_nodg_fixedenc_s0.pth
+===================================
+=== DONE fold=700 seed=0 18:48:10 elapsed=1224s ===
+=== TRAIN fold=700 seed=1 START 18:48:10 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 1
+Save path     : checkpoints/coarse5_fold700_gated_nodg_fixedenc_s1.pth
+Total samples : 37184
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4108 | Class: 0.1417 | Dom(GRL): 1.2691 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0241 | Cls Acc: 0.9403 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6829 | Class: 0.1272 | Dom(GRL): 1.5557 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0329 | Cls Acc: 0.9466 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.5017 | Class: 0.1027 | Dom(GRL): 1.3990 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0343 | Cls Acc: 0.9579 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4888 | Class: 0.0908 | Dom(GRL): 1.3980 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0389 | Cls Acc: 0.9642 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4738 | Class: 0.0802 | Dom(GRL): 1.3936 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0421 | Cls Acc: 0.9671 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4570 | Class: 0.0664 | Dom(GRL): 1.3906 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0438 | Cls Acc: 0.9731 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4338 | Class: 0.0496 | Dom(GRL): 1.3842 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0418 | Cls Acc: 0.9797 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4174 | Class: 0.0354 | Dom(GRL): 1.3820 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0407 | Cls Acc: 0.9862 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.4004 | Class: 0.0239 | Dom(GRL): 1.3766 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0313 | Cls Acc: 0.9909 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3914 | Class: 0.0165 | Dom(GRL): 1.3749 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0295 | Cls Acc: 0.9942 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold700_gated_nodg_fixedenc_s1.pth
+===================================
+=== DONE fold=700 seed=1 19:08:39 elapsed=1229s ===
+=== TRAIN fold=700 seed=2 START 19:08:39 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '800']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 2
+Save path     : checkpoints/coarse5_fold700_gated_nodg_fixedenc_s2.pth
+Total samples : 37184
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4228 | Class: 0.1407 | Dom(GRL): 1.2821 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0187 | Cls Acc: 0.9426 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6943 | Class: 0.1224 | Dom(GRL): 1.5719 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0415 | Cls Acc: 0.9491 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4952 | Class: 0.0972 | Dom(GRL): 1.3981 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0344 | Cls Acc: 0.9594 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4854 | Class: 0.0867 | Dom(GRL): 1.3987 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0398 | Cls Acc: 0.9646 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4704 | Class: 0.0757 | Dom(GRL): 1.3947 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0427 | Cls Acc: 0.9703 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4540 | Class: 0.0633 | Dom(GRL): 1.3908 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0458 | Cls Acc: 0.9751 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4315 | Class: 0.0490 | Dom(GRL): 1.3825 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0336 | Cls Acc: 0.9804 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4126 | Class: 0.0342 | Dom(GRL): 1.3783 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0262 | Cls Acc: 0.9869 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3977 | Class: 0.0221 | Dom(GRL): 1.3756 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0295 | Cls Acc: 0.9918 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3915 | Class: 0.0158 | Dom(GRL): 1.3757 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0161 | Cls Acc: 0.9941 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold700_gated_nodg_fixedenc_s2.pth
+===================================
+=== DONE fold=700 seed=2 19:29:05 elapsed=1226s ===
+=== TRAIN fold=800 seed=0 START 19:29:05 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '700']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 0
+Save path     : checkpoints/coarse5_fold800_gated_nodg_fixedenc_s0.pth
+Total samples : 38017
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.4359 | Class: 0.1074 | Dom(GRL): 1.3285 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0127 | Cls Acc: 0.9589 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6383 | Class: 0.0822 | Dom(GRL): 1.5561 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0435 | Cls Acc: 0.9685 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4701 | Class: 0.0611 | Dom(GRL): 1.4090 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0566 | Cls Acc: 0.9762 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4623 | Class: 0.0505 | Dom(GRL): 1.4118 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0687 | Cls Acc: 0.9809 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4535 | Class: 0.0465 | Dom(GRL): 1.4071 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0801 | Cls Acc: 0.9836 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4292 | Class: 0.0323 | Dom(GRL): 1.3969 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0894 | Cls Acc: 0.9876 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4123 | Class: 0.0231 | Dom(GRL): 1.3892 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0746 | Cls Acc: 0.9910 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.3976 | Class: 0.0156 | Dom(GRL): 1.3820 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0775 | Cls Acc: 0.9942 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3852 | Class: 0.0091 | Dom(GRL): 1.3761 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0692 | Cls Acc: 0.9968 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3818 | Class: 0.0044 | Dom(GRL): 1.3774 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0773 | Cls Acc: 0.9988 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold800_gated_nodg_fixedenc_s0.pth
+===================================
+=== DONE fold=800 seed=0 19:49:53 elapsed=1248s ===
+=== TRAIN fold=800 seed=1 START 19:49:53 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '700']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 1
+Save path     : checkpoints/coarse5_fold800_gated_nodg_fixedenc_s1.pth
+Total samples : 38017
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.3893 | Class: 0.1071 | Dom(GRL): 1.2822 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0213 | Cls Acc: 0.9581 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6457 | Class: 0.0865 | Dom(GRL): 1.5592 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0391 | Cls Acc: 0.9673 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4567 | Class: 0.0626 | Dom(GRL): 1.3941 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0337 | Cls Acc: 0.9763 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4463 | Class: 0.0531 | Dom(GRL): 1.3932 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0445 | Cls Acc: 0.9796 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4326 | Class: 0.0423 | Dom(GRL): 1.3903 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0454 | Cls Acc: 0.9830 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4205 | Class: 0.0355 | Dom(GRL): 1.3850 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0422 | Cls Acc: 0.9862 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4042 | Class: 0.0254 | Dom(GRL): 1.3789 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0308 | Cls Acc: 0.9902 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.3986 | Class: 0.0215 | Dom(GRL): 1.3771 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0301 | Cls Acc: 0.9937 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3851 | Class: 0.0109 | Dom(GRL): 1.3742 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0233 | Cls Acc: 0.9959 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3812 | Class: 0.0073 | Dom(GRL): 1.3740 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0221 | Cls Acc: 0.9976 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold800_gated_nodg_fixedenc_s1.pth
+===================================
+=== DONE fold=800 seed=1 20:10:27 elapsed=1234s ===
+=== TRAIN fold=800 seed=2 START 20:10:27 ===
+===================================
+Train GatedMaskModel (learnable sigmoid gates)
+===================================
+Device        : cuda
+Train domains : ['400', '500', '600', '700']
+All domains   : ['400', '500', '600', '700', '800']
+Num domains   : 5
+Epochs        : 10
+Batch size    : 16
+LR            : 0.0001
+Use domain gate: False
+Domain gate GRL: False
+Use gate orth : False
+Mask weight   : 0.1
+Domain weight : 1.0
+DomDisc weight: 1.0
+MMD weight    : 0.0
+Balanced batch: False
+Shuffled dom labels: False
+Seed          : 2
+Save path     : checkpoints/coarse5_fold800_gated_nodg_fixedenc_s2.pth
+Total samples : 38017
+===================================
+Epoch [1/10] alpha=0.000 | lr=9.76e-05 | Loss: 1.3935 | Class: 0.1046 | Dom(GRL): 1.2889 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0195 | Cls Acc: 0.9590 | DomDisc Acc: 0.0000
+Epoch [2/10] alpha=0.505 | lr=9.05e-05 | Loss: 1.6541 | Class: 0.0829 | Dom(GRL): 1.5712 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0401 | Cls Acc: 0.9690 | DomDisc Acc: 0.0000
+Epoch [3/10] alpha=0.804 | lr=7.96e-05 | Loss: 1.4604 | Class: 0.0612 | Dom(GRL): 1.3992 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0411 | Cls Acc: 0.9767 | DomDisc Acc: 0.0000
+Epoch [4/10] alpha=0.931 | lr=6.58e-05 | Loss: 1.4532 | Class: 0.0528 | Dom(GRL): 1.4004 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0552 | Cls Acc: 0.9795 | DomDisc Acc: 0.0000
+Epoch [5/10] alpha=0.977 | lr=5.05e-05 | Loss: 1.4387 | Class: 0.0432 | Dom(GRL): 1.3955 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0521 | Cls Acc: 0.9833 | DomDisc Acc: 0.0000
+Epoch [6/10] alpha=0.992 | lr=3.52e-05 | Loss: 1.4274 | Class: 0.0369 | Dom(GRL): 1.3905 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0552 | Cls Acc: 0.9861 | DomDisc Acc: 0.0000
+Epoch [7/10] alpha=0.997 | lr=2.14e-05 | Loss: 1.4086 | Class: 0.0244 | Dom(GRL): 1.3842 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0561 | Cls Acc: 0.9907 | DomDisc Acc: 0.0000
+Epoch [8/10] alpha=0.999 | lr=1.05e-05 | Loss: 1.4014 | Class: 0.0209 | Dom(GRL): 1.3804 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0560 | Cls Acc: 0.9937 | DomDisc Acc: 0.0000
+Epoch [9/10] alpha=1.000 | lr=3.42e-06 | Loss: 1.3859 | Class: 0.0098 | Dom(GRL): 1.3760 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0543 | Cls Acc: 0.9960 | DomDisc Acc: 0.0000
+Epoch [10/10] alpha=1.000 | lr=1.00e-06 | Loss: 1.3806 | Class: 0.0061 | Dom(GRL): 1.3745 | DomDisc: 0.0000 | Mask(gate_c*gate_d): 0.0000 | MMD: 0.0505 | Cls Acc: 0.9982 | DomDisc Acc: 0.0000
+===================================
+Training finished
+Saved: checkpoints/coarse5_fold800_gated_nodg_fixedenc_s2.pth
+===================================
+=== DONE fold=800 seed=2 20:31:05 elapsed=1238s ===
+ALL_FIXEDENC_TRAIN_DONE
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/smai9/anaconda3/envs/torch/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+

@@ -1,0 +1,8 @@
+=== EVAL z_inv START 20:57:08 ===
+=== EVAL z_inv DONE 21:20:32 ===
+=== EVAL rawz START 21:20:32 ===
+=== EVAL rawz DONE 21:44:16 ===
+=== EVAL pretrained START 21:44:16 ===
+=== EVAL pretrained DONE 21:49:34 ===
+ALL_FIXEDENC_EVAL_DONE
+

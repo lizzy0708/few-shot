@@ -30,5 +30,14 @@ conda run -n torch python experiments/eval_repl_check.py --test_fold 500 --train
 ## 통과 기준 (사전 고정)
 AUROC 차이(|repl − 기존|) ≤ 0.005. 통과 못하면 중단, 차이와 가능한 원인 보고.
 
-## 결과
-(학습·평가 완료 후 이 섹션에 추가)
+## 결과 (2026-10-08) — 통과 ✅
+
+| | AUROC | Acc | F1 | BalAcc |
+|---|---|---|---|---|
+| 기존 `coarse5_fold500_gated_nodg_s1.pth` | 0.9761±0.0023 | 0.9496±0.0047 | 0.9709±0.0027 | 0.8785±0.0168 |
+| 신규 `coarse5_fold500_gated_nodg_repl_s1.pth` | 0.9761±0.0023 | 0.9496±0.0047 | 0.9709±0.0027 | 0.8785±0.0168 |
+| **AUROC 차이** | **0.0000** | | | |
+
+**통과**(기준 0.005 이내, 실제 0.0000). 체크포인트 파일 자체는 MD5가 다름(`2973c319...` vs `dea5efa6...`, 크기도 다름 — 즉 버그로 같은 파일을 두 번 평가한 게 아니라 진짜 독립적으로 재학습된 별개 모델)인데도 평가 지표가 소수점 4자리까지 완전히 일치 — `torch.backends.cudnn.deterministic=True` 등 기존 결정론적 설정이 실제로 완벽히 작동함을 확인. 현재 코드/환경으로 Table 2 재현 가능 — **wrap-around 보정 재학습 본 작업 진행 가능**.
+
+원본 로그: `docs/generated/repl_check/{train,eval_repl,eval_orig}.log`.

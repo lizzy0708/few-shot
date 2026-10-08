@@ -1,0 +1,111 @@
+===================================
+GADF preprocessing (wrap-around FIXED)
+===================================
+Data dir   : HUST bearing dataset
+Save dir   : processed_fixed
+Domain mode: coarse
+Window size: 1024
+Image size : 128
+===================================
+processed: N800.mat -> domain 800
+processed: I804.mat -> domain 800
+processed: B700.mat -> domain 700
+processed: I604.mat -> domain 600
+processed: O800.mat -> domain 800
+processed: I800.mat -> domain 800
+processed: O602.mat -> domain 600
+processed: IB604.mat -> domain 600
+processed: IO804.mat -> domain 800
+processed: I802.mat -> domain 800
+processed: IO600.mat -> domain 600
+processed: OB402.mat -> domain 400
+processed: N504.mat -> domain 500
+processed: IB602.mat -> domain 600
+processed: N502.mat -> domain 500
+processed: IO702.mat -> domain 700
+processed: I702.mat -> domain 700
+processed: OB700.mat -> domain 700
+processed: B602.mat -> domain 600
+processed: N602.mat -> domain 600
+processed: O804.mat -> domain 800
+processed: B702.mat -> domain 700
+processed: OB802.mat -> domain 800
+processed: IB600.mat -> domain 600
+processed: IB704.mat -> domain 700
+processed: B500.mat -> domain 500
+processed: O700.mat -> domain 700
+processed: OB502.mat -> domain 500
+processed: O400.mat -> domain 400
+processed: OB804.mat -> domain 800
+processed: IB700.mat -> domain 700
+processed: OB500.mat -> domain 500
+processed: IO800.mat -> domain 800
+processed: B604.mat -> domain 600
+processed: B804.mat -> domain 800
+processed: IO602.mat -> domain 600
+processed: O702.mat -> domain 700
+processed: I400.mat -> domain 400
+processed: IB702.mat -> domain 700
+processed: I600.mat -> domain 600
+processed: OB604.mat -> domain 600
+processed: B704.mat -> domain 700
+processed: N704.mat -> domain 700
+processed: O402.mat -> domain 400
+processed: IO700.mat -> domain 700
+processed: IO400.mat -> domain 400
+processed: N600.mat -> domain 600
+processed: O604.mat -> domain 600
+processed: OB504.mat -> domain 500
+processed: N400.mat -> domain 400
+processed: O404.mat -> domain 400
+processed: O802.mat -> domain 800
+processed: N702.mat -> domain 700
+processed: O504.mat -> domain 500
+processed: B504.mat -> domain 500
+processed: IO802.mat -> domain 800
+processed: I500.mat -> domain 500
+processed: B800.mat -> domain 800
+processed: I602.mat -> domain 600
+processed: OB602.mat -> domain 600
+processed: O502.mat -> domain 500
+processed: I402.mat -> domain 400
+processed: B802.mat -> domain 800
+processed: IO704.mat -> domain 700
+processed: N404.mat -> domain 400
+processed: I404.mat -> domain 400
+processed: O500.mat -> domain 500
+processed: IO500.mat -> domain 500
+processed: O600.mat -> domain 600
+processed: IB502.mat -> domain 500
+processed: OB800.mat -> domain 800
+processed: N700.mat -> domain 700
+processed: IO604.mat -> domain 600
+processed: OB600.mat -> domain 600
+processed: IB500.mat -> domain 500
+processed: IB800.mat -> domain 800
+processed: IO504.mat -> domain 500
+processed: N604.mat -> domain 600
+processed: IB804.mat -> domain 800
+processed: IB504.mat -> domain 500
+processed: OB704.mat -> domain 700
+processed: I502.mat -> domain 500
+processed: I704.mat -> domain 700
+processed: I700.mat -> domain 700
+processed: N402.mat -> domain 400
+processed: B502.mat -> domain 500
+processed: IB802.mat -> domain 800
+processed: N802.mat -> domain 800
+processed: IO502.mat -> domain 500
+processed: OB404.mat -> domain 400
+processed: B600.mat -> domain 600
+processed: OB400.mat -> domain 400
+processed: IO404.mat -> domain 400
+processed: IO402.mat -> domain 400
+processed: I504.mat -> domain 500
+processed: OB702.mat -> domain 700
+processed: N500.mat -> domain 500
+processed: O704.mat -> domain 700
+processed: N804.mat -> domain 800
+
+GADF preprocessing (fixed) finished.
+
